@@ -1,0 +1,15 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "build": "esbuild --loader:.png=base64 src/index.ts --bundle --outfile=public/index.js"
+  },
+  "devDependencies": {
+    "esbuild": "^0.8.11",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  },
+  "dependencies": {
+    "pixi.js": "^5.3.3",
+    "poisson-disk-sampling": "^2.2.2"
+  }
+}
