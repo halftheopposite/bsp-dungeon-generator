@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "scripts": {
-    "build": "esbuild --loader:.png=base64 src/index.ts --bundle --outfile=public/index.js"
+    "build": "esbuild --loader:.png=base64 src/index.ts --bundle --sourcemap --outfile=public/index.js"
   },
   "devDependencies": {
     "esbuild": "^0.8.11",
