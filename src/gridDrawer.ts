@@ -100,7 +100,23 @@ export class GridDrawer {
     for (let y = 0; y < dungeon.height; y++) {
       for (let x = 0; x < dungeon.width; x++) {
         const tileId = dungeon.tilemap[y][x];
-        if (tileId > 0) {
+        // Hole
+        if (tileId < 0) {
+          const rectangle = new PIXI.Graphics();
+          rectangle.beginFill(0x00);
+          rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+          rectangle.endFill();
+          rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
+          this.tilemapContainer.addChild(rectangle);
+        }
+        // Ground
+        else if (tileId === 0) {
+          const sprite = new PIXI.Sprite(ground);
+          sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
+          this.tilemapContainer.addChild(sprite);
+        }
+        // Wall
+        else if (tileId > 0) {
           if (tileId in tilesSprites) {
             const texture = tilesSprites[tileId];
             const sprite = new PIXI.Sprite(texture);
@@ -114,10 +130,6 @@ export class GridDrawer {
             rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
             this.tilemapContainer.addChild(rectangle);
           }
-        } else {
-          const sprite = new PIXI.Sprite(ground);
-          sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
-          this.tilemapContainer.addChild(sprite);
         }
       }
     }
@@ -192,17 +204,15 @@ export class GridDrawer {
 
         // Add cell number
         const tileId = dungeon.tilemap[y][x];
-        if (tileId > 0) {
-          const text = new PIXI.Text(`${tileId}`, {
-            fontSize: 10,
-            fill: 0xffffff,
-            align: "center",
-          });
-          text.anchor.set(0.5);
-          text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
-          rectangle.addChild(text);
-          this.shapesContainer.addChild(rectangle);
-        }
+        const text = new PIXI.Text(`${tileId}`, {
+          fontSize: 10,
+          fill: 0xffffff,
+          align: "center",
+        });
+        text.anchor.set(0.5);
+        text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
+        rectangle.addChild(text);
+        this.shapesContainer.addChild(rectangle);
       }
     }
   };

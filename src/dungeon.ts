@@ -14,6 +14,7 @@ import {
   TileMap,
   TreeNode,
 } from "./types";
+import { Holes } from "./patterns";
 import { random, randomInRanges, shuffleArray } from "./utils";
 
 export interface DungeonArgs {
@@ -55,6 +56,9 @@ export interface DungeonResult {
 }
 
 export class Dungeon {
+  //
+  // Entrypoint
+  //
   generate = (args: DungeonArgs): DungeonResult => {
     const startAt = performance.now();
 
@@ -184,6 +188,7 @@ export class Dungeon {
     args: DungeonArgs
   ): TreeNode<Container> => {
     node.nodes.forEach((container) => {
+      // Generate the room's dimensions
       const x = Math.floor(
         container.x +
           args.containerGutterWidth +
@@ -209,13 +214,26 @@ export class Dungeon {
       if (room.width < args.roomMinSize || room.height < args.roomMinSize) {
         return;
       }
+
+      // Generate the room's holes (if any)
+      const hasHole = randomInRanges([0.6, 0.4], [true, true]);
+      if (hasHole) {
+        Holes.all.forEach((hole) => {
+          if (
+            !room.holes &&
+            room.width > hole.width * 2 &&
+            room.height > hole.height * 2
+          ) {
+            room.holes = hole;
+          }
+        });
+      }
+
       container.room = room;
     });
 
     return node;
   };
-
-  private generateHoles = (node: TreeNode<Container>, args: DungeonArgs) => {};
 
   private generateCorridors = (
     node: TreeNode<Container>,
@@ -273,7 +291,7 @@ export class Dungeon {
         ],
         minDistance: 1.5,
         maxDistance: 4,
-        tries: 3,
+        tries: 10,
       });
       const points: Array<number[]> = poisson.fill();
       const shuffledPoints = shuffleArray(points);
@@ -311,19 +329,11 @@ export class Dungeon {
       }
     }
 
-    // Carve rooms
     this.carveRooms(tree, tilemap);
-
-    // Carve corridors
     this.carveCorridors(tree, tilemap);
-
-    // Clean tilemap
+    this.carvePatterns(tree, tilemap);
     this.cleanTilemap(tilemap);
-
-    // Generate tilemask
     this.generateTileMask(tilemap);
-
-    // Normalize tilemask
     this.normalizeTileMask(tilemap);
 
     return tilemap;
@@ -369,6 +379,26 @@ export class Dungeon {
     this.carveCorridors(node.right, tilemap);
   };
 
+  private carvePatterns = (node: TreeNode<Container>, tilemap: TileMap) => {
+    node.nodes.forEach((container) => {
+      if (!container.room || !container.room.holes) {
+        return;
+      }
+
+      // Carve holes
+      const holes = container.room.holes;
+      const startY = Math.ceil(container.room.center.y - holes.height / 2);
+      const startX = Math.ceil(container.room.center.x - holes.width / 2);
+      for (let y = 0; y < holes.height; y++) {
+        for (let x = 0; x < holes.width; x++) {
+          const posY = startY + y;
+          const posX = startX + x;
+          tilemap[posY][posX] = holes.tiles[y][x];
+        }
+      }
+    });
+  };
+
   /**
    * Clean a tilemap (optional).
    */
@@ -376,6 +406,11 @@ export class Dungeon {
     // Remove any 1 unit width tiles (vertical or horizontal)
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
+        const tileId = tilemap[y][x];
+        if (tileId <= 0) {
+          continue;
+        }
+
         const beforeH = tilemap[y][x - 1];
         const afterH = tilemap[y][x + 1];
         if (beforeH === 0 && afterH === 0) {
@@ -442,13 +477,6 @@ export class Dungeon {
           }
         }
         break;
-      case "south":
-        {
-          if (y === tilemap.length - 1 || tilemap[y + 1][x] > 0) {
-            return true;
-          }
-        }
-        break;
       case "west": {
         if (x === tilemap[y].length - 1 || tilemap[y][x + 1] > 0) {
           return true;
@@ -458,6 +486,13 @@ export class Dungeon {
       case "east":
         {
           if (x === 0 || tilemap[y][x - 1] > 0) {
+            return true;
+          }
+        }
+        break;
+      case "south":
+        {
+          if (y === tilemap.length - 1 || tilemap[y + 1][x] > 0) {
             return true;
           }
         }
@@ -482,7 +517,7 @@ export class Dungeon {
 
           // [x][ ]
           // [ ]
-          if (rightTile > 0 && bottomTile > 0 && tilemap[y + 1][x + 1] === 0) {
+          if (rightTile > 0 && bottomTile > 0 && tilemap[y + 1][x + 1] <= 0) {
             tilemap[y][x] = DirectionNES;
           }
           // [ ][x]
@@ -490,22 +525,18 @@ export class Dungeon {
           else if (
             leftTile > 0 &&
             bottomTile > 0 &&
-            tilemap[y + 1][x - 1] === 0
+            tilemap[y + 1][x - 1] <= 0
           ) {
             tilemap[y][x] = DirectionNWS;
           }
           // [ ]
           // [x][ ]
-          else if (
-            topTile > 0 &&
-            rightTile > 0 &&
-            tilemap[y - 1][x + 1] === 0
-          ) {
+          else if (topTile > 0 && rightTile > 0 && tilemap[y - 1][x + 1] <= 0) {
             tilemap[y][x] = tilemap[y][x] | TileDirection.NorthEast;
           }
           //    [ ]
           // [ ][x]
-          else if (topTile > 0 && leftTile > 0 && tilemap[y - 1][x - 1] === 0) {
+          else if (topTile > 0 && leftTile > 0 && tilemap[y - 1][x - 1] <= 0) {
             tilemap[y][x] = tilemap[y][x] | TileDirection.NorthWest;
           }
         }

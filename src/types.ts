@@ -1,5 +1,8 @@
 //
 // Tree
+
+import { Pattern } from "./patterns";
+
 //
 export class TreeNode<T> {
   left?: TreeNode<T>;
@@ -67,6 +70,8 @@ export class Point {
 }
 
 export class Room extends Rectangle {
+  holes?: Pattern;
+
   constructor(x: number, y: number, width: number, height: number) {
     super(x, y, width, height);
   }
@@ -108,7 +113,6 @@ export class Monster extends Point {
 // Tilemap
 //
 export type TileMap = number[][];
-
 export enum TileDirection {
   North = 1,
   West = 2,
@@ -117,7 +121,6 @@ export enum TileDirection {
   NorthWest = 16,
   NorthEast = 32,
 }
-
 export const DirectionNW = TileDirection.North | TileDirection.West;
 export const DirectionNEW =
   TileDirection.North | TileDirection.East | TileDirection.West;
