@@ -1,3 +1,6 @@
+/**
+ * Shuffle an array's entries into a new one.
+ */
 export function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
 
@@ -9,11 +12,17 @@ export function shuffleArray<T>(array: T[]): T[] {
   return newArray;
 }
 
+/**
+ * Generate a random number between `min` and `max`.
+ */
 export function random(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-export function randomInRanges<T>(weights: number[], results: T[]): T {
+/**
+ * Return one of the values matching the randomly selected weight.
+ */
+export function randomInRanges<T>(weights: number[], values: T[]): T {
   const num = Math.random();
   let s = 0;
   let lastIndex = weights.length - 1;
@@ -21,9 +30,9 @@ export function randomInRanges<T>(weights: number[], results: T[]): T {
   for (var i = 0; i < lastIndex; ++i) {
     s += weights[i];
     if (num < s) {
-      return results[i];
+      return values[i];
     }
   }
 
-  return results[lastIndex];
+  return values[lastIndex];
 }

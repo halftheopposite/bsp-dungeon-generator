@@ -1,8 +1,5 @@
 //
 // Tree
-
-import { Pattern } from "./patterns";
-
 //
 export class TreeNode<T> {
   left?: TreeNode<T>;
@@ -93,10 +90,20 @@ export class Container extends Rectangle {
 }
 
 //
+// Patterns
+//
+export type PatternType = "holes";
+export interface Pattern {
+  type: PatternType;
+  width: number;
+  height: number;
+  tiles: TileMap;
+}
+
+//
 // Entities
 //
 export type MonsterType = "bandit" | "mushroom" | "skeleton" | "troll";
-
 export class Monster extends Point {
   radius: number;
   type: MonsterType;

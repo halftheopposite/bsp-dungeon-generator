@@ -1,4 +1,4 @@
-import { Pattern } from "./types";
+import { Pattern } from "../types";
 
 export const giantStarSquare: Pattern = {
   width: 6,

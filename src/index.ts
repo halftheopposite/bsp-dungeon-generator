@@ -1,8 +1,7 @@
-import { ShapeDrawer } from "./shapeDrawer";
 import { Dungeon } from "./dungeon";
-import { GridDrawer } from "./gridDrawer";
+import { Drawer } from "./drawer";
 
-const result = new Dungeon().generate({
+const dungeon = new Dungeon({
   mapWidth: 48,
   mapHeight: 48,
   mapGutterWidth: 1,
@@ -16,8 +15,5 @@ const result = new Dungeon().generate({
   corridorWidth: 2,
 });
 
-const gridDrawer = new GridDrawer(window.innerWidth, window.innerHeight);
-gridDrawer.draw(result);
-
-// const shapeDrawer = new ShapeDrawer();
-// shapeDrawer.draw(result);
+const drawer = new Drawer(window.innerWidth, window.innerHeight);
+drawer.draw(dungeon, { unitWidthInPixels: 16 });

@@ -2,10 +2,7 @@ import PoissonDiscSampling from "poisson-disk-sampling";
 import {
   Container,
   Corridor,
-  DirectionNW,
   DirectionNES,
-  DirectionNEW,
-  DirectionNEWS,
   DirectionNWS,
   Monster,
   MonsterType,
@@ -42,7 +39,7 @@ export interface DungeonArgs {
   corridorWidth: number;
 }
 
-export interface DungeonResult {
+export class Dungeon {
   /** The width in tiles */
   width: number;
   /** The height in tiles */
@@ -53,13 +50,8 @@ export interface DungeonResult {
   tilemap: TileMap;
   /** The monsters entities in the dungeon */
   monsters: Monster[];
-}
 
-export class Dungeon {
-  //
-  // Entrypoint
-  //
-  generate = (args: DungeonArgs): DungeonResult => {
+  constructor(args: DungeonArgs) {
     const startAt = performance.now();
 
     // Create the tree
@@ -89,14 +81,12 @@ export class Dungeon {
     const endAt = performance.now();
     console.log(`Dungeon generated in ${endAt - startAt}ms`);
 
-    return {
-      width: args.mapWidth,
-      height: args.mapHeight,
-      tree,
-      tilemap,
-      monsters,
-    };
-  };
+    this.width = args.mapWidth;
+    this.height = args.mapHeight;
+    this.tree = tree;
+    this.tilemap = tilemap;
+    this.monsters = monsters;
+  }
 
   //
   // Tree
@@ -210,13 +200,15 @@ export class Dungeon {
         args.containerGutterWidth -
         random(0, Math.floor(container.height / 4));
 
-      const room = new Room(x, y, width, height);
-      if (room.width < args.roomMinSize || room.height < args.roomMinSize) {
+      // Dismiss room if it does not fit minimum dimensions
+      if (width < args.roomMinSize || height < args.roomMinSize) {
         return;
       }
 
+      const room = new Room(x, y, width, height);
+
       // Generate the room's holes (if any)
-      const hasHole = randomInRanges([0.6, 0.4], [true, true]);
+      const hasHole = randomInRanges([0.6, 0.4], [true, false]);
       if (hasHole) {
         Holes.all.forEach((hole) => {
           if (

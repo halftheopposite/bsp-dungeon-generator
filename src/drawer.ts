@@ -1,12 +1,11 @@
 import * as PIXI from "pixi.js";
-import { DungeonResult } from "./dungeon";
+import { Dungeon } from "./dungeon";
 import { Container, TreeNode } from "./types";
 
 const DEBUG = false;
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-const TILE_SIZE = 16;
 const ground = PIXI.Texture.from("assets/tiles/ground.png");
 const tile3 = PIXI.Texture.from("assets/tiles/3.png");
 const tile5 = PIXI.Texture.from("assets/tiles/5.png");
@@ -65,10 +64,15 @@ const monstersSprites = {
   troll: troll,
 };
 
-export class GridDrawer {
+export interface DrawOptions {
+  unitWidthInPixels: number;
+}
+
+export class Drawer {
   app: PIXI.Application;
   tilemapContainer: PIXI.Container;
   shapesContainer: PIXI.Container;
+  unitInPixels: number;
 
   constructor(width: number, height: number) {
     this.app = new PIXI.Application({
@@ -84,7 +88,11 @@ export class GridDrawer {
     this.app.stage.addChild(this.shapesContainer);
   }
 
-  draw = (dungeon: DungeonResult) => {
+  draw = (dungeon: Dungeon, options: DrawOptions) => {
+    this.tilemapContainer.removeChildren();
+    this.shapesContainer.removeChildren();
+    this.unitInPixels = options.unitWidthInPixels;
+
     this.drawTiles(dungeon);
     this.drawMonsters(dungeon);
 
@@ -96,7 +104,7 @@ export class GridDrawer {
     }
   };
 
-  drawTiles = (dungeon: DungeonResult) => {
+  private drawTiles = (dungeon: Dungeon) => {
     for (let y = 0; y < dungeon.height; y++) {
       for (let x = 0; x < dungeon.width; x++) {
         const tileId = dungeon.tilemap[y][x];
@@ -104,15 +112,15 @@ export class GridDrawer {
         if (tileId < 0) {
           const rectangle = new PIXI.Graphics();
           rectangle.beginFill(0x00);
-          rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+          rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
           rectangle.endFill();
-          rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
+          rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(rectangle);
         }
         // Ground
         else if (tileId === 0) {
           const sprite = new PIXI.Sprite(ground);
-          sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
+          sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(sprite);
         }
         // Wall
@@ -120,14 +128,17 @@ export class GridDrawer {
           if (tileId in tilesSprites) {
             const texture = tilesSprites[tileId];
             const sprite = new PIXI.Sprite(texture);
-            sprite.position.set(x * TILE_SIZE, y * TILE_SIZE);
+            sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
             this.tilemapContainer.addChild(sprite);
           } else {
             const rectangle = new PIXI.Graphics();
             rectangle.beginFill(tilesColors[tileId]);
-            rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+            rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
             rectangle.endFill();
-            rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
+            rectangle.position.set(
+              x * this.unitInPixels,
+              y * this.unitInPixels
+            );
             this.tilemapContainer.addChild(rectangle);
           }
         }
@@ -135,30 +146,36 @@ export class GridDrawer {
     }
   };
 
-  drawMonsters = (dungeon: DungeonResult) => {
+  private drawMonsters = (dungeon: Dungeon) => {
     dungeon.monsters.forEach((monster) => {
       const sprite = new PIXI.Sprite(monstersSprites[monster.type]);
-      sprite.position.set(monster.x * TILE_SIZE, monster.y * TILE_SIZE);
+      sprite.position.set(
+        monster.x * this.unitInPixels,
+        monster.y * this.unitInPixels
+      );
       this.shapesContainer.addChild(sprite);
     });
   };
 
-  drawContainers = (container: TreeNode<Container>) => {
+  private drawContainers = (container: TreeNode<Container>) => {
     container.nodes.forEach((container) => {
       const rectangle = new PIXI.Graphics();
       rectangle.lineStyle(1, 0xff0000, 0.8);
       rectangle.drawRect(
         0,
         0,
-        container.width * TILE_SIZE,
-        container.height * TILE_SIZE
+        container.width * this.unitInPixels,
+        container.height * this.unitInPixels
       );
-      rectangle.position.set(container.x * TILE_SIZE, container.y * TILE_SIZE);
+      rectangle.position.set(
+        container.x * this.unitInPixels,
+        container.y * this.unitInPixels
+      );
       this.shapesContainer.addChild(rectangle);
     });
   };
 
-  drawRooms = (container: TreeNode<Container>) => {
+  private drawRooms = (container: TreeNode<Container>) => {
     container.nodes.forEach((container) => {
       const room = container.room;
       if (!room) {
@@ -167,13 +184,21 @@ export class GridDrawer {
 
       const rectangle = new PIXI.Graphics();
       rectangle.lineStyle(1, 0x00ff00, 0.8);
-      rectangle.drawRect(0, 0, room.width * TILE_SIZE, room.height * TILE_SIZE);
-      rectangle.position.set(room.x * TILE_SIZE, room.y * TILE_SIZE);
+      rectangle.drawRect(
+        0,
+        0,
+        room.width * this.unitInPixels,
+        room.height * this.unitInPixels
+      );
+      rectangle.position.set(
+        room.x * this.unitInPixels,
+        room.y * this.unitInPixels
+      );
       this.shapesContainer.addChild(rectangle);
     });
   };
 
-  drawCorridors = (container: TreeNode<Container>) => {
+  private drawCorridors = (container: TreeNode<Container>) => {
     const corridor = container.data.corridor;
     if (!corridor) {
       return;
@@ -184,23 +209,26 @@ export class GridDrawer {
     rectangle.drawRect(
       0,
       0,
-      corridor.width * TILE_SIZE,
-      corridor.height * TILE_SIZE
+      corridor.width * this.unitInPixels,
+      corridor.height * this.unitInPixels
     );
-    rectangle.position.set(corridor.x * TILE_SIZE, corridor.y * TILE_SIZE);
+    rectangle.position.set(
+      corridor.x * this.unitInPixels,
+      corridor.y * this.unitInPixels
+    );
     this.shapesContainer.addChild(rectangle);
 
     this.drawCorridors(container.left);
     this.drawCorridors(container.right);
   };
 
-  drawGrid = async (dungeon: DungeonResult) => {
+  private drawGrid = async (dungeon: Dungeon) => {
     for (let y = 0; y < dungeon.height; y++) {
       for (let x = 0; x < dungeon.width; x++) {
         const rectangle = new PIXI.Graphics();
         rectangle.lineStyle(1, 0xffffff, 0.1);
-        rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
-        rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
+        rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
+        rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
 
         // Add cell number
         const tileId = dungeon.tilemap[y][x];
@@ -210,7 +238,7 @@ export class GridDrawer {
           align: "center",
         });
         text.anchor.set(0.5);
-        text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
+        text.position.set(this.unitInPixels / 2, this.unitInPixels / 2);
         rectangle.addChild(text);
         this.shapesContainer.addChild(rectangle);
       }
