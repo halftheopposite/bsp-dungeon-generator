@@ -469,13 +469,13 @@ export class Dungeon {
           }
         }
         break;
-      case "west": {
+      case "east": {
         if (x === tilemap[y].length - 1 || tilemap[y][x + 1] > 0) {
           return true;
         }
         break;
       }
-      case "east":
+      case "west":
         {
           if (x === 0 || tilemap[y][x - 1] > 0) {
             return true;
@@ -510,7 +510,7 @@ export class Dungeon {
           // [x][ ]
           // [ ]
           if (rightTile > 0 && bottomTile > 0 && tilemap[y + 1][x + 1] <= 0) {
-            tilemap[y][x] = DirectionNES;
+            tilemap[y][x] = DirectionNWS;
           }
           // [ ][x]
           //    [ ]
@@ -519,7 +519,7 @@ export class Dungeon {
             bottomTile > 0 &&
             tilemap[y + 1][x - 1] <= 0
           ) {
-            tilemap[y][x] = DirectionNWS;
+            tilemap[y][x] = DirectionNES;
           }
           // [ ]
           // [x][ ]

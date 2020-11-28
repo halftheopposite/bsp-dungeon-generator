@@ -3,11 +3,12 @@ import * as PIXI from "pixi.js";
 import { Dungeon } from "./dungeon";
 import { Drawer } from "./drawer";
 
+// Generate dungeon
 const dungeon = new Dungeon({
-  mapWidth: 48,
+  mapWidth: 64,
   mapHeight: 48,
   mapGutterWidth: 1,
-  iterations: 3,
+  iterations: 4,
   containerGutterWidth: 1,
   containerWidthRatio: 0.45,
   containerHeightRatio: 0.45,
@@ -17,28 +18,25 @@ const dungeon = new Dungeon({
   corridorWidth: 2,
 });
 
+// Render dungeon
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
 drawer.draw(dungeon, {
   debug: false,
   unitWidthInPixels: 16,
   tilesColors: {
     "-1": 0xffffff,
-    1: 0x1f466c,
-    2: 0x13c3a1,
+    0: 0x1f466c,
     3: 0x4760b0,
-    4: 0xd38be7,
     5: 0x4113f0,
-    6: 0x802d70,
     7: 0x267492,
-    8: 0xd2f3fd,
-    9: 0xf9cd26,
     10: 0xef2db3,
     11: 0x54fccd,
     12: 0x6899ce,
     13: 0xa67493,
     14: 0xddffd1,
     15: 0xa21cd2,
-    16: 0xe3e7c7,
+    31: 0xd38be7,
+    47: 0x802d70,
   },
   tilesSprites: {
     0: PIXI.Texture.from("assets/tiles/0.png"),
