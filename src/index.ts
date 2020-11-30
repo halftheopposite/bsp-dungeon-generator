@@ -24,7 +24,8 @@ drawer.draw(dungeon, {
   debug: false,
   unitWidthInPixels: 16,
   tilesColors: {
-    "-1": 0xffffff,
+    "-2": 0x00,
+    "-1": 0x00,
     0: 0x1f466c,
     3: 0x4760b0,
     5: 0x4113f0,
@@ -37,8 +38,10 @@ drawer.draw(dungeon, {
     15: 0xa21cd2,
     31: 0xd38be7,
     47: 0x802d70,
+    peaks: 0x8123de,
   },
   tilesSprites: {
+    "-1": PIXI.Texture.from("assets/tiles/hole.png"),
     0: PIXI.Texture.from("assets/tiles/0.png"),
     3: PIXI.Texture.from("assets/tiles/3.png"),
     5: PIXI.Texture.from("assets/tiles/5.png"),
@@ -51,6 +54,9 @@ drawer.draw(dungeon, {
     15: PIXI.Texture.from("assets/tiles/15.png"),
     31: PIXI.Texture.from("assets/tiles/31.png"),
     47: PIXI.Texture.from("assets/tiles/47.png"),
+  },
+  propsSprites: {
+    1: PIXI.Texture.from("assets/props/peaks.png"),
   },
   monstersSprites: {
     bandit: PIXI.Texture.from("assets/monsters/bandit.png"),

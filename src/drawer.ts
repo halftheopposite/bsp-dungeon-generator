@@ -1,8 +1,9 @@
 import * as PIXI from "pixi.js";
 import { Dungeon } from "./dungeon";
-import { Container, TreeNode } from "./types";
+import { Container, TileMap, TreeNode } from "./types";
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.settings.ROUND_PIXELS = true;
 
 export interface TexturesMap {
   [key: string]: PIXI.Texture;
@@ -17,6 +18,7 @@ export interface DrawOptions {
   unitWidthInPixels: number;
   tilesSprites: TexturesMap;
   tilesColors: ColorsMap;
+  propsSprites: TexturesMap;
   monstersSprites: TexturesMap;
 }
 
@@ -45,7 +47,8 @@ export class Drawer {
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;
 
-    this.drawTiles(dungeon, options.tilesSprites, options.tilesColors);
+    this.drawTiles(dungeon.tilemap, options.tilesSprites, options.tilesColors);
+    this.drawProps(dungeon.props, options.propsSprites, options.tilesColors);
     this.drawMonsters(dungeon, options.monstersSprites);
 
     if (options.debug) {
@@ -57,13 +60,42 @@ export class Drawer {
   };
 
   private drawTiles = (
-    dungeon: Dungeon,
+    tilemap: TileMap,
     sprites: TexturesMap,
     colors: ColorsMap
   ) => {
-    for (let y = 0; y < dungeon.height; y++) {
-      for (let x = 0; x < dungeon.width; x++) {
-        const tileId = dungeon.tilemap[y][x];
+    for (let y = 0; y < tilemap.length; y++) {
+      for (let x = 0; x < tilemap[y].length; x++) {
+        const tileId = tilemap[y][x];
+        const tileTexture = sprites[tileId];
+        if (tileTexture) {
+          const sprite = new PIXI.Sprite(tileTexture);
+          sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
+          this.tilemapContainer.addChild(sprite);
+        } else {
+          const rectangle = new PIXI.Graphics();
+          rectangle.beginFill(tileId in colors ? colors[tileId] : 0xff00ff);
+          rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
+          rectangle.endFill();
+          rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
+          this.tilemapContainer.addChild(rectangle);
+        }
+      }
+    }
+  };
+
+  private drawProps = (
+    tilemap: TileMap,
+    sprites: TexturesMap,
+    colors: ColorsMap
+  ) => {
+    for (let y = 0; y < tilemap.length; y++) {
+      for (let x = 0; x < tilemap[y].length; x++) {
+        const tileId = tilemap[y][x];
+        if (tileId === 0) {
+          continue;
+        }
+
         const tileTexture = sprites[tileId];
         if (tileTexture) {
           const sprite = new PIXI.Sprite(tileTexture);
@@ -110,7 +142,6 @@ export class Drawer {
         const text = new PIXI.Text(`${tileId}`, {
           fontSize: 10,
           fill: 0xffffff,
-          //   align: "center",
         });
         text.anchor.set(0.5);
         text.position.set(this.unitInPixels / 2, this.unitInPixels / 2);
@@ -121,7 +152,7 @@ export class Drawer {
   };
 
   private drawContainers = (container: TreeNode<Container>) => {
-    container.nodes.forEach((container) => {
+    container.leaves.forEach((container) => {
       const rectangle = new PIXI.Graphics();
       rectangle.lineStyle(1, 0xff0000, 0.8);
       rectangle.drawRect(
@@ -139,7 +170,7 @@ export class Drawer {
   };
 
   private drawRooms = (container: TreeNode<Container>) => {
-    container.nodes.forEach((container) => {
+    container.leaves.forEach((container) => {
       const room = container.room;
       if (!room) {
         return;
@@ -162,7 +193,7 @@ export class Drawer {
   };
 
   private drawCorridors = (container: TreeNode<Container>) => {
-    const corridor = container.data.corridor;
+    const corridor = container.leaf.corridor;
     if (!corridor) {
       return;
     }

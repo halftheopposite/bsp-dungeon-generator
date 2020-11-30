@@ -4,19 +4,19 @@
 export class TreeNode<T> {
   left?: TreeNode<T>;
   right?: TreeNode<T>;
-  data: T;
+  leaf: T;
 
   constructor(data: T) {
-    this.data = data;
+    this.leaf = data;
   }
 
-  get nodes(): T[] {
+  get leaves(): T[] {
     const result: T[] = [];
 
     if (this.left && this.right) {
-      result.push(...this.left.nodes, ...this.right.nodes);
+      result.push(...this.left.leaves, ...this.right.leaves);
     } else {
-      result.push(this.data);
+      result.push(this.leaf);
     }
 
     return result;
@@ -26,6 +26,8 @@ export class TreeNode<T> {
 //
 // Containers
 //
+export type Direction = "horizontal" | "vertical";
+
 export class Rectangle {
   x: number;
   y: number;
@@ -75,8 +77,13 @@ export class Room extends Rectangle {
 }
 
 export class Corridor extends Rectangle {
+  traps?: Pattern;
+  direction: Direction;
+
   constructor(x: number, y: number, width: number, height: number) {
     super(x, y, width, height);
+
+    this.direction = width > height ? "horizontal" : "vertical";
   }
 }
 
@@ -92,12 +99,19 @@ export class Container extends Rectangle {
 //
 // Patterns
 //
-export type PatternType = "holes";
+export type PatternType = "hole" | "trap";
 export interface Pattern {
   type: PatternType;
   width: number;
   height: number;
   tiles: TileMap;
+}
+
+//
+// Props
+//
+export enum PropType {
+  Spikes = 1,
 }
 
 //

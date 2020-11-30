@@ -1,3 +1,25 @@
+import { TileMap } from "./types";
+
+/**
+ * Create an empty tilemap.
+ */
+export function createTilemap(
+  width: number,
+  height: number,
+  value: number
+): TileMap {
+  const tilemap: TileMap = [];
+
+  for (let y = 0; y < height; y++) {
+    tilemap[y] = [];
+    for (let x = 0; x < width; x++) {
+      tilemap[y][x] = value;
+    }
+  }
+
+  return tilemap;
+}
+
 /**
  * Shuffle an array's entries into a new one.
  */

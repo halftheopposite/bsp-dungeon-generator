@@ -2,17 +2,19 @@ import PoissonDiscSampling from "poisson-disk-sampling";
 import {
   Container,
   Corridor,
+  Direction,
   DirectionNES,
   DirectionNWS,
   Monster,
   MonsterType,
+  PropType,
   Room,
   TileDirection,
   TileMap,
   TreeNode,
 } from "./types";
-import { Holes } from "./patterns";
-import { random, randomInRanges, shuffleArray } from "./utils";
+import { Holes, Traps } from "./patterns";
+import { createTilemap, random, randomInRanges, shuffleArray } from "./utils";
 
 export interface DungeonArgs {
   /** Width of the map */
@@ -48,6 +50,8 @@ export class Dungeon {
   tree: TreeNode<Container>;
   /** The tilemap representing the dungeon */
   tilemap: TileMap;
+  /** The props in the dungeon (traps, flags, torches...) */
+  props: TileMap;
   /** The monsters entities in the dungeon */
   monsters: Monster[];
 
@@ -76,7 +80,7 @@ export class Dungeon {
     const monsters = this.generateMonsters(tree, args);
 
     // Create the tilemap
-    const tilemap = this.generateTilemap(tree, args);
+    const { tilemap, props } = this.generateTilemap(tree, args);
 
     const endAt = performance.now();
     console.log(`Dungeon generated in ${endAt - startAt}ms`);
@@ -85,6 +89,7 @@ export class Dungeon {
     this.height = args.mapHeight;
     this.tree = tree;
     this.tilemap = tilemap;
+    this.props = props;
     this.monsters = monsters;
   }
 
@@ -115,7 +120,7 @@ export class Dungeon {
     let right: Container;
 
     // Generate a random direction to split the container
-    const direction = randomInRanges<"vertical" | "horizontal">(
+    const direction = randomInRanges<Direction>(
       [0.5, 0.5],
       ["vertical", "horizontal"]
     );
@@ -177,7 +182,7 @@ export class Dungeon {
     node: TreeNode<Container>,
     args: DungeonArgs
   ): TreeNode<Container> => {
-    node.nodes.forEach((container) => {
+    node.leaves.forEach((container) => {
       // Generate the room's dimensions
       const x = Math.floor(
         container.x +
@@ -231,34 +236,44 @@ export class Dungeon {
     node: TreeNode<Container>,
     args: DungeonArgs
   ) => {
+    // We arrived at the bottom nodes
     if (!node.left || !node.right) {
       return;
     }
 
-    const leftCenter = node.left.data.center;
-    const rightCenter = node.right.data.center;
-
+    // Create the corridor
+    const leftCenter = node.left.leaf.center;
+    const rightCenter = node.right.leaf.center;
     const x = Math.ceil(leftCenter.x);
     const y = Math.ceil(leftCenter.y);
+
+    let corridor: Corridor;
     if (leftCenter.x === rightCenter.x) {
       // Vertical
-      const corridor = new Corridor(
+      corridor = new Corridor(
         x,
         y,
         Math.ceil(args.corridorWidth),
         Math.ceil(rightCenter.y) - y
       );
-      node.data.corridor = corridor;
+      node.leaf.corridor = corridor;
     } else {
       // Horizontal
-      const corridor = new Corridor(
+      corridor = new Corridor(
         x,
         y,
         Math.ceil(rightCenter.x) - x,
         Math.ceil(args.corridorWidth)
       );
-      node.data.corridor = corridor;
     }
+
+    // Generate the corridor's traps (if any)
+    const hasTrap = randomInRanges([0.6, 0.3], [true, false]);
+    if (hasTrap) {
+      corridor.traps = Traps.smallSquare;
+    }
+
+    node.leaf.corridor = corridor;
 
     this.generateCorridors(node.left, args);
     this.generateCorridors(node.right, args);
@@ -270,7 +285,7 @@ export class Dungeon {
   ): Monster[] => {
     const monsters: Monster[] = [];
 
-    node.nodes.forEach((node) => {
+    node.leaves.forEach((node) => {
       const room = node.room;
       if (!room) {
         return;
@@ -311,28 +326,23 @@ export class Dungeon {
   private generateTilemap = (
     tree: TreeNode<Container>,
     args: DungeonArgs
-  ): TileMap => {
-    // Initialize the tilemap
-    const tilemap: TileMap = [];
-    for (let y = 0; y < args.mapHeight; y++) {
-      tilemap[y] = [];
-      for (let x = 0; x < args.mapWidth; x++) {
-        tilemap[y][x] = 1;
-      }
-    }
+  ): { tilemap: TileMap; props: TileMap } => {
+    const tilemap = createTilemap(args.mapWidth, args.mapHeight, 1);
+    const props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
     this.carveRooms(tree, tilemap);
     this.carveCorridors(tree, tilemap);
     this.carvePatterns(tree, tilemap);
+    this.carveTraps(tree, props);
     this.cleanTilemap(tilemap);
     this.generateTileMask(tilemap);
     this.normalizeTileMask(tilemap);
 
-    return tilemap;
+    return { tilemap, props };
   };
 
   private carveRooms = (node: TreeNode<Container>, tilemap: TileMap) => {
-    node.nodes.forEach((container) => {
+    node.leaves.forEach((container) => {
       if (!container.room) {
         return;
       }
@@ -352,7 +362,7 @@ export class Dungeon {
   };
 
   private carveCorridors = (node: TreeNode<Container>, tilemap: TileMap) => {
-    const corridor = node.data.corridor;
+    const corridor = node.leaf.corridor;
     if (!corridor) {
       return;
     }
@@ -372,7 +382,7 @@ export class Dungeon {
   };
 
   private carvePatterns = (node: TreeNode<Container>, tilemap: TileMap) => {
-    node.nodes.forEach((container) => {
+    node.leaves.forEach((container) => {
       if (!container.room || !container.room.holes) {
         return;
       }
@@ -389,6 +399,30 @@ export class Dungeon {
         }
       }
     });
+  };
+
+  private carveTraps = (node: TreeNode<Container>, tilemap: TileMap) => {
+    const corridor = node.leaf.corridor;
+    if (!corridor) {
+      return;
+    }
+
+    // Carve traps
+    if (corridor.traps) {
+      const traps = corridor.traps;
+      const startY = Math.ceil(corridor.center.y - traps.height / 2);
+      const startX = Math.ceil(corridor.center.x - traps.width / 2);
+      for (let y = 0; y < traps.height; y++) {
+        for (let x = 0; x < traps.width; x++) {
+          const posY = startY + y;
+          const posX = startX + x;
+          tilemap[posY][posX] = PropType.Spikes;
+        }
+      }
+    }
+
+    this.carveTraps(node.left, tilemap);
+    this.carveTraps(node.right, tilemap);
   };
 
   /**
