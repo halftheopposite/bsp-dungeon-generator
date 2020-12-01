@@ -37,8 +37,12 @@ export interface DungeonArgs {
   roomMaxMonsters: number;
   /** Minimum size (width or height) under which it is discarded */
   roomMinSize: number;
+  /** Chance that a hole will appear in a room */
+  roomHoleChance: number;
   /** Width of corridors */
   corridorWidth: number;
+  /** Chance that a trap will appear in a corridor */
+  corridorTrapChance: number;
 }
 
 export class Dungeon {
@@ -213,13 +217,16 @@ export class Dungeon {
       const room = new Room(x, y, width, height);
 
       // Generate the room's holes (if any)
-      const hasHole = randomInRanges([0.6, 0.4], [true, false]);
+      const hasHole = randomInRanges(
+        [args.roomHoleChance, 1 - args.roomHoleChance],
+        [true, false]
+      );
       if (hasHole) {
         Holes.all.forEach((hole) => {
           if (
             !room.holes &&
-            room.width > hole.width * 2 &&
-            room.height > hole.height * 2
+            room.width >= hole.width * 2 &&
+            room.height >= hole.height * 2
           ) {
             room.holes = hole;
           }
@@ -268,9 +275,15 @@ export class Dungeon {
     }
 
     // Generate the corridor's traps (if any)
-    const hasTrap = randomInRanges([0.6, 0.3], [true, false]);
+    const hasTrap = randomInRanges(
+      [args.corridorTrapChance, 1 - args.corridorTrapChance],
+      [true, false]
+    );
     if (hasTrap) {
-      corridor.traps = Traps.smallSquare;
+      corridor.traps =
+        corridor.direction === "horizontal"
+          ? Traps.smallLarge
+          : Traps.smallLong;
     }
 
     node.leaf.corridor = corridor;
@@ -331,10 +344,10 @@ export class Dungeon {
     const props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
     this.carveRooms(tree, tilemap);
-    this.carveCorridors(tree, tilemap);
+    this.carveCorridors(tree, tilemap, props);
     this.carvePatterns(tree, tilemap);
     this.carveTraps(tree, props);
-    this.cleanTilemap(tilemap);
+    this.cleanTilemap(tree, tilemap, props);
     this.generateTileMask(tilemap);
     this.normalizeTileMask(tilemap);
 
@@ -361,24 +374,28 @@ export class Dungeon {
     });
   };
 
-  private carveCorridors = (node: TreeNode<Container>, tilemap: TileMap) => {
+  private carveCorridors = (
+    node: TreeNode<Container>,
+    props: TileMap,
+    tilemap: TileMap
+  ) => {
     const corridor = node.leaf.corridor;
     if (!corridor) {
       return;
     }
 
-    for (let y = 0; y < tilemap.length; y++) {
-      for (let x = 0; x < tilemap[y].length; x++) {
+    for (let y = 0; y < props.length; y++) {
+      for (let x = 0; x < props[y].length; x++) {
         const inHeightRange = y >= corridor.y && y < corridor.down;
         const inWidthRange = x >= corridor.x && x < corridor.right;
         if (inHeightRange && inWidthRange) {
-          tilemap[y][x] = 0;
+          props[y][x] = 0;
         }
       }
     }
 
-    this.carveCorridors(node.left, tilemap);
-    this.carveCorridors(node.right, tilemap);
+    this.carveCorridors(node.left, props, tilemap);
+    this.carveCorridors(node.right, props, tilemap);
   };
 
   private carvePatterns = (node: TreeNode<Container>, tilemap: TileMap) => {
@@ -428,7 +445,11 @@ export class Dungeon {
   /**
    * Clean a tilemap (optional).
    */
-  private cleanTilemap = (tilemap: TileMap) => {
+  private cleanTilemap = (
+    node: TreeNode<Container>,
+    tilemap: TileMap,
+    props: TileMap
+  ) => {
     // Remove any 1 unit width tiles (vertical or horizontal)
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
@@ -452,6 +473,28 @@ export class Dungeon {
         }
       }
     }
+
+    // Clean traps that are inside rooms
+    node.leaves.forEach((container) => {
+      if (!container.room) {
+        return;
+      }
+
+      for (let y = 0; y < props.length; y++) {
+        for (let x = 0; x < props[y].length; x++) {
+          const propId = props[y][x];
+          if (propId === PropType.Spikes) {
+            const inHeightRange =
+              y >= container.room.y && y < container.room.down;
+            const inWidthRange =
+              x >= container.room.x && x < container.room.right;
+            if (inHeightRange && inWidthRange) {
+              props[y][x] = 0;
+            }
+          }
+        }
+      }
+    });
   };
 
   private generateTileMask = (tilemap: TileMap) => {

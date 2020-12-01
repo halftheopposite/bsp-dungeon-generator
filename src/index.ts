@@ -15,7 +15,9 @@ const dungeon = new Dungeon({
   roomGutterWidth: 2,
   roomMaxMonsters: 6,
   roomMinSize: 3,
+  roomHoleChance: 0.5,
   corridorWidth: 2,
+  corridorTrapChance: 0.5,
 });
 
 // Render dungeon

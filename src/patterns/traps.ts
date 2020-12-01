@@ -1,13 +1,26 @@
 import { Pattern } from "../types";
 
-export const smallSquare: Pattern = {
-  width: 2,
+export const smallLarge: Pattern = {
+  width: 5,
   height: 2,
   type: "trap",
   tiles: [
+    [1, 1, 1, 1, 1],
+    [1, 1, 1, 1, 1],
+  ],
+};
+
+export const smallLong: Pattern = {
+  width: 2,
+  height: 5,
+  type: "trap",
+  tiles: [
+    [1, 1],
+    [1, 1],
+    [1, 1],
     [1, 1],
     [1, 1],
   ],
 };
 
-export const all: Pattern[] = [smallSquare];
+export const all: Pattern[] = [smallLarge, smallLong];
