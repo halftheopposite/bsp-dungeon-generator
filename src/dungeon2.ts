@@ -4,6 +4,7 @@ import {
   Corridor,
   Direction,
   Monster,
+  NewTileDirection,
   PropType,
   Room,
   TileDirection,
@@ -345,75 +346,162 @@ function carveCorridors(node: TreeNode<Container>, tiles: TileMap): TileMap {
   return tiles;
 }
 
-function carveTilesMask(tilemap: TileMap) {
-  for (let y = 0; y < tilemap.length; y++) {
-    for (let x = 0; x < tilemap[y].length; x++) {
+function carveTilesMask(tiles: TileMap) {
+  for (let y = 0; y < tiles.length; y++) {
+    for (let x = 0; x < tiles[y].length; x++) {
       // Apply tilemask only to walls
-      if (tilemap[y][x] > 0) {
-        let mask = 0;
-
-        if (tileDirectionCollides(x, y, "west", tilemap)) {
-          mask |= TileDirection.West;
-        }
-
-        if (tileDirectionCollides(x, y, "east", tilemap)) {
-          mask |= TileDirection.East;
-        }
-
-        if (tileDirectionCollides(x, y, "north", tilemap)) {
-          mask |= TileDirection.North;
-        }
-
-        if (tileDirectionCollides(x, y, "south", tilemap)) {
-          mask |= TileDirection.South;
-        }
-
-        tilemap[y][x] = mask;
+      if (tiles[y][x] > 0) {
+        tiles[y][x] = computeBitMask(x, y, tiles);
       }
     }
   }
 
-  return tilemap;
+  return tiles;
+}
+
+function computeBitMask(x: number, y: number, tiles: TileMap): number {
+  let mask = 0;
+
+  if (tileDirectionCollides(x, y, "north", tiles)) {
+    mask |= NewTileDirection.North;
+  }
+
+  if (tileDirectionCollides(x, y, "west", tiles)) {
+    mask |= NewTileDirection.West;
+  }
+
+  if (tileDirectionCollides(x, y, "east", tiles)) {
+    mask |= NewTileDirection.East;
+  }
+
+  if (tileDirectionCollides(x, y, "south", tiles)) {
+    mask |= NewTileDirection.South;
+  }
+
+  if (
+    mask & NewTileDirection.North &&
+    mask & NewTileDirection.West &&
+    tileDirectionCollides(x, y, "north-west", tiles)
+  ) {
+    mask |= NewTileDirection.NorthWest;
+  }
+
+  if (
+    mask & NewTileDirection.North &&
+    mask & NewTileDirection.East &&
+    tileDirectionCollides(x, y, "north-east", tiles)
+  ) {
+    mask |= NewTileDirection.NorthEast;
+  }
+
+  if (
+    mask & NewTileDirection.South &&
+    mask & NewTileDirection.West &&
+    tileDirectionCollides(x, y, "south-west", tiles)
+  ) {
+    mask |= NewTileDirection.SouthWest;
+  }
+
+  if (
+    mask & NewTileDirection.South &&
+    mask & NewTileDirection.East &&
+    tileDirectionCollides(x, y, "south-east", tiles)
+  ) {
+    mask |= NewTileDirection.SouthEast;
+  }
+
+  return maskToTileIdMap[mask];
 }
 
 function tileDirectionCollides(
   x: number,
   y: number,
-  side: "north" | "west" | "east" | "south",
+  side:
+    | "north"
+    | "west"
+    | "east"
+    | "south"
+    | "north-west"
+    | "north-east"
+    | "south-west"
+    | "south-east",
   tilemap: TileMap
 ) {
+  const isLeft = x === 0;
+  const isRight = x === tilemap[y].length - 1;
+  const isTop = y === 0;
+  const isBottom = y === tilemap.length - 1;
+
   switch (side) {
     case "north":
-      {
-        if (y === 0 || tilemap[y - 1][x] > 0) {
-          return true;
-        }
-      }
-      break;
-    case "east": {
-      if (x === tilemap[y].length - 1 || tilemap[y][x + 1] > 0) {
-        return true;
-      }
-      break;
-    }
+      return isTop || tilemap[y - 1][x] > 0;
     case "west":
-      {
-        if (x === 0 || tilemap[y][x - 1] > 0) {
-          return true;
-        }
-      }
-      break;
+      return isLeft || tilemap[y][x - 1] > 0;
+    case "east":
+      return isRight || tilemap[y][x + 1] > 0;
     case "south":
-      {
-        if (y === tilemap.length - 1 || tilemap[y + 1][x] > 0) {
-          return true;
-        }
-      }
-      break;
+      return isBottom || tilemap[y + 1][x] > 0;
+    case "north-west":
+      return isLeft || isTop || tilemap[y - 1][x - 1] > 0;
+    case "north-east":
+      return isRight || isTop || tilemap[y - 1][x + 1] > 0;
+    case "south-west":
+      return isLeft || isBottom || tilemap[y + 1][x - 1] > 0;
+    case "south-east":
+      return isRight || isBottom || tilemap[y + 1][x + 1] > 0;
   }
-
-  return false;
 }
+
+const maskToTileIdMap = {
+  2: 1,
+  8: 2,
+  10: 3,
+  11: 4,
+  16: 5,
+  18: 6,
+  22: 7,
+  24: 8,
+  26: 9,
+  27: 10,
+  30: 11,
+  31: 12,
+  64: 13,
+  66: 14,
+  72: 15,
+  74: 16,
+  75: 17,
+  80: 18,
+  82: 19,
+  86: 20,
+  88: 21,
+  90: 22,
+  91: 23,
+  94: 24,
+  95: 25,
+  104: 26,
+  106: 27,
+  107: 28,
+  120: 29,
+  122: 30,
+  123: 31,
+  126: 32,
+  127: 33,
+  208: 34,
+  210: 35,
+  214: 36,
+  216: 37,
+  218: 38,
+  219: 39,
+  222: 40,
+  223: 41,
+  246: 36,
+  248: 42,
+  250: 43,
+  251: 44,
+  254: 45,
+  255: 46,
+  0: 47,
+};
 
 //
 // Props

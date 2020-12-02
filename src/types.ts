@@ -155,3 +155,14 @@ export const DirectionNEWS =
   TileDirection.East |
   TileDirection.West |
   TileDirection.South;
+
+export enum NewTileDirection {
+  NorthWest = 1,
+  North = 2,
+  NorthEast = 4,
+  West = 8,
+  East = 16,
+  SouthWest = 32,
+  South = 64,
+  SouthEast = 128,
+}
