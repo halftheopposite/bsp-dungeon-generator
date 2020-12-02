@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 
 import { Dungeon } from "./dungeon";
 import { Drawer } from "./drawer";
+import { generate } from "./dungeon2";
 
 // Generate dungeon
 const dungeon = new Dungeon({
@@ -20,9 +21,27 @@ const dungeon = new Dungeon({
   corridorTrapChance: 0.5,
 });
 
+const dungeon2 = generate({
+  mapWidth: 48,
+  mapHeight: 48,
+  mapGutterWidth: 1,
+  iterations: 3,
+  containerGutterWidth: 1,
+  containerWidthRatio: 0.45,
+  containerHeightRatio: 0.45,
+  roomGutterWidth: 2,
+  roomMaxMonsters: 6,
+  roomMinSize: 3,
+  roomHoleChance: 0.5,
+  corridorWidth: 2,
+  corridorTrapChance: 0.5,
+});
+
+console.log("dungeon2:", dungeon2);
+
 // Render dungeon
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
-drawer.draw(dungeon, {
+drawer.draw(dungeon2, {
   debug: false,
   unitWidthInPixels: 16,
   tilesColors: {

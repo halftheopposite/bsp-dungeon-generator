@@ -58,3 +58,12 @@ export function randomInRanges<T>(weights: number[], values: T[]): T {
 
   return values[lastIndex];
 }
+
+/**
+ * Create and return a deep copy of a tilemap.
+ */
+export function duplicateTilemap(tilemap: TileMap): TileMap {
+  return tilemap.map((row) => {
+    return [...row];
+  });
+}

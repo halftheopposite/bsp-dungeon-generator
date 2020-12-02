@@ -10,6 +10,7 @@ export class TreeNode<T> {
     this.leaf = data;
   }
 
+  /** Get the bottom-most leaves */
   get leaves(): T[] {
     const result: T[] = [];
 
