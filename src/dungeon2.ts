@@ -57,9 +57,14 @@ export interface Dungeon {
 }
 
 export function generate(args: Args): Dungeon {
+  const startAt = performance.now();
+
   const tree = createTree(args);
   const tiles = createTilesLayer(tree, args);
   const props = createPropsLayer(tree, args);
+
+  const endAt = performance.now();
+  console.log(`Dungeon generated in ${endAt - startAt}ms`);
 
   return {
     width: args.mapWidth,
@@ -207,7 +212,6 @@ function generateRoom(container: Container, args: Args): Room {
 
   // Dismiss room if it does not fit minimum dimensions
   if (width < args.roomMinSize || height < args.roomMinSize) {
-    console.log("too small");
     return;
   }
 
@@ -359,6 +363,97 @@ function carveTilesMask(tiles: TileMap) {
   return tiles;
 }
 
+//
+// Props
+//
+function createPropsLayer(node: TreeNode<Container>, args: Args): TileMap {
+  let props = createTilemap(args.mapWidth, args.mapHeight, 0);
+
+  props = carveTraps(node, duplicateTilemap(props));
+
+  return props;
+}
+
+function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
+  const corridor = node.leaf.corridor;
+  if (!corridor) {
+    return;
+  }
+
+  // Carve traps
+  if (corridor.traps) {
+    const traps = corridor.traps;
+    const startY = Math.ceil(corridor.center.y - traps.height / 2);
+    const startX = Math.ceil(corridor.center.x - traps.width / 2);
+    for (let y = 0; y < traps.height; y++) {
+      for (let x = 0; x < traps.width; x++) {
+        const posY = startY + y;
+        const posX = startX + x;
+        props[posY][posX] = PropType.Spikes;
+      }
+    }
+  }
+
+  carveTraps(node.left, props);
+  carveTraps(node.right, props);
+
+  return props;
+}
+
+//
+// Utils
+//
+const maskToTileIdMap = {
+  2: 1,
+  8: 2,
+  10: 3,
+  11: 4,
+  16: 5,
+  18: 6,
+  22: 7,
+  24: 8,
+  26: 9,
+  27: 10,
+  30: 11,
+  31: 12,
+  64: 13,
+  66: 14,
+  72: 15,
+  74: 16,
+  75: 17,
+  80: 18,
+  82: 19,
+  86: 20,
+  88: 21,
+  90: 22,
+  91: 23,
+  94: 24,
+  95: 25,
+  104: 26,
+  106: 27,
+  107: 28,
+  120: 29,
+  122: 30,
+  123: 31,
+  126: 32,
+  127: 33,
+  208: 34,
+  210: 35,
+  214: 36,
+  216: 37,
+  218: 38,
+  219: 39,
+  222: 40,
+  223: 41,
+  246: 36,
+  248: 42,
+  250: 43,
+  251: 44,
+  254: 45,
+  255: 46,
+  0: 47,
+};
+
 function computeBitMask(x: number, y: number, tiles: TileMap): number {
   let mask = 0;
 
@@ -450,92 +545,4 @@ function tileDirectionCollides(
     case "south-east":
       return isRight || isBottom || tilemap[y + 1][x + 1] > 0;
   }
-}
-
-const maskToTileIdMap = {
-  2: 1,
-  8: 2,
-  10: 3,
-  11: 4,
-  16: 5,
-  18: 6,
-  22: 7,
-  24: 8,
-  26: 9,
-  27: 10,
-  30: 11,
-  31: 12,
-  64: 13,
-  66: 14,
-  72: 15,
-  74: 16,
-  75: 17,
-  80: 18,
-  82: 19,
-  86: 20,
-  88: 21,
-  90: 22,
-  91: 23,
-  94: 24,
-  95: 25,
-  104: 26,
-  106: 27,
-  107: 28,
-  120: 29,
-  122: 30,
-  123: 31,
-  126: 32,
-  127: 33,
-  208: 34,
-  210: 35,
-  214: 36,
-  216: 37,
-  218: 38,
-  219: 39,
-  222: 40,
-  223: 41,
-  246: 36,
-  248: 42,
-  250: 43,
-  251: 44,
-  254: 45,
-  255: 46,
-  0: 47,
-};
-
-//
-// Props
-//
-function createPropsLayer(node: TreeNode<Container>, args: Args): TileMap {
-  let props = createTilemap(args.mapWidth, args.mapHeight, 0);
-
-  props = carveTraps(node, duplicateTilemap(props));
-
-  return props;
-}
-
-function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
-  const corridor = node.leaf.corridor;
-  if (!corridor) {
-    return;
-  }
-
-  // Carve traps
-  if (corridor.traps) {
-    const traps = corridor.traps;
-    const startY = Math.ceil(corridor.center.y - traps.height / 2);
-    const startX = Math.ceil(corridor.center.x - traps.width / 2);
-    for (let y = 0; y < traps.height; y++) {
-      for (let x = 0; x < traps.width; x++) {
-        const posY = startY + y;
-        const posX = startX + x;
-        props[posY][posX] = PropType.Spikes;
-      }
-    }
-  }
-
-  carveTraps(node.left, props);
-  carveTraps(node.right, props);
-
-  return props;
 }
