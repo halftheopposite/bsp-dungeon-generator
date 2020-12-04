@@ -44,7 +44,7 @@ export function random(min: number, max: number): number {
 /**
  * Return one of the values matching the randomly selected weight.
  */
-export function randomInRanges<T>(weights: number[], values: T[]): T {
+export function randomWeights<T>(weights: number[], values: T[]): T {
   const num = Math.random();
   let s = 0;
   let lastIndex = weights.length - 1;
@@ -57,6 +57,20 @@ export function randomInRanges<T>(weights: number[], values: T[]): T {
   }
 
   return values[lastIndex];
+}
+
+/**
+ * Return one of the values.
+ */
+export function randomChoice<T>(values: T[]): T {
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+/**
+ * Return `true` if probability is matched.
+ */
+export function randomProbability(probability: number): boolean {
+  return random(0, 1) <= probability;
 }
 
 /**

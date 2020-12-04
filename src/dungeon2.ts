@@ -15,7 +15,8 @@ import {
   createTilemap,
   duplicateTilemap,
   random,
-  randomInRanges,
+  randomChoice,
+  randomProbability,
 } from "./utils";
 
 export interface Args {
@@ -115,7 +116,9 @@ function generateTree(
     );
   } else {
     // We arrived at the bottom-most node and we can generate a room
-    node.leaf.room = generateRoom(container, args);
+    if (randomProbability(0.8)) {
+      node.leaf.room = generateRoom(container, args);
+    }
   }
 
   return node;
@@ -129,11 +132,7 @@ function splitContainer(
   let right: Container;
 
   // Generate a random direction to split the container
-  const direction = randomInRanges<Direction>(
-    [0.5, 0.5],
-    ["vertical", "horizontal"]
-  );
-
+  const direction = randomChoice<Direction>(["vertical", "horizontal"]);
   if (direction === "vertical") {
     // Vertical
     left = new Container(
@@ -218,10 +217,7 @@ function generateRoom(container: Container, args: Args): Room {
   const room = new Room(x, y, width, height);
 
   // Generate the room's holes (if any)
-  const hasHole = randomInRanges(
-    [args.roomHoleChance, 1 - args.roomHoleChance],
-    [true, false]
-  );
+  const hasHole = randomProbability(args.roomHoleChance);
   if (hasHole) {
     Holes.all.forEach((hole) => {
       if (
@@ -268,10 +264,7 @@ function generateCorridor(
   }
 
   // Generate the corridor's traps (if any)
-  const hasTrap = randomInRanges(
-    [args.corridorTrapChance, 1 - args.corridorTrapChance],
-    [true, false]
-  );
+  const hasTrap = randomProbability(args.corridorTrapChance);
   if (hasTrap) {
     corridor.traps =
       corridor.direction === "horizontal" ? Traps.smallLarge : Traps.smallLong;
@@ -369,15 +362,18 @@ function carveTilesMask(tiles: TileMap) {
 function createPropsLayer(node: TreeNode<Container>, args: Args): TileMap {
   let props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
-  props = carveTraps(node, duplicateTilemap(props));
+  props = carveTraps(node, props);
+  props = cleanProps(node, props); // Optional
 
   return props;
 }
 
 function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
+  let result = duplicateTilemap(props);
+
   const corridor = node.leaf.corridor;
   if (!corridor) {
-    return;
+    return result;
   }
 
   // Carve traps
@@ -389,15 +385,45 @@ function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
       for (let x = 0; x < traps.width; x++) {
         const posY = startY + y;
         const posX = startX + x;
-        props[posY][posX] = PropType.Spikes;
+        result[posY][posX] = PropType.Spikes;
       }
     }
   }
 
-  carveTraps(node.left, props);
-  carveTraps(node.right, props);
+  result = carveTraps(node.left, result);
+  result = carveTraps(node.right, result);
 
-  return props;
+  return result;
+}
+
+// function carveTorches(props: TileMap): TileMap {}
+
+function cleanProps(node: TreeNode<Container>, props: TileMap): TileMap {
+  let result = duplicateTilemap(props);
+
+  // Clean traps that are inside rooms
+  node.leaves.forEach((container) => {
+    if (!container.room) {
+      return result;
+    }
+
+    for (let y = 0; y < result.length; y++) {
+      for (let x = 0; x < result[y].length; x++) {
+        const propId = result[y][x];
+        if (propId === PropType.Spikes) {
+          const inHeightRange =
+            y >= container.room.y && y < container.room.down;
+          const inWidthRange =
+            x >= container.room.x && x < container.room.right;
+          if (inHeightRange && inWidthRange) {
+            result[y][x] = 0;
+          }
+        }
+      }
+    }
+  });
+
+  return result;
 }
 
 //

@@ -22,10 +22,10 @@ const dungeon = new Dungeon({
 });
 
 const dungeon2 = generate({
-  mapWidth: 48,
+  mapWidth: 96,
   mapHeight: 48,
   mapGutterWidth: 1,
-  iterations: 4,
+  iterations: 5,
   containerGutterWidth: 1,
   containerWidthRatio: 0.45,
   containerHeightRatio: 0.45,
@@ -55,6 +55,7 @@ drawer.draw(dungeon2, {
     4: PIXI.Texture.from("assets/tiles/s.png"),
     5: PIXI.Texture.from("assets/tiles/s.png"),
     7: PIXI.Texture.from("assets/tiles/s.png"),
+    6: PIXI.Texture.from("assets/tiles/s.png"),
     8: PIXI.Texture.from("assets/tiles/s.png"),
     10: PIXI.Texture.from("assets/tiles/s.png"),
     11: PIXI.Texture.from("assets/tiles/s.png"),

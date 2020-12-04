@@ -14,7 +14,7 @@ import {
   TreeNode,
 } from "./types";
 import { Holes, Traps } from "./patterns";
-import { createTilemap, random, randomInRanges, shuffleArray } from "./utils";
+import { createTilemap, random, randomWeights, shuffleArray } from "./utils";
 
 export interface DungeonArgs {
   /** Width of the map */
@@ -124,7 +124,7 @@ export class Dungeon {
     let right: Container;
 
     // Generate a random direction to split the container
-    const direction = randomInRanges<Direction>(
+    const direction = randomWeights<Direction>(
       [0.5, 0.5],
       ["vertical", "horizontal"]
     );
@@ -217,7 +217,7 @@ export class Dungeon {
       const room = new Room(x, y, width, height);
 
       // Generate the room's holes (if any)
-      const hasHole = randomInRanges(
+      const hasHole = randomWeights(
         [args.roomHoleChance, 1 - args.roomHoleChance],
         [true, false]
       );
@@ -275,7 +275,7 @@ export class Dungeon {
     }
 
     // Generate the corridor's traps (if any)
-    const hasTrap = randomInRanges(
+    const hasTrap = randomWeights(
       [args.corridorTrapChance, 1 - args.corridorTrapChance],
       [true, false]
     );
@@ -320,7 +320,7 @@ export class Dungeon {
       slicedPoints.forEach((point) => {
         const x = room.x + args.roomGutterWidth + point[0];
         const y = room.y + args.roomGutterWidth + point[1];
-        const type = randomInRanges<MonsterType>(
+        const type = randomWeights<MonsterType>(
           [0.5, 0.3, 0.15, 0.05],
           ["bandit", "skeleton", "troll", "mushroom"]
         );
