@@ -34,6 +34,8 @@ export interface Args {
   containerWidthRatio: number;
   /** Minimum height ratio for a vertical container */
   containerHeightRatio: number;
+  /** Chance that a room spaws in a container */
+  roomSpawnChance: number;
   /** Gutter of a room */
   roomGutterWidth: number;
   /** Maximum monsters per room */
@@ -62,7 +64,7 @@ export function generate(args: Args): Dungeon {
 
   const tree = createTree(args);
   const tiles = createTilesLayer(tree, args);
-  const props = createPropsLayer(tree, args);
+  const props = createPropsLayer(tree, tiles, args);
 
   const endAt = performance.now();
   console.log(`Dungeon generated in ${endAt - startAt}ms`);
@@ -116,7 +118,7 @@ function generateTree(
     );
   } else {
     // We arrived at the bottom-most node and we can generate a room
-    if (randomProbability(0.8)) {
+    if (randomProbability(args.roomSpawnChance)) {
       node.leaf.room = generateRoom(container, args);
     }
   }
@@ -359,10 +361,15 @@ function carveTilesMask(tiles: TileMap) {
 //
 // Props
 //
-function createPropsLayer(node: TreeNode<Container>, args: Args): TileMap {
+function createPropsLayer(
+  node: TreeNode<Container>,
+  tiles: TileMap,
+  args: Args
+): TileMap {
   let props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
   props = carveTraps(node, props);
+  props = carveTorches(tiles, props);
   props = cleanProps(node, props); // Optional
 
   return props;
@@ -385,7 +392,7 @@ function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
       for (let x = 0; x < traps.width; x++) {
         const posY = startY + y;
         const posX = startX + x;
-        result[posY][posX] = PropType.Spikes;
+        result[posY][posX] = PropType.Peak;
       }
     }
   }
@@ -396,7 +403,34 @@ function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
   return result;
 }
 
-// function carveTorches(props: TileMap): TileMap {}
+function carveTorches(tiles: TileMap, props: TileMap): TileMap {
+  let result = duplicateTilemap(props);
+
+  for (let y = 0; y < result.length; y++) {
+    for (let x = 0; x < result[y].length; x++) {
+      const tileId = tiles[y][x];
+
+      const leftCorner =
+        maskToTileIdMap[
+          NewTileDirection.North |
+            NewTileDirection.West |
+            NewTileDirection.NorthWest
+        ];
+      const rightCorner =
+        maskToTileIdMap[
+          NewTileDirection.North |
+            NewTileDirection.East |
+            NewTileDirection.NorthEast
+        ];
+
+      if (tileId === leftCorner || tileId === rightCorner) {
+        result[y][x] = PropType.Torch;
+      }
+    }
+  }
+
+  return result;
+}
 
 function cleanProps(node: TreeNode<Container>, props: TileMap): TileMap {
   let result = duplicateTilemap(props);
@@ -410,7 +444,7 @@ function cleanProps(node: TreeNode<Container>, props: TileMap): TileMap {
     for (let y = 0; y < result.length; y++) {
       for (let x = 0; x < result[y].length; x++) {
         const propId = result[y][x];
-        if (propId === PropType.Spikes) {
+        if (propId === PropType.Peak) {
           const inHeightRange =
             y >= container.room.y && y < container.room.down;
           const inWidthRange =

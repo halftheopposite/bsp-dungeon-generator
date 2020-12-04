@@ -70,7 +70,7 @@ export function randomChoice<T>(values: T[]): T {
  * Return `true` if probability is matched.
  */
 export function randomProbability(probability: number): boolean {
-  return random(0, 1) <= probability;
+  return Math.random() > 1 - probability;
 }
 
 /**

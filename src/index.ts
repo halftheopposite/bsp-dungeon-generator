@@ -23,12 +23,13 @@ const dungeon = new Dungeon({
 
 const dungeon2 = generate({
   mapWidth: 96,
-  mapHeight: 48,
+  mapHeight: 54,
   mapGutterWidth: 1,
   iterations: 5,
   containerGutterWidth: 1,
   containerWidthRatio: 0.45,
   containerHeightRatio: 0.45,
+  roomSpawnChance: 0.7,
   roomGutterWidth: 2,
   roomMaxMonsters: 6,
   roomMinSize: 3,
@@ -52,6 +53,7 @@ drawer.draw(dungeon2, {
     0: PIXI.Texture.from("assets/tiles/ground.png"),
     1: PIXI.Texture.from("assets/tiles/s.png"),
     2: PIXI.Texture.from("assets/tiles/s.png"),
+    3: PIXI.Texture.from("assets/tiles/s.png"),
     4: PIXI.Texture.from("assets/tiles/s.png"),
     5: PIXI.Texture.from("assets/tiles/s.png"),
     7: PIXI.Texture.from("assets/tiles/s.png"),
@@ -62,8 +64,9 @@ drawer.draw(dungeon2, {
     12: PIXI.Texture.from("assets/tiles/s.png"),
     13: PIXI.Texture.from("assets/tiles/w-e.png"),
     14: PIXI.Texture.from("assets/tiles/w-e.png"),
+    15: PIXI.Texture.from("assets/tiles/w-e.png"),
     17: PIXI.Texture.from("assets/tiles/w-e.png"),
-    18: PIXI.Texture.from("assets/tiles/s.png"),
+    18: PIXI.Texture.from("assets/tiles/w-e.png"),
     20: PIXI.Texture.from("assets/tiles/w-e.png"),
     26: PIXI.Texture.from("assets/tiles/n-ne-e.png"),
     27: PIXI.Texture.from("assets/tiles/n-ne-e.png"),
@@ -81,7 +84,8 @@ drawer.draw(dungeon2, {
     46: PIXI.Texture.from("assets/tiles/all.png"),
   },
   propsSprites: {
-    1: PIXI.Texture.from("assets/props/peaks.png"),
+    1: PIXI.Texture.from("assets/props/peak.png"),
+    2: PIXI.Texture.from("assets/props/torch.png"),
   },
   monstersSprites: {
     bandit: PIXI.Texture.from("assets/monsters/bandit.png"),

@@ -433,7 +433,7 @@ export class Dungeon {
         for (let x = 0; x < traps.width; x++) {
           const posY = startY + y;
           const posX = startX + x;
-          tilemap[posY][posX] = PropType.Spikes;
+          tilemap[posY][posX] = PropType.Peak;
         }
       }
     }
@@ -483,7 +483,7 @@ export class Dungeon {
       for (let y = 0; y < props.length; y++) {
         for (let x = 0; x < props[y].length; x++) {
           const propId = props[y][x];
-          if (propId === PropType.Spikes) {
+          if (propId === PropType.Peak) {
             const inHeightRange =
               y >= container.room.y && y < container.room.down;
             const inWidthRange =

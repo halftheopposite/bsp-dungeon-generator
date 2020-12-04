@@ -112,7 +112,8 @@ export interface Pattern {
 // Props
 //
 export enum PropType {
-  Spikes = 1,
+  Peak = 1,
+  Torch = 2,
 }
 
 //
