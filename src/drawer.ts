@@ -9,10 +9,6 @@ export interface TexturesMap {
   [key: string]: PIXI.Texture;
 }
 
-export interface ColorsMap {
-  [key: string]: number;
-}
-
 export interface DrawOptions {
   debug: boolean;
   /** Draws the tile Id on each tile (CPU intensive) */
@@ -44,6 +40,8 @@ export class Drawer {
   }
 
   draw = (dungeon: Dungeon, options: DrawOptions) => {
+    console.log("Drawing with options:", options);
+
     this.tilemapContainer.removeChildren();
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;

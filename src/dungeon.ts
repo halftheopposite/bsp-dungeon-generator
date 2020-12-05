@@ -6,7 +6,6 @@ import {
   Direction,
   Monster,
   MonsterType,
-  NewTileDirection,
   PropType,
   Room,
   TileDirection,
@@ -464,15 +463,11 @@ function carveTorches(tiles: TileMap, props: TileMap): TileMap {
 
       const leftCorner =
         maskToTileIdMap[
-          NewTileDirection.North |
-            NewTileDirection.West |
-            NewTileDirection.NorthWest
+          TileDirection.North | TileDirection.West | TileDirection.NorthWest
         ];
       const rightCorner =
         maskToTileIdMap[
-          NewTileDirection.North |
-            NewTileDirection.East |
-            NewTileDirection.NorthEast
+          TileDirection.North | TileDirection.East | TileDirection.NorthEast
         ];
 
       if (tileId === leftCorner || tileId === rightCorner) {
@@ -570,51 +565,51 @@ function computeBitMask(x: number, y: number, tiles: TileMap): number {
   let mask = 0;
 
   if (tileDirectionCollides(x, y, "north", tiles)) {
-    mask |= NewTileDirection.North;
+    mask |= TileDirection.North;
   }
 
   if (tileDirectionCollides(x, y, "west", tiles)) {
-    mask |= NewTileDirection.West;
+    mask |= TileDirection.West;
   }
 
   if (tileDirectionCollides(x, y, "east", tiles)) {
-    mask |= NewTileDirection.East;
+    mask |= TileDirection.East;
   }
 
   if (tileDirectionCollides(x, y, "south", tiles)) {
-    mask |= NewTileDirection.South;
+    mask |= TileDirection.South;
   }
 
   if (
-    mask & NewTileDirection.North &&
-    mask & NewTileDirection.West &&
+    mask & TileDirection.North &&
+    mask & TileDirection.West &&
     tileDirectionCollides(x, y, "north-west", tiles)
   ) {
-    mask |= NewTileDirection.NorthWest;
+    mask |= TileDirection.NorthWest;
   }
 
   if (
-    mask & NewTileDirection.North &&
-    mask & NewTileDirection.East &&
+    mask & TileDirection.North &&
+    mask & TileDirection.East &&
     tileDirectionCollides(x, y, "north-east", tiles)
   ) {
-    mask |= NewTileDirection.NorthEast;
+    mask |= TileDirection.NorthEast;
   }
 
   if (
-    mask & NewTileDirection.South &&
-    mask & NewTileDirection.West &&
+    mask & TileDirection.South &&
+    mask & TileDirection.West &&
     tileDirectionCollides(x, y, "south-west", tiles)
   ) {
-    mask |= NewTileDirection.SouthWest;
+    mask |= TileDirection.SouthWest;
   }
 
   if (
-    mask & NewTileDirection.South &&
-    mask & NewTileDirection.East &&
+    mask & TileDirection.South &&
+    mask & TileDirection.East &&
     tileDirectionCollides(x, y, "south-east", tiles)
   ) {
-    mask |= NewTileDirection.SouthEast;
+    mask |= TileDirection.SouthEast;
   }
 
   return maskToTileIdMap[mask];

@@ -23,6 +23,7 @@ const dungeon = generate({
 console.log("Dungeon:", dungeon);
 
 const textures = {
+  // Tiles
   hole: PIXI.Texture.from("assets/tiles/hole.png"),
   edge: PIXI.Texture.from("assets/tiles/edge.png"),
   ground: PIXI.Texture.from("assets/tiles/ground.png"),
@@ -36,12 +37,26 @@ const textures = {
   "n-nw-w": PIXI.Texture.from("assets/tiles/n-nw-w.png"),
   "n-ne-e": PIXI.Texture.from("assets/tiles/n-ne-e.png"),
   all: PIXI.Texture.from("assets/tiles/all.png"),
+  // Props
+  peak: PIXI.Texture.from("assets/props/peak.png"),
+  torch: PIXI.Texture.from("assets/props/torch.png"),
+  bone: PIXI.Texture.from("assets/props/bone.png"),
+  skull: PIXI.Texture.from("assets/props/skull.png"),
+  "web-left": PIXI.Texture.from("assets/props/web-left.png"),
+  "web-right": PIXI.Texture.from("assets/props/web-right.png"),
+  "crate-silver": PIXI.Texture.from("assets/props/crate-silver.png"),
+  "crate-wood": PIXI.Texture.from("assets/props/crate-wood.png"),
+  // Monsters
+  bandit: PIXI.Texture.from("assets/monsters/bandit.png"),
+  mushroom: PIXI.Texture.from("assets/monsters/mushroom.png"),
+  skeleton: PIXI.Texture.from("assets/monsters/skeleton.png"),
+  troll: PIXI.Texture.from("assets/monsters/troll.png"),
 };
 
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
 drawer.draw(dungeon, {
-  debug: false,
-  debugTilesNumber: true,
+  debug: true,
+  debugTilesNumber: false,
   unitWidthInPixels: 16,
   tilesSprites: {
     "-2": textures["hole"],
@@ -69,24 +84,30 @@ drawer.draw(dungeon, {
     29: textures["n-ne-e"],
     28: textures["e"],
     33: textures["e"],
-    34: textures["n-nw-w.png"],
-    35: textures["n-nw-w.png"],
-    36: textures["w.png"],
-    37: textures["n-nw-w.png"],
-    41: textures["w.png"],
-    42: textures["n.png"],
-    44: textures["ne.png"],
-    45: textures["nw.png"],
-    46: textures["all.png"],
+    34: textures["n-nw-w"],
+    35: textures["n-nw-w"],
+    36: textures["w"],
+    37: textures["n-nw-w"],
+    41: textures["w"],
+    42: textures["n"],
+    44: textures["ne"],
+    45: textures["nw"],
+    46: textures["all"],
   },
   propsSprites: {
-    1: PIXI.Texture.from("assets/props/peak.png"),
-    2: PIXI.Texture.from("assets/props/torch.png"),
+    1: textures["peak"],
+    2: textures["torch"],
+    3: textures["bone"],
+    4: textures["skull"],
+    5: textures["web-left"],
+    6: textures["web-right"],
+    7: textures["crate-silver"],
+    8: textures["crate-wood"],
   },
   monstersSprites: {
-    bandit: PIXI.Texture.from("assets/monsters/bandit.png"),
-    mushroom: PIXI.Texture.from("assets/monsters/mushroom.png"),
-    skeleton: PIXI.Texture.from("assets/monsters/skeleton.png"),
-    troll: PIXI.Texture.from("assets/monsters/troll.png"),
+    bandit: textures["bandit"],
+    mushroom: textures["mushroom"],
+    skeleton: textures["skeleton"],
+    troll: textures["troll"],
   },
 });

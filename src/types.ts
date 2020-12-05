@@ -114,6 +114,12 @@ export interface Pattern {
 export enum PropType {
   Peak = 1,
   Torch = 2,
+  Bone = 3,
+  Skull = 4,
+  WebLeft = 5,
+  WebRight = 6,
+  CrateSilver = 7,
+  CrateWood = 8,
 }
 
 //
@@ -137,27 +143,6 @@ export class Monster extends Point {
 //
 export type TileMap = number[][];
 export enum TileDirection {
-  North = 1,
-  West = 2,
-  East = 4,
-  South = 8,
-  NorthWest = 16,
-  NorthEast = 32,
-}
-export const DirectionNW = TileDirection.North | TileDirection.West;
-export const DirectionNEW =
-  TileDirection.North | TileDirection.East | TileDirection.West;
-export const DirectionNES =
-  TileDirection.North | TileDirection.East | TileDirection.South;
-export const DirectionNWS =
-  TileDirection.North | TileDirection.West | TileDirection.South;
-export const DirectionNEWS =
-  TileDirection.North |
-  TileDirection.East |
-  TileDirection.West |
-  TileDirection.South;
-
-export enum NewTileDirection {
   NorthWest = 1,
   North = 2,
   NorthEast = 4,
