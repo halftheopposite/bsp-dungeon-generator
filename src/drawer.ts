@@ -15,9 +15,10 @@ export interface ColorsMap {
 
 export interface DrawOptions {
   debug: boolean;
+  /** Draws the tile Id on each tile (CPU intensive) */
+  debugTilesNumber: boolean;
   unitWidthInPixels: number;
   tilesSprites: TexturesMap;
-  tilesColors: ColorsMap;
   propsSprites: TexturesMap;
   monstersSprites: TexturesMap;
 }
@@ -47,23 +48,19 @@ export class Drawer {
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;
 
-    this.drawTiles(dungeon.tilemap, options.tilesSprites, options.tilesColors);
-    this.drawProps(dungeon.props, options.propsSprites, options.tilesColors);
+    this.drawTiles(dungeon.tilemap, options.tilesSprites);
+    this.drawProps(dungeon.props, options.propsSprites);
     this.drawMonsters(dungeon, options.monstersSprites);
 
     if (options.debug) {
-      this.drawGrid(dungeon);
+      this.drawGrid(dungeon, options);
       this.drawContainers(dungeon.tree);
       this.drawRooms(dungeon.tree);
       this.drawCorridors(dungeon.tree);
     }
   };
 
-  private drawTiles = (
-    tilemap: TileMap,
-    sprites: TexturesMap,
-    colors: ColorsMap
-  ) => {
+  private drawTiles = (tilemap: TileMap, sprites: TexturesMap) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const tileId = tilemap[y][x];
@@ -74,7 +71,7 @@ export class Drawer {
           this.tilemapContainer.addChild(sprite);
         } else {
           const rectangle = new PIXI.Graphics();
-          rectangle.beginFill(tileId in colors ? colors[tileId] : 0xff00ff);
+          rectangle.beginFill(0xff00ff);
           rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
           rectangle.endFill();
           rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
@@ -84,11 +81,7 @@ export class Drawer {
     }
   };
 
-  private drawProps = (
-    tilemap: TileMap,
-    sprites: TexturesMap,
-    colors: ColorsMap
-  ) => {
+  private drawProps = (tilemap: TileMap, sprites: TexturesMap) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const tileId = tilemap[y][x];
@@ -103,7 +96,7 @@ export class Drawer {
           this.tilemapContainer.addChild(sprite);
         } else {
           const rectangle = new PIXI.Graphics();
-          rectangle.beginFill(colors[tileId] || 0xff00ff);
+          rectangle.beginFill(0xff00ff);
           rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
           rectangle.endFill();
           rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
@@ -129,7 +122,7 @@ export class Drawer {
   //
   // Debug
   //
-  private drawGrid = async (dungeon: Dungeon) => {
+  private drawGrid = async (dungeon: Dungeon, options: DrawOptions) => {
     for (let y = 0; y < dungeon.height; y++) {
       for (let x = 0; x < dungeon.width; x++) {
         const rectangle = new PIXI.Graphics();
@@ -138,14 +131,17 @@ export class Drawer {
         rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
 
         // Add cell number
-        const tileId = dungeon.tilemap[y][x];
-        const text = new PIXI.Text(`${tileId}`, {
-          fontSize: 10,
-          fill: 0xffffff,
-        });
-        text.anchor.set(0.5);
-        text.position.set(this.unitInPixels / 2, this.unitInPixels / 2);
-        rectangle.addChild(text);
+        if (options.debugTilesNumber) {
+          const tileId = dungeon.tilemap[y][x];
+          const text = new PIXI.Text(`${tileId}`, {
+            fontSize: 10,
+            fill: 0xffffff,
+          });
+          text.anchor.set(0.5);
+          text.position.set(this.unitInPixels / 2, this.unitInPixels / 2);
+          rectangle.addChild(text);
+        }
+
         this.shapesContainer.addChild(rectangle);
       }
     }
