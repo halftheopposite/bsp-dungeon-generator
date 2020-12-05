@@ -1,5 +1,5 @@
 import PoissonDiscSampling from "poisson-disk-sampling";
-import { Holes, Traps } from "./patterns";
+import { Entrances, Holes, Traps } from "./patterns";
 import {
   Container,
   Corridor,
@@ -33,10 +33,8 @@ export interface Args {
   iterations: number;
   /** Gutter of a container */
   containerGutterWidth: number;
-  /** Minimum width ratio for an horizontal container */
-  containerWidthRatio: number;
-  /** Minimum height ratio for a vertical container */
-  containerHeightRatio: number;
+  /** Minimum size ratio for a container */
+  containerSizeRatio: number;
   /** Chance that a room spaws in a container */
   roomSpawnChance: number;
   /** Gutter of a room */
@@ -61,7 +59,7 @@ export interface Dungeon {
   /** The tree representing the dungeon */
   tree: TreeNode<Container>;
   /** The tilemap representing the dungeon */
-  tilemap: TileMap;
+  tiles: TileMap;
   /** The props in the dungeon (traps, flags, torches...) */
   props: TileMap;
   /** The monsters entities in the dungeon */
@@ -73,8 +71,8 @@ export function generate(args: Args): Dungeon {
 
   const tree = createTree(args);
   const tiles = createTilesLayer(tree, args);
-  const monsters = generateMonsters(tree, args);
   const props = createPropsLayer(tree, tiles, args);
+  const monsters = generateMonsters(tree, args);
 
   const endAt = performance.now();
   console.log(`Dungeon generated in ${endAt - startAt}ms`);
@@ -83,8 +81,8 @@ export function generate(args: Args): Dungeon {
     width: args.mapWidth,
     height: args.mapHeight,
     tree,
-    tilemap: tiles,
-    props: props,
+    tiles,
+    props,
     monsters,
   };
 }
@@ -103,6 +101,9 @@ function createTree(args: Args): TreeNode<Container> {
     args.iterations,
     args
   );
+
+  generateRoomIds(tree);
+  generateEntrance(tree);
 
   return tree;
 }
@@ -164,8 +165,8 @@ function splitContainer(
     const leftWidthRatio = left.width / left.height;
     const rightWidthRatio = right.width / right.height;
     if (
-      leftWidthRatio < args.containerWidthRatio ||
-      rightWidthRatio < args.containerWidthRatio
+      leftWidthRatio < args.containerSizeRatio ||
+      rightWidthRatio < args.containerSizeRatio
     ) {
       return splitContainer(container, args);
     }
@@ -188,8 +189,8 @@ function splitContainer(
     const leftHeightRatio = left.height / left.width;
     const rightHeightRatio = right.height / right.width;
     if (
-      leftHeightRatio < args.containerHeightRatio ||
-      rightHeightRatio < args.containerHeightRatio
+      leftHeightRatio < args.containerSizeRatio ||
+      rightHeightRatio < args.containerSizeRatio
     ) {
       return splitContainer(container, args);
     }
@@ -285,6 +286,38 @@ function generateCorridor(
   return corridor;
 }
 
+function generateRoomIds(tree: TreeNode<Container>) {
+  let roomId = 0;
+  tree.leaves.forEach((leaf) => {
+    if (leaf.room) {
+      leaf.room.id = `${roomId}`;
+      roomId++;
+    }
+  });
+}
+
+function generateEntrance(tree: TreeNode<Container>) {
+  let entranceFound = false;
+  tree.leaves.forEach((leaf) => {
+    if (entranceFound) {
+      return;
+    }
+
+    const entrance = randomChoice(Entrances.all);
+    if (leaf.width > entrance.width && leaf.height > entrance.height) {
+      const x = Math.floor(leaf.center.x - entrance.width / 2);
+      const y = Math.floor(leaf.center.y - entrance.height / 2);
+      leaf.room = new Room(x, y, entrance.width, entrance.height);
+      leaf.room.entrance = entrance;
+      entranceFound = true;
+    }
+  });
+
+  if (!entranceFound) {
+    throw new Error("Could not find a room to create the dungeon entrance.");
+  }
+}
+
 //
 // Tiles
 //
@@ -376,7 +409,7 @@ function generateMonsters(node: TreeNode<Container>, args: Args): Monster[] {
 
   node.leaves.forEach((node) => {
     const room = node.room;
-    if (!room) {
+    if (!room || room.entrance) {
       return;
     }
 
@@ -421,6 +454,7 @@ function createPropsLayer(
 
   props = carveTraps(tree, props);
   props = carveTorches(tiles, props);
+  props = carveEntrance(tree, props);
   props = cleanProps(tree, props); // Optional
 
   return props;
@@ -475,6 +509,30 @@ function carveTorches(tiles: TileMap, props: TileMap): TileMap {
       }
     }
   }
+
+  return result;
+}
+
+function carveEntrance(node: TreeNode<Container>, props: TileMap): TileMap {
+  let result = duplicateTilemap(props);
+
+  node.leaves.forEach((leaf) => {
+    const room = leaf.room;
+    if (!room || !room.entrance) {
+      return;
+    }
+
+    const entrance = room.entrance;
+    const startY = Math.ceil(room.center.y - entrance.height / 2);
+    const startX = Math.ceil(room.center.x - entrance.width / 2);
+    for (let y = 0; y < entrance.height; y++) {
+      for (let x = 0; x < entrance.width; x++) {
+        const posY = startY + y;
+        const posX = startX + x;
+        result[posY][posX] = entrance.tiles[y][x];
+      }
+    }
+  });
 
   return result;
 }

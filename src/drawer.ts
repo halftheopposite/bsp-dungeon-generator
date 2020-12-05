@@ -46,14 +46,14 @@ export class Drawer {
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;
 
-    this.drawTiles(dungeon.tilemap, options.tilesSprites);
+    this.drawTiles(dungeon.tiles, options.tilesSprites);
     this.drawProps(dungeon.props, options.propsSprites);
     this.drawMonsters(dungeon, options.monstersSprites);
 
     if (options.debug) {
       this.drawGrid(dungeon, options);
       this.drawContainers(dungeon.tree);
-      this.drawRooms(dungeon.tree);
+      this.drawRooms(dungeon.tree, options);
       this.drawCorridors(dungeon.tree);
     }
   };
@@ -130,7 +130,7 @@ export class Drawer {
 
         // Add cell number
         if (options.debugTilesNumber) {
-          const tileId = dungeon.tilemap[y][x];
+          const tileId = dungeon.tiles[y][x];
           const text = new PIXI.Text(`${tileId}`, {
             fontSize: 10,
             fill: 0xffffff,
@@ -163,7 +163,10 @@ export class Drawer {
     });
   };
 
-  private drawRooms = (container: TreeNode<Container>) => {
+  private drawRooms = (
+    container: TreeNode<Container>,
+    options: DrawOptions
+  ) => {
     container.leaves.forEach((container) => {
       const room = container.room;
       if (!room) {
@@ -182,6 +185,19 @@ export class Drawer {
         room.x * this.unitInPixels,
         room.y * this.unitInPixels
       );
+
+      // Room id
+      const text = new PIXI.Text(`${room.id}`, {
+        fontSize: 22,
+        fill: 0x00ff00,
+      });
+      text.anchor.set(0.5);
+      rectangle.addChild(text);
+      text.position.set(
+        (room.width / 2) * options.unitWidthInPixels,
+        (room.height / 2) * options.unitWidthInPixels
+      );
+
       this.shapesContainer.addChild(rectangle);
     });
   };

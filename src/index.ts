@@ -9,9 +9,8 @@ const dungeon = generate({
   mapGutterWidth: 1,
   iterations: 5,
   containerGutterWidth: 1,
-  containerWidthRatio: 0.45,
-  containerHeightRatio: 0.45,
-  roomSpawnChance: 0.7,
+  containerSizeRatio: 0.45,
+  roomSpawnChance: 0.8,
   roomGutterWidth: 2,
   roomMaxMonsters: 6,
   roomMinSize: 4,
@@ -46,6 +45,7 @@ const textures = {
   "web-right": PIXI.Texture.from("assets/props/web-right.png"),
   "crate-silver": PIXI.Texture.from("assets/props/crate-silver.png"),
   "crate-wood": PIXI.Texture.from("assets/props/crate-wood.png"),
+  ladder: PIXI.Texture.from("assets/props/ladder.png"),
   // Monsters
   bandit: PIXI.Texture.from("assets/monsters/bandit.png"),
   mushroom: PIXI.Texture.from("assets/monsters/mushroom.png"),
@@ -55,7 +55,7 @@ const textures = {
 
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
 drawer.draw(dungeon, {
-  debug: true,
+  debug: false,
   debugTilesNumber: false,
   unitWidthInPixels: 16,
   tilesSprites: {
@@ -103,6 +103,7 @@ drawer.draw(dungeon, {
     6: textures["web-right"],
     7: textures["crate-silver"],
     8: textures["crate-wood"],
+    9: textures["ladder"],
   },
   monstersSprites: {
     bandit: textures["bandit"],

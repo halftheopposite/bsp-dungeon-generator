@@ -29,6 +29,16 @@ export class TreeNode<T> {
 //
 export type Direction = "horizontal" | "vertical";
 
+export class Point {
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
 export class Rectangle {
   x: number;
   y: number;
@@ -59,17 +69,18 @@ export class Rectangle {
   }
 }
 
-export class Point {
-  x: number;
-  y: number;
+export class Container extends Rectangle {
+  room?: Room;
+  corridor?: Corridor;
 
-  constructor(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+  constructor(x: number, y: number, width: number, height: number) {
+    super(x, y, width, height);
   }
 }
 
 export class Room extends Rectangle {
+  id: string;
+  entrance?: Pattern;
   holes?: Pattern;
 
   constructor(x: number, y: number, width: number, height: number) {
@@ -88,19 +99,10 @@ export class Corridor extends Rectangle {
   }
 }
 
-export class Container extends Rectangle {
-  room?: Room;
-  corridor?: Corridor;
-
-  constructor(x: number, y: number, width: number, height: number) {
-    super(x, y, width, height);
-  }
-}
-
 //
 // Patterns
 //
-export type PatternType = "hole" | "trap";
+export type PatternType = "hole" | "trap" | "entrance";
 export interface Pattern {
   type: PatternType;
   width: number;
@@ -120,6 +122,7 @@ export enum PropType {
   WebRight = 6,
   CrateSilver = 7,
   CrateWood = 8,
+  Ladder = 9,
 }
 
 //
