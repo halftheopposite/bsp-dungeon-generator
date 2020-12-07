@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 
 import { Drawer } from "./drawer";
 import { generate } from "./dungeon";
+import { MonsterType, PropType } from "./types";
 
 const dungeon = generate({
   mapWidth: 96,
@@ -95,20 +96,20 @@ drawer.draw(dungeon, {
     46: textures["all"],
   },
   propsSprites: {
-    1: textures["peak"],
-    2: textures["torch"],
-    3: textures["bone"],
-    4: textures["skull"],
-    5: textures["web-left"],
-    6: textures["web-right"],
-    7: textures["crate-silver"],
-    8: textures["crate-wood"],
-    9: textures["ladder"],
+    [`${PropType.Peak}`]: textures["peak"],
+    [`${PropType.Torch}`]: textures["torch"],
+    [`${PropType.Bone}`]: textures["bone"],
+    [`${PropType.Skull}`]: textures["skull"],
+    [`${PropType.WebLeft}`]: textures["web-left"],
+    [`${PropType.WebRight}`]: textures["web-right"],
+    [`${PropType.CrateSilver}`]: textures["crate-silver"],
+    [`${PropType.CrateWood}`]: textures["crate-wood"],
+    [`${PropType.Ladder}`]: textures["ladder"],
   },
   monstersSprites: {
-    bandit: textures["bandit"],
-    mushroom: textures["mushroom"],
-    skeleton: textures["skeleton"],
-    troll: textures["troll"],
+    [`${MonsterType.Bandit}`]: textures["bandit"],
+    [`${MonsterType.Mushroom}`]: textures["mushroom"],
+    [`${MonsterType.Skeleton}`]: textures["skeleton"],
+    [`${MonsterType.Troll}`]: textures["troll"],
   },
 });

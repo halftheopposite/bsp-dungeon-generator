@@ -431,7 +431,12 @@ function generateMonsters(node: TreeNode<Container>, args: Args): Monster[] {
       const y = room.y + args.roomGutterWidth + point[1];
       const type = randomWeights<MonsterType>(
         [0.5, 0.3, 0.15, 0.05],
-        ["bandit", "skeleton", "troll", "mushroom"]
+        [
+          MonsterType.Bandit,
+          MonsterType.Mushroom,
+          MonsterType.Skeleton,
+          MonsterType.Troll,
+        ]
       );
       const radius = 3;
 

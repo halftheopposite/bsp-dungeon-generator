@@ -128,7 +128,12 @@ export enum PropType {
 //
 // Entities
 //
-export type MonsterType = "bandit" | "mushroom" | "skeleton" | "troll";
+export enum MonsterType {
+  Bandit = 1,
+  Mushroom = 2,
+  Skeleton = 3,
+  Troll = 4,
+}
 export class Monster extends Point {
   radius: number;
   type: MonsterType;
