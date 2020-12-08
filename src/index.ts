@@ -5,13 +5,13 @@ import { generate } from "./dungeon";
 import { MonsterType, PropType } from "./types";
 
 const dungeon = generate({
-  mapWidth: 96,
-  mapHeight: 54,
+  mapWidth: 72,
+  mapHeight: 56,
   mapGutterWidth: 1,
-  iterations: 5,
+  iterations: 4,
   containerGutterWidth: 1,
   containerSizeRatio: 0.45,
-  roomSpawnChance: 0.8,
+  roomSpawnChance: 0.6,
   roomGutterWidth: 2,
   roomMaxMonsters: 6,
   roomMinSize: 4,
@@ -56,7 +56,7 @@ const textures = {
 
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
 drawer.draw(dungeon, {
-  debug: false,
+  debug: true,
   debugTilesNumber: false,
   unitWidthInPixels: 16,
   tilesSprites: {

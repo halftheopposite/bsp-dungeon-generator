@@ -48,7 +48,7 @@ export class Drawer {
 
     this.drawTiles(dungeon.tiles, options.tilesSprites);
     this.drawProps(dungeon.props, options.propsSprites);
-    this.drawMonsters(dungeon, options.monstersSprites);
+    this.drawMonsters(dungeon.monsters, options.monstersSprites);
 
     if (options.debug) {
       this.drawGrid(dungeon, options);
@@ -61,15 +61,15 @@ export class Drawer {
   private drawTiles = (tilemap: TileMap, sprites: TexturesMap) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
-        const tileId = tilemap[y][x];
-        const tileTexture = sprites[tileId];
-        if (tileTexture) {
-          const sprite = new PIXI.Sprite(tileTexture);
+        const id = tilemap[y][x];
+        const texture = sprites[id];
+        if (texture) {
+          const sprite = new PIXI.Sprite(texture);
           sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(sprite);
         } else {
           const rectangle = new PIXI.Graphics();
-          rectangle.beginFill(0xff00ff);
+          rectangle.beginFill(0xff0000);
           rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
           rectangle.endFill();
           rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
@@ -82,19 +82,19 @@ export class Drawer {
   private drawProps = (tilemap: TileMap, sprites: TexturesMap) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
-        const tileId = tilemap[y][x];
-        if (tileId === 0) {
+        const id = tilemap[y][x];
+        if (id === 0) {
           continue;
         }
 
-        const tileTexture = sprites[tileId];
-        if (tileTexture) {
-          const sprite = new PIXI.Sprite(tileTexture);
+        const texture = sprites[id];
+        if (texture) {
+          const sprite = new PIXI.Sprite(texture);
           sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(sprite);
         } else {
           const rectangle = new PIXI.Graphics();
-          rectangle.beginFill(0xff00ff);
+          rectangle.beginFill(0x00ff00);
           rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
           rectangle.endFill();
           rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
@@ -104,17 +104,33 @@ export class Drawer {
     }
   };
 
-  private drawMonsters = (dungeon: Dungeon, sprites: TexturesMap) => {
-    dungeon.monsters.forEach((monster) => {
-      if (monster.type in sprites) {
-        const sprite = new PIXI.Sprite(sprites[monster.type]);
-        sprite.position.set(
-          monster.x * this.unitInPixels,
-          monster.y * this.unitInPixels
-        );
-        this.shapesContainer.addChild(sprite);
+  private drawMonsters = (tilemap: TileMap, sprites: TexturesMap) => {
+    for (let y = 0; y < tilemap.length; y++) {
+      for (let x = 0; x < tilemap[y].length; x++) {
+        const id = tilemap[y][x];
+        if (id === 0) {
+          continue;
+        }
+
+        const texture = sprites[id];
+        if (texture) {
+          const sprite = new PIXI.Sprite(texture);
+          sprite.anchor.set(0.5);
+          sprite.position.set(
+            x * this.unitInPixels + this.unitInPixels / 2,
+            y * this.unitInPixels + this.unitInPixels / 2
+          );
+          this.tilemapContainer.addChild(sprite);
+        } else {
+          const rectangle = new PIXI.Graphics();
+          rectangle.beginFill(0x0000ff);
+          rectangle.drawRect(0, 0, this.unitInPixels, this.unitInPixels);
+          rectangle.endFill();
+          rectangle.position.set(x * this.unitInPixels, y * this.unitInPixels);
+          this.tilemapContainer.addChild(rectangle);
+        }
       }
-    });
+    }
   };
 
   //

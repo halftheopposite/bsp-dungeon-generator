@@ -80,11 +80,13 @@ export class Container extends Rectangle {
 
 export class Room extends Rectangle {
   id: string;
-  entrance?: Pattern;
-  holes?: Pattern;
+  template: RoomTemplate;
 
-  constructor(x: number, y: number, width: number, height: number) {
-    super(x, y, width, height);
+  constructor(x: number, y: number, id: string, template: RoomTemplate) {
+    super(x, y, template.width, template.height);
+
+    this.id = id;
+    this.template = template;
   }
 }
 
@@ -102,6 +104,25 @@ export class Corridor extends Rectangle {
 //
 // Patterns
 //
+export type RoomType =
+  | "entrance"
+  | "monsters"
+  | "heal"
+  | "treasure"
+  | "mini-boss"
+  | "boss";
+export interface RoomTemplate {
+  id: string;
+  type: RoomType;
+  width: number;
+  height: number;
+  layers: {
+    tiles: TileMap;
+    props: TileMap;
+    monsters: TileMap;
+  };
+}
+
 export type PatternType = "hole" | "trap" | "entrance";
 export interface Pattern {
   type: PatternType;
