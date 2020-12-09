@@ -32,15 +32,30 @@ const textures = {
   "n-nw-w": PIXI.Texture.from("assets/tiles/n-nw-w.png"),
   "n-ne-e": PIXI.Texture.from("assets/tiles/n-ne-e.png"),
   all: PIXI.Texture.from("assets/tiles/all.png"),
-  // Props
+  // Traps
   peak: PIXI.Texture.from("assets/props/peak.png"),
-  torch: PIXI.Texture.from("assets/props/torch.png"),
+  // Decor
   bone: PIXI.Texture.from("assets/props/bone.png"),
-  skull: PIXI.Texture.from("assets/props/skull.png"),
-  "web-left": PIXI.Texture.from("assets/props/web-left.png"),
-  "web-right": PIXI.Texture.from("assets/props/web-right.png"),
   "crate-silver": PIXI.Texture.from("assets/props/crate-silver.png"),
   "crate-wood": PIXI.Texture.from("assets/props/crate-wood.png"),
+  flag: PIXI.Texture.from("assets/props/flag.png"),
+  "handcuff-1": PIXI.Texture.from("assets/props/handcuff-1.png"),
+  "handcuff-2": PIXI.Texture.from("assets/props/handcuff-2.png"),
+  lamp: PIXI.Texture.from("assets/props/lamp.png"),
+  skull: PIXI.Texture.from("assets/props/skull.png"),
+  "stones-large": PIXI.Texture.from("assets/props/stones-large.png"),
+  "stones-small": PIXI.Texture.from("assets/props/stones-small.png"),
+  torch: PIXI.Texture.from("assets/props/torch.png"),
+  "web-left": PIXI.Texture.from("assets/props/web-left.png"),
+  "web-right": PIXI.Texture.from("assets/props/web-right.png"),
+  // Items
+  "health-large": PIXI.Texture.from("assets/props/health-large.png"),
+  "health-small": PIXI.Texture.from("assets/props/health-small.png"),
+  "key-gold": PIXI.Texture.from("assets/props/key-gold.png"),
+  "key-silver": PIXI.Texture.from("assets/props/key-silver.png"),
+  "mana-large": PIXI.Texture.from("assets/props/mana-large.png"),
+  "mana-small": PIXI.Texture.from("assets/props/mana-small.png"),
+  // Spawns
   ladder: PIXI.Texture.from("assets/props/ladder.png"),
   // Monsters
   bandit: PIXI.Texture.from("assets/monsters/bandit.png"),
@@ -51,7 +66,7 @@ const textures = {
 
 const drawer = new Drawer(window.innerWidth, window.innerHeight);
 drawer.draw(dungeon, {
-  debug: true,
+  debug: false,
   debugTilesNumber: false,
   unitWidthInPixels: 16,
   tilesSprites: {
@@ -91,14 +106,30 @@ drawer.draw(dungeon, {
     46: textures["all"],
   },
   propsSprites: {
+    // Traps
     [`${PropType.Peak}`]: textures["peak"],
-    [`${PropType.Torch}`]: textures["torch"],
+    // Decor
     [`${PropType.Bone}`]: textures["bone"],
-    [`${PropType.Skull}`]: textures["skull"],
-    [`${PropType.WebLeft}`]: textures["web-left"],
-    [`${PropType.WebRight}`]: textures["web-right"],
+    [`${PropType.Flag}`]: textures["flag"],
     [`${PropType.CrateSilver}`]: textures["crate-silver"],
     [`${PropType.CrateWood}`]: textures["crate-wood"],
+    [`${PropType.Handcuff1}`]: textures["handcuff-1"],
+    [`${PropType.Handcuff2}`]: textures["handcuff-2"],
+    [`${PropType.Lamp}`]: textures["lamp"],
+    [`${PropType.Skull}`]: textures["skull"],
+    [`${PropType.StonesLarge}`]: textures["stones-large"],
+    [`${PropType.StonesSmall}`]: textures["stones-small"],
+    [`${PropType.Torch}`]: textures["torch"],
+    [`${PropType.WebLeft}`]: textures["web-left"],
+    [`${PropType.WebRight}`]: textures["web-right"],
+    // Items
+    [`${PropType.HealthLarge}`]: textures["health-large"],
+    [`${PropType.HealthSmall}`]: textures["health-small"],
+    [`${PropType.KeyGold}`]: textures["key-gold"],
+    [`${PropType.KeySilver}`]: textures["key-silver"],
+    [`${PropType.ManaLarge}`]: textures["mana-large"],
+    [`${PropType.ManaSmall}`]: textures["mana-small"],
+    // Spawns
     [`${PropType.Ladder}`]: textures["ladder"],
   },
   monstersSprites: {

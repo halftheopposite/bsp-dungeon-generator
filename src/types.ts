@@ -135,15 +135,31 @@ export interface Pattern {
 // Props
 //
 export enum PropType {
+  // Traps
   Peak = 1,
-  Torch = 2,
-  Bone = 3,
-  Skull = 4,
-  WebLeft = 5,
-  WebRight = 6,
-  CrateSilver = 7,
-  CrateWood = 8,
-  Ladder = 9,
+  // Decor
+  Bone = 2,
+  CrateSilver = 3,
+  CrateWood = 4,
+  Flag = 5,
+  Handcuff1 = 6,
+  Handcuff2 = 7,
+  Lamp = 8,
+  Skull = 9,
+  StonesLarge = 10,
+  StonesSmall = 11,
+  Torch = 12,
+  WebLeft = 13,
+  WebRight = 14,
+  // Items
+  HealthLarge = 15,
+  HealthSmall = 16,
+  KeyGold = 17,
+  KeySilver = 18,
+  ManaLarge = 19,
+  ManaSmall = 20,
+  // Spawns
+  Ladder = 21,
 }
 
 //

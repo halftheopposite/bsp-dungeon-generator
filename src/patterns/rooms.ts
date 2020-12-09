@@ -17,11 +17,11 @@ export const entrance1: RoomTemplate = {
       [0, 0, 0, 0, 0],
     ],
     props: [
-      [5, 0, 0, 8, 7],
+      [13, 0, 0, 2, 14],
       [0, 0, 0, 0, 0],
-      [0, 0, 9, 0, 0],
+      [0, 0, 21, 0, 0],
       [0, 0, 0, 0, 0],
-      [0, 3, 0, 0, 0],
+      [0, 0, 0, 0, 0],
     ],
     monsters: [
       [0, 0, 0, 0, 0],
@@ -36,7 +36,7 @@ export const entrance1: RoomTemplate = {
 export const entrance2: RoomTemplate = {
   width: 5,
   height: 5,
-  id: "entrance_1",
+  id: "entrance_2",
   type: "entrance",
   layers: {
     tiles: [
@@ -47,11 +47,11 @@ export const entrance2: RoomTemplate = {
       [0, 0, 0, 0, 0],
     ],
     props: [
-      [8, 8, 0, 0, 6],
-      [4, 0, 0, 0, 0],
-      [0, 0, 9, 0, 0],
-      [0, 0, 0, 3, 0],
-      [5, 0, 0, 0, 0],
+      [4, 4, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 21, 0, 0],
+      [0, 11, 0, 0, 0],
+      [0, 0, 0, 0, 0],
     ],
     monsters: [
       [0, 0, 0, 0, 0],
@@ -80,7 +80,7 @@ export const monstersSmall: RoomTemplate = {
       [0, 0, 0, 0, 0],
     ],
     props: [
-      [5, 0, 0, 0, 8],
+      [11, 0, 0, 0, 8],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0],
@@ -118,7 +118,7 @@ export const monsterMedium: RoomTemplate = {
       [0, 1, 0, 0, 0, 0, 1, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 1, 0, 3, 4, 0, 1, 0],
+      [0, 1, 0, 0, 0, 0, 1, 0],
       [0, 1, 1, 0, 0, 1, 1, 0],
       [0, 0, 0, 0, 0, 0, 0, 0],
     ],
