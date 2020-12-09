@@ -26,20 +26,10 @@ export interface Args {
   mapGutterWidth: number;
   /** Number of recursive divisions */
   iterations: number;
-  /** Gutter of a container */
-  containerGutterWidth: number;
   /** Minimum size ratio for a container */
   containerSizeRatio: number;
   /** Chance that a room spaws in a container */
   roomSpawnChance: number;
-  /** Gutter of a room */
-  roomGutterWidth: number;
-  /** Maximum monsters per room */
-  roomMaxMonsters: number;
-  /** Minimum size (width or height) under which it is discarded */
-  roomMinSize: number;
-  /** Chance that a hole will appear in a room */
-  roomHoleChance: number;
   /** Width of corridors */
   corridorWidth: number;
   /** Chance that a trap will appear in a corridor */
@@ -91,7 +81,7 @@ function createTree(args: Args): TreeNode<Container> {
     args
   );
 
-  generateRooms(tree);
+  generateRooms(tree, args);
 
   return tree;
 }
@@ -222,11 +212,22 @@ function generateCorridor(
   return corridor;
 }
 
-function generateRooms(tree: TreeNode<Container>) {
+function generateRooms(tree: TreeNode<Container>, args: Args) {
   let roomId = 0;
 
   tree.leaves.forEach((leaf) => {
-    const template = randomChoice(Rooms.all);
+    if (!randomProbability(args.roomSpawnChance)) {
+      return;
+    }
+
+    const filteredRooms = Rooms.all.filter(
+      (room) => room.width <= leaf.width && room.height <= leaf.height
+    );
+    if (!filteredRooms.length) {
+      return;
+    }
+
+    const template = randomChoice(filteredRooms);
     if (leaf.width > template.width && leaf.height > template.height) {
       const x = Math.floor(leaf.center.x - template.width / 2);
       const y = Math.floor(leaf.center.y - template.height / 2);
@@ -244,7 +245,7 @@ function createTilesLayer(tree: TreeNode<Container>, args: Args): TileMap {
 
   tiles = carveCorridors(tree, duplicateTilemap(tiles));
   tiles = carveRooms(tree, duplicateTilemap(tiles));
-  tiles = carveTilesMask(duplicateTilemap(tiles));
+  tiles = computeTilesMask(duplicateTilemap(tiles));
 
   return tiles;
 }
@@ -293,7 +294,7 @@ function carveRooms(node: TreeNode<Container>, tiles: TileMap) {
   return result;
 }
 
-function carveTilesMask(tiles: TileMap) {
+function computeTilesMask(tiles: TileMap) {
   for (let y = 0; y < tiles.length; y++) {
     for (let x = 0; x < tiles[y].length; x++) {
       // Apply tilemask only to walls
@@ -316,37 +317,17 @@ function createPropsLayer(
 ): TileMap {
   let props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
+  props = carveCorridorsTraps(tree, props);
   props = carveProps(tree, props);
-  props = carveTraps(tree, props);
   props = carveTorches(tiles, props);
-  props = cleanProps(tree, props);
 
   return props;
 }
 
-function carveProps(node: TreeNode<Container>, props: TileMap) {
-  let result = duplicateTilemap(props);
-
-  node.leaves.forEach((container) => {
-    const room = container.room;
-    if (!room) {
-      return;
-    }
-
-    const propsLayer = room.template.layers.props;
-    for (let y = 0; y < room.template.height; y++) {
-      for (let x = 0; x < room.template.width; x++) {
-        const posY = room.y + y;
-        const posX = room.x + x;
-        result[posY][posX] = propsLayer[y][x];
-      }
-    }
-  });
-
-  return result;
-}
-
-function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
+function carveCorridorsTraps(
+  node: TreeNode<Container>,
+  props: TileMap
+): TileMap {
   let result = duplicateTilemap(props);
 
   const corridor = node.leaf.corridor;
@@ -368,8 +349,30 @@ function carveTraps(node: TreeNode<Container>, props: TileMap): TileMap {
     }
   }
 
-  result = carveTraps(node.left, result);
-  result = carveTraps(node.right, result);
+  result = carveCorridorsTraps(node.left, result);
+  result = carveCorridorsTraps(node.right, result);
+
+  return result;
+}
+
+function carveProps(node: TreeNode<Container>, props: TileMap) {
+  let result = duplicateTilemap(props);
+
+  node.leaves.forEach((container) => {
+    const room = container.room;
+    if (!room) {
+      return;
+    }
+
+    const propsLayer = room.template.layers.props;
+    for (let y = 0; y < room.template.height; y++) {
+      for (let x = 0; x < room.template.width; x++) {
+        const posY = room.y + y;
+        const posX = room.x + x;
+        result[posY][posX] = propsLayer[y][x];
+      }
+    }
+  });
 
   return result;
 }
@@ -395,34 +398,6 @@ function carveTorches(tiles: TileMap, props: TileMap): TileMap {
       }
     }
   }
-
-  return result;
-}
-
-function cleanProps(node: TreeNode<Container>, props: TileMap): TileMap {
-  let result = duplicateTilemap(props);
-
-  // Clean traps that are inside rooms
-  node.leaves.forEach((container) => {
-    if (!container.room) {
-      return result;
-    }
-
-    for (let y = 0; y < result.length; y++) {
-      for (let x = 0; x < result[y].length; x++) {
-        const propId = result[y][x];
-        if (propId === PropType.Peak) {
-          const inHeightRange =
-            y >= container.room.y && y < container.room.down;
-          const inWidthRange =
-            x >= container.room.x && x < container.room.right;
-          if (inHeightRange && inWidthRange) {
-            result[y][x] = 0;
-          }
-        }
-      }
-    }
-  });
 
   return result;
 }
