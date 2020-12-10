@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import { Dungeon } from "./dungeon";
-import { Container, TileMap, TreeNode } from "./types";
+import { Dungeon } from "../../generate/dungeon";
+import { Container, TileMap, TreeNode } from "../../generate/types";
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 PIXI.settings.ROUND_PIXELS = true;

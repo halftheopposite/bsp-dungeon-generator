@@ -1,4 +1,5 @@
-import { Rooms, Traps } from "./patterns";
+import { Rooms } from "./rooms";
+import { Traps } from "./traps";
 import {
   Container,
   Corridor,
@@ -205,8 +206,7 @@ function generateCorridor(
   // Generate the corridor's traps (if any)
   const hasTrap = randomProbability(args.corridorTrapChance);
   if (hasTrap) {
-    corridor.traps =
-      corridor.direction === "horizontal" ? Traps.smallLarge : Traps.smallLong;
+    corridor.traps = corridor.direction === "horizontal" ? Traps[0] : Traps[1];
   }
 
   return corridor;
@@ -220,7 +220,7 @@ function generateRooms(tree: TreeNode<Container>, args: Args) {
       return;
     }
 
-    const filteredRooms = Rooms.all.filter(
+    const filteredRooms = Rooms.filter(
       (room) => room.width <= leaf.width && room.height <= leaf.height
     );
     if (!filteredRooms.length) {

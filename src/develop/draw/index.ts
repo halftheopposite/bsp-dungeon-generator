@@ -1,8 +1,8 @@
 import * as PIXI from "pixi.js";
 
 import { Drawer } from "./drawer";
-import { generate } from "./dungeon";
-import { MonsterType, PropType } from "./types";
+import { generate } from "../../generate/dungeon";
+import { MonsterType, PropType } from "../../generate/types";
 
 const dungeon = generate({
   mapWidth: 72,
