@@ -7,16 +7,42 @@ import {
   TileLayer,
   TileLayers,
 } from "../../generate/types";
-import { resizeTileMap } from "../../generate/utils";
+import { createTilemap, resizeTileMap } from "../../generate/utils";
 import { CanvasDrawer } from "./CanvasDrawer";
 
 const COLUMN_WIDTH = 200;
 
 export function App(props: {}): React.ReactElement {
   const [rooms, setRooms] = React.useState<RoomTemplate[]>([]);
-  const [selected, setSelected] = React.useState<string>(null);
+  const [selectedRoomId, setSelectedRoomId] = React.useState<string>(null);
+  const selectedRoom = selectedRoomId
+    ? rooms.find((item) => item.id === selectedRoomId)
+    : null;
 
-  /** Safely update a room in the list */
+  // Add a room
+  const onRoomAdd = () => {
+    const id = String(Date.now());
+    setRooms((prev) => {
+      const result = [...prev];
+
+      result.push({
+        id,
+        width: 8,
+        height: 8,
+        type: "monsters",
+        layers: {
+          tiles: createTilemap(8, 8, 0),
+          props: createTilemap(8, 8, 0),
+          monsters: createTilemap(8, 8, 0),
+        },
+      });
+
+      return result;
+    });
+    setSelectedRoomId(id);
+  };
+
+  // Update a room
   const onRoomUpdate = (updated: RoomTemplate, oldRoomId: string) => {
     setRooms((prev) => {
       const index = prev.findIndex((item) => item.id === oldRoomId);
@@ -28,16 +54,28 @@ export function App(props: {}): React.ReactElement {
 
       return updatedRooms;
     });
-    setSelected(updated.id);
+    setSelectedRoomId(updated.id);
   };
 
+  // Delete a room
+  const onRoomDelete = (roomId: string) => {
+    setRooms((prev) => {
+      const result = [...prev];
+
+      const index = prev.findIndex((item) => item.id === roomId);
+      if (index !== -1) {
+        result.splice(index, 1);
+      }
+      return result;
+    });
+  };
+
+  // Load all rooms on mount.
   React.useEffect(() => {
     const sorted = Rooms.sort((a, b) => a.id.localeCompare(b.id));
     setRooms(sorted);
   }, []);
 
-    const selectedRoom = selected ? rooms.find((item) => item.id === selected) : null;
-console.log('Selected room:', selectedRoom)
   return (
     <div
       style={{
@@ -48,12 +86,15 @@ console.log('Selected room:', selectedRoom)
         bottom: 0,
       }}
     >
-      <RoomsList rooms={rooms} onRoomClick={(room) => setSelected(room.id)} />
+      <RoomsList
+        rooms={rooms}
+        selectedRoomId={selectedRoomId}
+        onRoomAdd={onRoomAdd}
+        onRoomClick={(roomId) => setSelectedRoomId(roomId)}
+        onRoomDelete={onRoomDelete}
+      />
       {selectedRoom ? (
-        <Room
-          room={selectedRoom}
-          onUpdate={onRoomUpdate}
-        />
+        <Room room={selectedRoom} onUpdate={onRoomUpdate} />
       ) : null}
     </div>
   );
@@ -64,9 +105,12 @@ console.log('Selected room:', selectedRoom)
  */
 export function RoomsList(props: {
   rooms: RoomTemplate[];
-  onRoomClick: (room: RoomTemplate) => void;
+  selectedRoomId: string;
+  onRoomAdd: () => void;
+  onRoomClick: (roomId: string) => void;
+  onRoomDelete: (roomId: string) => void;
 }): React.ReactElement {
-  const { rooms, onRoomClick } = props;
+  const { rooms, selectedRoomId, onRoomAdd, onRoomClick, onRoomDelete } = props;
 
   return (
     <div
@@ -93,8 +137,15 @@ export function RoomsList(props: {
       >
         Rooms
       </h1>
+      <input type="button" value="+ Add room" onClick={onRoomAdd} />
       {rooms.map((room) => (
-        <RoomListItem key={room.id} room={room} onClick={onRoomClick} />
+        <RoomListItem
+          key={room.id}
+          room={room}
+          selected={selectedRoomId === room.id}
+          onClick={onRoomClick}
+          onDelete={onRoomDelete}
+        />
       ))}
     </div>
   );
@@ -102,10 +153,20 @@ export function RoomsList(props: {
 
 export function RoomListItem(props: {
   room: RoomTemplate;
-  onClick: (room: RoomTemplate) => void;
+  selected: boolean;
+  onClick: (roomId: string) => void;
+  onDelete: (roomId: string) => void;
 }): React.ReactElement {
-  const { room, onClick } = props;
+  const { room, selected, onClick, onDelete } = props;
   const [hovered, setHovered] = React.useState(false);
+
+  const handleDelete = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+
+    onDelete(room.id);
+  };
 
   return (
     <div
@@ -114,14 +175,27 @@ export function RoomListItem(props: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        flexDirection: "row",
         borderBottom: "1px solid #efefef",
-        backgroundColor: hovered ? `rgba(0,0,0,0.1)` : "white",
+        backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
       }}
-      onClick={() => onClick(room)}
+      onClick={() => onClick(room.id)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
       {room.id}
+      {/* When hovered, display a delete button */}
+      {hovered ? (
+        <div
+          style={{
+            position: "absolute",
+            right: 8,
+          }}
+          onClick={handleDelete}
+        >
+          🗑️
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -137,12 +211,15 @@ export function Room(props: {
   const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
 
   /** When a room's details are updated */
-  const onDetailsUpdate = (params: {
-    id: string;
-    type: RoomType;
-    width: number;
-    height: number;
-  }, oldRoomId: string) => {
+  const onDetailsUpdate = (
+    params: {
+      id: string;
+      type: RoomType;
+      width: number;
+      height: number;
+    },
+    oldRoomId: string
+  ) => {
     const updated = {
       ...room,
       ...params,
@@ -220,15 +297,18 @@ export function RoomDetails(props: {
   room: RoomTemplate;
   selectedLayer: TileLayer;
   onLayerUpdate: (layer: TileLayer) => void;
-  onUpdate: (params: {
-    id: string;
-    type: RoomType;
-    width: number;
-    height: number;
-  }, oldRoomId: string) => void;
+  onUpdate: (
+    params: {
+      id: string;
+      type: RoomType;
+      width: number;
+      height: number;
+    },
+    oldRoomId: string
+  ) => void;
 }): React.ReactElement {
   const { room, selectedLayer, onLayerUpdate, onUpdate } = props;
-const [oldId, setOldId] = React.useState(room.id); // Keep a ref to the old id since ids can be changed
+  const [oldId, setOldId] = React.useState(room.id); // Keep a ref to the old id since ids can be changed
   const [id, setId] = React.useState(room.id);
   const [type, setType] = React.useState<RoomType>(room.type);
   const [width, setWidth] = React.useState(room.width);
@@ -244,12 +324,15 @@ const [oldId, setOldId] = React.useState(room.id); // Keep a ref to the old id s
   }, [room.id]);
 
   React.useEffect(() => {
-    onUpdate({
-      id,
-      type,
-      width,
-      height,
-    }, oldId);
+    onUpdate(
+      {
+        id,
+        type,
+        width,
+        height,
+      },
+      oldId
+    );
   }, [id, type, width, height]);
 
   return (
