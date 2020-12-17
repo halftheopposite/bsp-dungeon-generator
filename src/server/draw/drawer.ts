@@ -2,9 +2,6 @@ import * as PIXI from "pixi.js";
 import { Dungeon } from "../../generate/dungeon";
 import { Container, TileMap, TreeNode } from "../../generate/types";
 
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-PIXI.settings.ROUND_PIXELS = true;
-
 export interface TexturesMap {
   [key: string]: PIXI.Texture;
 }
@@ -136,7 +133,7 @@ export class Drawer {
   //
   // Debug
   //
-  private drawGrid = async (dungeon: Dungeon, options: DrawOptions) => {
+  private drawGrid = (dungeon: Dungeon, options: DrawOptions) => {
     for (let y = 0; y < dungeon.height; y++) {
       for (let x = 0; x < dungeon.width; x++) {
         const rectangle = new PIXI.Graphics();

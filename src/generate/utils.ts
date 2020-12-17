@@ -21,6 +21,32 @@ export function createTilemap(
 }
 
 /**
+ * Resize a tilemap.
+ */
+export function resizeTileMap(
+  tilemap: TileMap,
+  width: number,
+  height: number
+): TileMap {
+  const result: TileMap = [];
+
+  for (let y = 0; y < height; y++) {
+    result[y] = [];
+    for (let x = 0; x < width; x++) {
+      let value = 0;
+
+      if (y < tilemap.length && x < tilemap[y].length) {
+        value = tilemap[y][x];
+      }
+
+      result[y][x] = value;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Shuffle an array's entries into a new one.
  */
 export function shuffleArray<T>(array: T[]): T[] {

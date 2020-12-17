@@ -111,6 +111,14 @@ export type RoomType =
   | "treasure"
   | "mini-boss"
   | "boss";
+export const RoomTypes: RoomType[] = [
+  "entrance",
+  "monsters",
+  "heal",
+  "treasure",
+  "mini-boss",
+  "boss",
+];
 export interface RoomTemplate {
   id: string;
   type: RoomType;
@@ -187,6 +195,9 @@ export class Monster extends Point {
 // Tilemap
 //
 export type TileMap = number[][];
+export type TileMaps = { [layer: string]: TileMap };
+export type TileLayer = "tiles" | "props" | "monsters";
+export const TileLayers: TileLayer[] = ["tiles", "props", "monsters"];
 export enum TileDirection {
   NorthWest = 1,
   North = 2,

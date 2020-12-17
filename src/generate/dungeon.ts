@@ -294,17 +294,19 @@ function carveRooms(node: TreeNode<Container>, tiles: TileMap) {
   return result;
 }
 
-function computeTilesMask(tiles: TileMap) {
-  for (let y = 0; y < tiles.length; y++) {
-    for (let x = 0; x < tiles[y].length; x++) {
+export function computeTilesMask(tiles: TileMap) {
+  const result = duplicateTilemap(tiles);
+
+  for (let y = 0; y < result.length; y++) {
+    for (let x = 0; x < result[y].length; x++) {
       // Apply tilemask only to walls
-      if (tiles[y][x] > 0) {
-        tiles[y][x] = computeBitMask(x, y, tiles);
+      if (result[y][x] > 0) {
+        result[y][x] = computeBitMask(x, y, result);
       }
     }
   }
 
-  return tiles;
+  return result;
 }
 
 //
