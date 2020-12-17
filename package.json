@@ -1,9 +1,9 @@
 {
   "license": "MIT",
   "scripts": {
-    "build:design": "esbuild src/server/design/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --sourcemap --outfile=src/server/design/public/script.js",
-    "build:draw": "esbuild src/server/draw/index.ts --bundle --loader:.png=base64 --sourcemap --outfile=src/server/draw/public/script.js",
-    "build": "yarn run build:design && yarn run build:draw",
+    "build:edit": "esbuild src/server/edit/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --sourcemap --outfile=src/server/edit/public/script.js",
+    "build:generate": "esbuild src/server/generate/index.ts --bundle --loader:.png=base64 --sourcemap --outfile=src/server/generate/public/script.js",
+    "build": "yarn run build:edit && yarn run build:generate",
     "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json,html\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run build && ts-node src/server/index.ts\""
   },
   "devDependencies": {

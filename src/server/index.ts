@@ -5,14 +5,9 @@ const PORT = 3000;
 
 const app = express();
 
-// Design
-app.use(express.static(path.join(__dirname, "design", "public")));
-app.use("/design", express.static(path.join(__dirname, "design", "public")));
-
-// Draw
-app.use(express.static(path.join(__dirname, "draw", "public")));
-app.use("/draw", express.static(path.join(__dirname, "draw", "public")));
+app.use('/edit', express.static(path.join(__dirname, "edit", "public")));
+app.use("/generate", express.static(path.join(__dirname, "generate", "public")));
 
 app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`);
+    console.log(`App listening at http://localhost:${PORT}`);
 });
