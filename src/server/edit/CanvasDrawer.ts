@@ -25,9 +25,9 @@ export class CanvasDrawer {
   // Lifecycle
   constructor(container: HTMLDivElement, width: number, height: number) {
     this.app = new PIXI.Application({
-      width,
-      height,
-      backgroundColor: 0x00,
+      width: container.getBoundingClientRect().width,
+      height: container.getBoundingClientRect().height,
+      backgroundColor: 0xffffff,
     });
 
     if (container.hasChildNodes()) {
@@ -169,7 +169,7 @@ export class CanvasDrawer {
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const rectangle = new PIXI.Graphics();
-        rectangle.lineStyle(1, 0xffffff, 0.1);
+        rectangle.lineStyle(1, 0x00ff00, 0.5);
         rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
         rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
         this.gridContainer.addChild(rectangle);
