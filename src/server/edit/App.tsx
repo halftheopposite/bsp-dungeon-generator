@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Rooms } from "../../generate/rooms";
 import {
   RoomTemplate,
   RoomType,
@@ -7,75 +6,13 @@ import {
   TileLayer,
   TileLayers,
 } from "../../generate/types";
-import { createTilemap, resizeTileMap } from "../../generate/utils";
+import { resizeTileMap } from "../../generate/utils";
 import { CanvasDrawer } from "./CanvasDrawer";
+import { CollectionsProvider, useRooms } from "./hooks/rooms";
 
 const COLUMN_WIDTH = 200;
 
 export function App(props: {}): React.ReactElement {
-  const [rooms, setRooms] = React.useState<RoomTemplate[]>([]);
-  const [selectedRoomId, setSelectedRoomId] = React.useState<string>(null);
-  const selectedRoom = selectedRoomId
-    ? rooms.find((item) => item.id === selectedRoomId)
-    : null;
-
-  // Add a room
-  const onRoomAdd = () => {
-    const id = String(Date.now());
-    setRooms((prev) => {
-      const result = [...prev];
-
-      result.push({
-        id,
-        width: 8,
-        height: 8,
-        type: "monsters",
-        layers: {
-          tiles: createTilemap(8, 8, 0),
-          props: createTilemap(8, 8, 0),
-          monsters: createTilemap(8, 8, 0),
-        },
-      });
-
-      return result;
-    });
-    setSelectedRoomId(id);
-  };
-
-  // Update a room
-  const onRoomUpdate = (updated: RoomTemplate, oldRoomId: string) => {
-    setRooms((prev) => {
-      const index = prev.findIndex((item) => item.id === oldRoomId);
-      const updatedRooms = [...prev];
-      updatedRooms[index] = {
-        ...updatedRooms[index],
-        ...updated,
-      };
-
-      return updatedRooms;
-    });
-    setSelectedRoomId(updated.id);
-  };
-
-  // Delete a room
-  const onRoomDelete = (roomId: string) => {
-    setRooms((prev) => {
-      const result = [...prev];
-
-      const index = prev.findIndex((item) => item.id === roomId);
-      if (index !== -1) {
-        result.splice(index, 1);
-      }
-      return result;
-    });
-  };
-
-  // Load all rooms on mount.
-  React.useEffect(() => {
-    const sorted = Rooms.sort((a, b) => a.id.localeCompare(b.id));
-    setRooms(sorted);
-  }, []);
-
   return (
     <div
       style={{
@@ -86,32 +23,18 @@ export function App(props: {}): React.ReactElement {
         bottom: 0,
       }}
     >
-      <RoomsList
-        rooms={rooms}
-        selectedRoomId={selectedRoomId}
-        onRoomAdd={onRoomAdd}
-        onRoomClick={(roomId) => setSelectedRoomId(roomId)}
-        onRoomDelete={onRoomDelete}
-      />
-      {selectedRoom ? (
-        <Room room={selectedRoom} onUpdate={onRoomUpdate} />
-      ) : null}
+      <CollectionsProvider>
+        <Sidebar />
+        <Room />
+      </CollectionsProvider>
     </div>
   );
 }
 
-/**
- * A list of all available rooms.
- */
-export function RoomsList(props: {
-  rooms: RoomTemplate[];
-  selectedRoomId: string;
-  onRoomAdd: () => void;
-  onRoomClick: (roomId: string) => void;
-  onRoomDelete: (roomId: string) => void;
-}): React.ReactElement {
-  const { rooms, selectedRoomId, onRoomAdd, onRoomClick, onRoomDelete } = props;
-
+//
+// Sidebar
+//
+export function Sidebar(props: {}): React.ReactElement {
   return (
     <div
       style={{
@@ -126,6 +49,17 @@ export function RoomsList(props: {
         flexDirection: "column",
       }}
     >
+      <SidebarHeader />
+      <Rooms />
+    </div>
+  );
+}
+
+export function SidebarHeader(props: {}): React.ReactElement {
+  const { saveRooms } = useRooms();
+
+  return (
+    <div>
       <h1
         style={{
           height: 40,
@@ -137,14 +71,62 @@ export function RoomsList(props: {
       >
         Rooms
       </h1>
-      <input type="button" value="+ Add room" onClick={onRoomAdd} />
+      <div style={{ display: "flex", flexDirection: "column", margin: 8 }}>
+        <input type="button" value="Save file" onClick={saveRooms} />
+      </div>
+    </div>
+  );
+}
+
+export function Rooms(props: {}): React.ReactElement {
+  return (
+    <div>
+      <RoomsHeader />
+      <RoomsList />
+    </div>
+  );
+}
+
+export function RoomsHeader(props: {}): React.ReactElement {
+  const { addRoom } = useRooms();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 8,
+      }}
+    >
+      <h2>Rooms</h2>
+      <input type="button" value="+ Add room" onClick={addRoom} />
+    </div>
+  );
+}
+
+export function RoomsList(props: {}): React.ReactElement {
+  const { rooms, selectedRoomId, selectRoom, removeRoom } = useRooms();
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 8,
+      }}
+    >
+      <h2>Rooms</h2>
       {rooms.map((room) => (
         <RoomListItem
           key={room.id}
           room={room}
           selected={selectedRoomId === room.id}
-          onClick={onRoomClick}
-          onDelete={onRoomDelete}
+          onClick={() => selectRoom(room.id)}
+          onDelete={() => removeRoom(room.id)}
         />
       ))}
     </div>
@@ -176,6 +158,7 @@ export function RoomListItem(props: {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        borderTop: "1px solid #efefef",
         borderBottom: "1px solid #efefef",
         backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
       }}
@@ -200,14 +183,32 @@ export function RoomListItem(props: {
   );
 }
 
-/**
- * A selected room details and editor.
- */
-export function Room(props: {
-  room: RoomTemplate;
-  onUpdate: (updated: RoomTemplate, oldRoomId: string) => void;
-}): React.ReactElement {
-  const { room, onUpdate } = props;
+//
+// Room
+//
+export function Room(props: {}): React.ReactElement {
+  const { rooms, selectedRoomId, updateRoom } = useRooms();
+
+  const room = rooms.find((item) => item.id === selectedRoomId);
+  if (!room) {
+    return (
+      <div
+        style={{
+          position: "absolute",
+          left: COLUMN_WIDTH,
+          bottom: 0,
+          top: 0,
+          right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Select a room or create one.
+      </div>
+    );
+  }
+
   const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
 
   /** When a room's details are updated */
@@ -244,7 +245,7 @@ export function Room(props: {
       );
     }
 
-    onUpdate(updated, oldRoomId);
+    updateRoom(updated, oldRoomId);
   };
 
   /** When a tile is updated in a layer */
@@ -259,7 +260,7 @@ export function Room(props: {
     };
 
     updated.layers[layer][y][x] = value;
-    onUpdate(updated, room.id);
+    updateRoom(updated, room.id);
   };
 
   const onLayerUpdate = (layer: TileLayer) => {
