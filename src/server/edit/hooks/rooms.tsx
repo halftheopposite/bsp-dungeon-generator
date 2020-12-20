@@ -11,7 +11,7 @@ export interface RoomsValue {
   selectRoom: (roomId: string) => void;
   filterRooms: (type: RoomType | "all") => void;
   saveRooms: () => void;
-  loadRooms: () => void;
+  loadRooms: (rooms: RoomTemplate[]) => void;
 }
 
 export const RoomsContext = React.createContext<RoomsValue>({
@@ -109,7 +109,11 @@ export function CollectionsProvider(props: {
   };
 
   /** Load and populate using a JSON representation of the rooms  */
-  const loadRooms = () => {};
+  const loadRooms = (loadedRooms: RoomTemplate[]) => {
+    setRooms(loadedRooms);
+    setSelectedRoomId(null);
+    setFilter("all");
+  };
 
   // Filter and sort rooms
   const filtered = React.useMemo(() => {

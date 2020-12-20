@@ -50,13 +50,26 @@ export function Sidebar(props: {}): React.ReactElement {
       }}
     >
       <SidebarHeader />
-      <Rooms />
+      <Separator />
+      <RoomsList />
     </div>
   );
 }
 
-export function SidebarHeader(props: {}): React.ReactElement {
-  const { saveRooms } = useRooms();
+function SidebarHeader(props: {}): React.ReactElement {
+  const { saveRooms, loadRooms } = useRooms();
+
+  const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.addEventListener("load", (event) => {
+      const rawJSON = event.target.result;
+      const parsedJSON = JSON.parse(rawJSON);
+      loadRooms(parsedJSON);
+    });
+    reader.readAsText(file);
+  };
 
   return (
     <div>
@@ -66,74 +79,64 @@ export function SidebarHeader(props: {}): React.ReactElement {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderBottom: "1px solid #efefef",
         }}
       >
-        Rooms
+        Editor
       </h1>
+      <Separator />
       <div style={{ display: "flex", flexDirection: "column", margin: 8 }}>
+        {/* Load */}
+        <p style={{ fontWeight: "bold" }}>You can load an existing save:</p>
+        <input type="file" accept="application/json" onChange={onFileChange} />
+        <p style={{ marginTop: 8, fontWeight: "bold" }}>
+          You can save your edits:
+        </p>
         <input type="button" value="Save file" onClick={saveRooms} />
       </div>
     </div>
   );
 }
 
-export function Rooms(props: {}): React.ReactElement {
-  return (
-    <div>
-      <RoomsHeader />
-      <RoomsList />
-    </div>
-  );
-}
-
-export function RoomsHeader(props: {}): React.ReactElement {
-  const { addRoom } = useRooms();
+function RoomsList(props: {}): React.ReactElement {
+  const { rooms, selectedRoomId, addRoom, selectRoom, removeRoom } = useRooms();
 
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 8,
+        padding: 8,
       }}
     >
       <h2>Rooms</h2>
+      <Spacer />
+
+      {/* Add room button */}
       <input type="button" value="+ Add room" onClick={addRoom} />
+      <Spacer size={16} />
+
+      {/* Rooms list */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          borderTop: "1px solid #efefef",
+        }}
+      >
+        {rooms.map((room) => (
+          <RoomListItem
+            key={room.id}
+            room={room}
+            selected={selectedRoomId === room.id}
+            onClick={() => selectRoom(room.id)}
+            onDelete={() => removeRoom(room.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-export function RoomsList(props: {}): React.ReactElement {
-  const { rooms, selectedRoomId, selectRoom, removeRoom } = useRooms();
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        margin: 8,
-      }}
-    >
-      <h2>Rooms</h2>
-      {rooms.map((room) => (
-        <RoomListItem
-          key={room.id}
-          room={room}
-          selected={selectedRoomId === room.id}
-          onClick={() => selectRoom(room.id)}
-          onDelete={() => removeRoom(room.id)}
-        />
-      ))}
-    </div>
-  );
-}
-
-export function RoomListItem(props: {
+function RoomListItem(props: {
   room: RoomTemplate;
   selected: boolean;
   onClick: (roomId: string) => void;
@@ -158,9 +161,9 @@ export function RoomListItem(props: {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-        borderTop: "1px solid #efefef",
         borderBottom: "1px solid #efefef",
         backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
+        width: "100%",
       }}
       onClick={() => onClick(room.id)}
       onMouseEnter={() => setHovered(true)}
@@ -186,8 +189,9 @@ export function RoomListItem(props: {
 //
 // Room
 //
-export function Room(props: {}): React.ReactElement {
+function Room(props: {}): React.ReactElement {
   const { rooms, selectedRoomId, updateRoom } = useRooms();
+  const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
 
   const room = rooms.find((item) => item.id === selectedRoomId);
   if (!room) {
@@ -208,8 +212,6 @@ export function Room(props: {}): React.ReactElement {
       </div>
     );
   }
-
-  const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
 
   /** When a room's details are updated */
   const onDetailsUpdate = (
@@ -294,7 +296,7 @@ export function Room(props: {}): React.ReactElement {
   );
 }
 
-export function RoomDetails(props: {
+function RoomDetails(props: {
   room: RoomTemplate;
   selectedLayer: TileLayer;
   onLayerUpdate: (layer: TileLayer) => void;
@@ -434,7 +436,7 @@ export function RoomDetails(props: {
   );
 }
 
-export function RoomLayers(props: {
+function RoomLayers(props: {
   room: RoomTemplate;
   selectedLayer: TileLayer;
   onUpdate: (layer: TileLayer, x: number, y: number, value: number) => void;
@@ -499,4 +501,19 @@ export function RoomLayers(props: {
       />
     </div>
   );
+}
+
+//
+// Utils
+//
+function Separator(props: { size?: number }): React.ReactElement {
+  const { size = 2 } = props;
+
+  return <div style={{ height: size, backgroundColor: "#efefef" }} />;
+}
+
+function Spacer(props: { size?: number }): React.ReactElement {
+  const { size = 8 } = props;
+
+  return <div style={{ height: size, minHeight: size }} />;
 }
