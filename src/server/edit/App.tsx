@@ -8,6 +8,7 @@ import {
 } from "../../generate/types";
 import { resizeTileMap } from "../../generate/utils";
 import { CanvasDrawer } from "./CanvasDrawer";
+import { BORDER_COLOR } from "./constants";
 import { CollectionsProvider, useRooms } from "./hooks/rooms";
 
 const COLUMN_WIDTH = 200;
@@ -44,7 +45,7 @@ export function Sidebar(props: {}): React.ReactElement {
         top: 0,
         width: COLUMN_WIDTH,
         cursor: "pointer",
-        borderRight: "2px solid #efefef",
+        borderRight: `2px solid ${BORDER_COLOR}`,
         display: "flex",
         flexDirection: "column",
       }}
@@ -112,6 +113,7 @@ function RoomsList(props: {}): React.ReactElement {
       {/* Add room button */}
       <input type="button" value="+ Add room" onClick={addRoom} />
       <Spacer size={16} />
+      <Separator size={2} />
 
       {/* Rooms list */}
       <div
@@ -119,7 +121,6 @@ function RoomsList(props: {}): React.ReactElement {
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          borderTop: "1px solid #efefef",
         }}
       >
         {rooms.map((room) => (
@@ -161,7 +162,7 @@ function RoomListItem(props: {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
-        borderBottom: "1px solid #efefef",
+        borderBottom: `1px solid ${BORDER_COLOR}`,
         backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
         width: "100%",
       }}
@@ -346,7 +347,7 @@ function RoomDetails(props: {
         bottom: 0,
         top: 0,
         width: COLUMN_WIDTH,
-        borderRight: "2px solid #efefef",
+        borderRight: `2px solid ${BORDER_COLOR}`,
         display: "flex",
         flexDirection: "column",
       }}
@@ -357,11 +358,11 @@ function RoomDetails(props: {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          borderBottom: "1px solid #efefef",
         }}
       >
         {room.id}
       </h2>
+      <Separator size={2} />
 
       {/* Params */}
       <div
@@ -408,11 +409,11 @@ function RoomDetails(props: {
           onChange={(event) => setHeight(Number.parseInt(event.target.value))}
         />
       </div>
+      <Separator size={2} />
 
       {/* Layers */}
       <div
         style={{
-          borderTop: "1px solid #efefef",
           marginTop: 16,
           padding: 8,
         }}
@@ -483,7 +484,7 @@ function RoomLayers(props: {
     <div
       style={{
         position: "absolute",
-        left: COLUMN_WIDTH,
+        left: COLUMN_WIDTH + 2,
         bottom: 0,
         top: 0,
         right: 0,
@@ -509,7 +510,7 @@ function RoomLayers(props: {
 function Separator(props: { size?: number }): React.ReactElement {
   const { size = 2 } = props;
 
-  return <div style={{ height: size, backgroundColor: "#efefef" }} />;
+  return <div style={{ height: size, backgroundColor: BORDER_COLOR }} />;
 }
 
 function Spacer(props: { size?: number }): React.ReactElement {
