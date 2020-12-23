@@ -1,10 +1,16 @@
 import * as React from "react";
 import {
+  MonsterType,
+  MonsterTypes,
+  PropType,
+  PropTypes,
   RoomTemplate,
   RoomType,
   RoomTypes,
   TileLayer,
   TileLayers,
+  TileType,
+  TileTypes,
 } from "../../generate/types";
 import { resizeTileMap } from "../../generate/utils";
 import { CanvasDrawer } from "./CanvasDrawer";
@@ -12,6 +18,9 @@ import { BORDER_COLOR, SIDEBAR_WIDTH } from "./constants";
 import { useRooms } from "./hooks/rooms";
 import { Separator } from "./Utils";
 
+/**
+ * The selected room's editor.
+ */
 export function Room(props: {}): React.ReactElement {
   const { rooms, selectedRoomId, updateRoom } = useRooms();
 
@@ -105,6 +114,9 @@ export function Room(props: {}): React.ReactElement {
   );
 }
 
+/**
+ * The selected room's base parameters.
+ */
 function RoomDetails(props: {
   room: RoomTemplate;
   onUpdate: (
@@ -123,7 +135,7 @@ function RoomDetails(props: {
   const [type, setType] = React.useState<RoomType>(room.type);
   const [width, setWidth] = React.useState(room.width);
   const [height, setHeight] = React.useState(room.height);
-  const { selectedLayer, selectLayer } = useRooms();
+  const { selectedLayer, selectedTile, selectLayer, selectTile } = useRooms();
 
   /** When the room is updated we reset all the fields */
   React.useEffect(() => {
@@ -233,9 +245,22 @@ function RoomDetails(props: {
           value={selectedLayer}
           onChange={(event) => selectLayer(event.target.value as TileLayer)}
         >
-          {TileLayers.map((tileLayer) => (
-            <option key={tileLayer} value={tileLayer}>
-              {tileLayer}
+          {TileLayers.map((item) => (
+            <option key={item} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+
+        {/* Tile */}
+        <p style={{ marginTop: 16 }}>Tile:</p>
+        <select
+          value={selectedTile}
+          onChange={(event) => selectTile(event.target.value)}
+        >
+          {getTilesForLayer(selectedLayer).map((item) => (
+            <option key={item} value={item}>
+              {item}
             </option>
           ))}
         </select>
@@ -244,6 +269,9 @@ function RoomDetails(props: {
   );
 }
 
+/**
+ * The selected room's tile editor.
+ */
 function RoomLayers(props: {
   room: RoomTemplate;
   onUpdate: (layer: TileLayer, x: number, y: number, value: number) => void;
@@ -251,7 +279,7 @@ function RoomLayers(props: {
   const { room, onUpdate } = props;
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<CanvasDrawer>();
-  const { selectedLayer } = useRooms();
+  const { selectedLayer, selectedTile } = useRooms();
 
   const onTileClick = (x: number, y: number) => {
     const layer = room.layers[selectedLayer];
@@ -260,16 +288,13 @@ function RoomLayers(props: {
     }
 
     const tileId = layer[y][x];
-
-    switch (selectedLayer) {
-      case "tiles":
-        onUpdate(selectedLayer, x, y, tileId !== 0 ? 0 : 1);
-        break;
-      case "props":
-        break;
-      case "monsters":
-        break;
-    }
+    const newTileId = getTileIdFromName(selectedLayer, selectedTile);
+    onUpdate(
+      selectedLayer,
+      x,
+      y,
+      tileId !== 0 && tileId === newTileId ? 0 : newTileId
+    );
   };
 
   /** Initialize the canvas drawer */
@@ -283,7 +308,7 @@ function RoomLayers(props: {
     }
 
     canvasDrawer.current.onTileClick = onTileClick;
-  }, [canvasRef, room]);
+  }, [canvasRef, room, selectedLayer, selectedTile]);
 
   /** Update drawer when room changes */
   React.useEffect(() => {
@@ -313,4 +338,26 @@ function RoomLayers(props: {
       />
     </div>
   );
+}
+
+function getTilesForLayer(layer: TileLayer): string[] {
+  switch (layer) {
+    case "tiles":
+      return TileTypes;
+    case "props":
+      return PropTypes;
+    case "monsters":
+      return MonsterTypes;
+  }
+}
+
+function getTileIdFromName(layer: TileLayer, tileName: string): number {
+  switch (layer) {
+    case "tiles":
+      return TileType[tileName];
+    case "props":
+      return PropType[tileName];
+    case "monsters":
+      return MonsterType[tileName];
+  }
 }

@@ -12,6 +12,7 @@ export interface RoomsValue {
   removeRoom: (roomId: string) => void;
   selectRoom: (roomId: string) => void;
   selectLayer: (layer: TileLayer) => void;
+  selectTile: (tileName: string) => void;
   filterRooms: (type: RoomType | "all") => void;
   saveRooms: () => void;
   loadRooms: (rooms: RoomTemplate[]) => void;
@@ -27,6 +28,7 @@ export const RoomsContext = React.createContext<RoomsValue>({
   removeRoom: () => {},
   selectRoom: () => {},
   selectLayer: () => {},
+  selectTile: () => {},
   filterRooms: () => {},
   saveRooms: () => {},
   loadRooms: () => {},
@@ -101,18 +103,6 @@ export function CollectionsProvider(props: {
   /** Select a tile layer in the room */
   const selectLayer = (layer: TileLayer) => {
     setSelectedLayer(layer);
-
-    switch (layer) {
-      case "tiles":
-        setSelectedTile("Wall");
-        break;
-      case "props":
-        setSelectedTile("Peak");
-        break;
-      case "monsters":
-        setSelectedTile("Bandit");
-        break;
-    }
   };
 
   /** Select a tile in the layer */
@@ -144,6 +134,21 @@ export function CollectionsProvider(props: {
     setSelectedRoomId(null);
     setFilter("all");
   };
+
+  // When updating the selected layer, update the selected tile accordingly
+  React.useEffect(() => {
+    switch (selectedLayer) {
+      case "tiles":
+        setSelectedTile("Wall");
+        break;
+      case "props":
+        setSelectedTile("Peak");
+        break;
+      case "monsters":
+        setSelectedTile("Bandit");
+        break;
+    }
+  }, [selectedLayer]);
 
   // Filter and sort rooms
   const filtered = React.useMemo(() => {
