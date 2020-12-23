@@ -140,6 +140,25 @@ export interface Pattern {
 }
 
 //
+// Tiles
+//
+export enum TileDirection {
+  NorthWest = 1,
+  North = 2,
+  NorthEast = 4,
+  West = 8,
+  East = 16,
+  SouthWest = 32,
+  South = 64,
+  SouthEast = 128,
+}
+export enum TileType {
+  Hole = -1,
+  Wall = 1,
+}
+export const TileTypes = Object.keys(TileType);
+
+//
 // Props
 //
 export enum PropType {
@@ -169,9 +188,10 @@ export enum PropType {
   // Spawns
   Ladder = 21,
 }
+export const PropTypes = Object.keys(PropType);
 
 //
-// Entities
+// Monsters
 //
 export enum MonsterType {
   Bandit = 1,
@@ -179,17 +199,7 @@ export enum MonsterType {
   Skeleton = 3,
   Troll = 4,
 }
-export class Monster extends Point {
-  radius: number;
-  type: MonsterType;
-
-  constructor(x: number, y: number, radius: number, type: MonsterType) {
-    super(x, y);
-
-    this.radius = radius;
-    this.type = type;
-  }
-}
+export const MonsterTypes = Object.keys(MonsterType);
 
 //
 // Tilemap
@@ -198,13 +208,3 @@ export type TileMap = number[][];
 export type TileMaps = { [layer: string]: TileMap };
 export type TileLayer = "tiles" | "props" | "monsters";
 export const TileLayers: TileLayer[] = ["tiles", "props", "monsters"];
-export enum TileDirection {
-  NorthWest = 1,
-  North = 2,
-  NorthEast = 4,
-  West = 8,
-  East = 16,
-  SouthWest = 32,
-  South = 64,
-  SouthEast = 128,
-}

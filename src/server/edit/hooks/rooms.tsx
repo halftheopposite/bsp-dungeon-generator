@@ -1,14 +1,17 @@
 import React from "react";
-import { RoomTemplate, RoomType } from "../../../generate/types";
+import { RoomTemplate, RoomType, TileLayer } from "../../../generate/types";
 import { createTilemap } from "../../../generate/utils";
 
 export interface RoomsValue {
   rooms: RoomTemplate[];
   selectedRoomId: string;
+  selectedLayer: TileLayer;
+  selectedTile: string;
   addRoom: () => void;
   updateRoom: (updated: RoomTemplate, oldRoomId: string) => void;
   removeRoom: (roomId: string) => void;
   selectRoom: (roomId: string) => void;
+  selectLayer: (layer: TileLayer) => void;
   filterRooms: (type: RoomType | "all") => void;
   saveRooms: () => void;
   loadRooms: (rooms: RoomTemplate[]) => void;
@@ -17,10 +20,13 @@ export interface RoomsValue {
 export const RoomsContext = React.createContext<RoomsValue>({
   rooms: [],
   selectedRoomId: null,
+  selectedLayer: "tiles",
+  selectedTile: "",
   addRoom: () => {},
   updateRoom: () => {},
   removeRoom: () => {},
   selectRoom: () => {},
+  selectLayer: () => {},
   filterRooms: () => {},
   saveRooms: () => {},
   loadRooms: () => {},
@@ -32,6 +38,8 @@ export function CollectionsProvider(props: {
   const { children } = props;
   const [rooms, setRooms] = React.useState<RoomTemplate[]>([]);
   const [selectedRoomId, setSelectedRoomId] = React.useState<string>(null);
+  const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
+  const [selectedTile, setSelectedTile] = React.useState<string>("");
   const [filter, setFilter] = React.useState<RoomType | "all">("all");
 
   /** Add a room */
@@ -90,6 +98,28 @@ export function CollectionsProvider(props: {
     setSelectedRoomId(roomId);
   };
 
+  /** Select a tile layer in the room */
+  const selectLayer = (layer: TileLayer) => {
+    setSelectedLayer(layer);
+
+    switch (layer) {
+      case "tiles":
+        setSelectedTile("Wall");
+        break;
+      case "props":
+        setSelectedTile("Peak");
+        break;
+      case "monsters":
+        setSelectedTile("Bandit");
+        break;
+    }
+  };
+
+  /** Select a tile in the layer */
+  const selectTile = (tileName: string) => {
+    setSelectedTile(tileName);
+  };
+
   /** Filter rooms on their type */
   const filterRooms = (type: RoomType | "all") => {
     setFilter(type);
@@ -129,15 +159,19 @@ export function CollectionsProvider(props: {
     return {
       rooms: filtered,
       selectedRoomId,
+      selectedLayer,
+      selectedTile,
       addRoom,
       updateRoom,
       removeRoom,
       selectRoom,
+      selectLayer,
+      selectTile,
       filterRooms,
       saveRooms,
       loadRooms,
     };
-  }, [rooms, selectedRoomId, filter]);
+  }, [rooms, selectedRoomId, selectedLayer, selectedTile, filter]);
 
   return (
     <RoomsContext.Provider value={value}>{children}</RoomsContext.Provider>
