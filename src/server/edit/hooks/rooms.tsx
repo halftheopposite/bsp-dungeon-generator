@@ -62,6 +62,8 @@ export function CollectionsProvider(props: {
         },
       });
 
+      localStorage.setItem("rooms", JSON.stringify(rooms));
+
       return result;
     });
     setSelectedRoomId(id);
@@ -77,6 +79,8 @@ export function CollectionsProvider(props: {
         ...updated,
       };
 
+      localStorage.setItem("rooms", JSON.stringify(rooms));
+
       return updatedRooms;
     });
     setSelectedRoomId(updated.id);
@@ -91,6 +95,9 @@ export function CollectionsProvider(props: {
       if (index !== -1) {
         result.splice(index, 1);
       }
+
+      localStorage.setItem("rooms", JSON.stringify(rooms));
+
       return result;
     });
   };
@@ -149,6 +156,20 @@ export function CollectionsProvider(props: {
         break;
     }
   }, [selectedLayer]);
+
+  // Load rooms from localstorage when initialized
+  React.useEffect(() => {
+    const saved = localStorage.getItem("rooms");
+    let parsed;
+    try {
+      parsed = JSON.parse(saved);
+    } catch (error) {
+      console.log("Error loading rooms from local storage.");
+      parsed = [];
+    }
+
+    loadRooms(parsed);
+  }, []);
 
   // Filter and sort rooms
   const filtered = React.useMemo(() => {
