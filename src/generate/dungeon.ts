@@ -303,6 +303,11 @@ export function computeTilesMask(tiles: TileMap) {
       if (result[y][x] > 0) {
         result[y][x] = computeBitMask(x, y, result);
       }
+
+      // Compute holes
+      if (result[y][x] < 0) {
+        result[y][x] = computeHole(x, y, result);
+      }
     }
   }
 
@@ -543,6 +548,17 @@ function computeBitMask(x: number, y: number, tiles: TileMap): number {
   }
 
   return maskToTileIdMap[mask];
+}
+
+function computeHole(x: number, y: number, tiles: TileMap): number {
+  let result = -1;
+
+  const isTop = y === 0;
+  if (!isTop && tiles[y - 1][x] < 0) {
+    result = -2;
+  }
+
+  return result;
 }
 
 function tileDirectionCollides(
