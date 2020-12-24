@@ -26,22 +26,7 @@ export function Room(props: {}): React.ReactElement {
 
   const room = rooms.find((item) => item.id === selectedRoomId);
   if (!room) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          left: SIDEBAR_WIDTH,
-          bottom: 0,
-          top: 0,
-          right: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Select a room or create one.
-      </div>
-    );
+    return <RoomEmpty />;
   }
 
   /** When a room's details are updated */
@@ -114,6 +99,25 @@ export function Room(props: {}): React.ReactElement {
   );
 }
 
+function RoomEmpty(): React.ReactElement {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: SIDEBAR_WIDTH,
+        bottom: 0,
+        top: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      Select a room or create one.
+    </div>
+  );
+}
+
 /**
  * The selected room's base parameters.
  */
@@ -147,15 +151,22 @@ function RoomDetails(props: {
   }, [room.id]);
 
   React.useEffect(() => {
-    onUpdate(
-      {
-        id,
-        type,
-        width,
-        height,
-      },
-      oldId
-    );
+    if (
+      room.id !== id ||
+      room.type !== type ||
+      room.width !== width ||
+      room.height !== height
+    ) {
+      onUpdate(
+        {
+          id,
+          type,
+          width,
+          height,
+        },
+        oldId
+      );
+    }
   }, [id, type, width, height]);
 
   return (

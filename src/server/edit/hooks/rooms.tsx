@@ -48,9 +48,8 @@ export function CollectionsProvider(props: {
   const addRoom = () => {
     const id = String(Date.now());
     setRooms((prev) => {
-      const result = [...prev];
-
-      result.push({
+      const updatedRooms = [...prev];
+      updatedRooms.push({
         id,
         width: 8,
         height: 8,
@@ -62,9 +61,9 @@ export function CollectionsProvider(props: {
         },
       });
 
-      localStorage.setItem("rooms", JSON.stringify(rooms));
+      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
 
-      return result;
+      return updatedRooms;
     });
     setSelectedRoomId(id);
   };
@@ -79,7 +78,7 @@ export function CollectionsProvider(props: {
         ...updated,
       };
 
-      localStorage.setItem("rooms", JSON.stringify(rooms));
+      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
 
       return updatedRooms;
     });
@@ -89,16 +88,16 @@ export function CollectionsProvider(props: {
   /** Remove a room */
   const removeRoom = (roomId: string) => {
     setRooms((prev) => {
-      const result = [...prev];
+      const updatedRooms = [...prev];
 
       const index = prev.findIndex((item) => item.id === roomId);
       if (index !== -1) {
-        result.splice(index, 1);
+        updatedRooms.splice(index, 1);
       }
 
-      localStorage.setItem("rooms", JSON.stringify(rooms));
+      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
 
-      return result;
+      return updatedRooms;
     });
   };
 
@@ -162,9 +161,9 @@ export function CollectionsProvider(props: {
     const saved = localStorage.getItem("rooms");
     let parsed;
     try {
-      parsed = JSON.parse(saved);
+      parsed = JSON.parse(saved) || [];
     } catch (error) {
-      console.log("Error loading rooms from local storage.");
+      console.warn("Error loading rooms from local storage.");
       parsed = [];
     }
 
