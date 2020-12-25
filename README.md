@@ -1,6 +1,8 @@
 # dungeon
 
-A configurable dungeon generator using Binary-Space Partitioning and hand-made rooms.
+A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms.
+
+![dungeon](images/dungeon.png "Screenshot of a generated dungeon")
 
 ## Running
 
