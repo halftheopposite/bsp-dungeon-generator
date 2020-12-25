@@ -56,3 +56,11 @@ This will return:
     monsters: TileMap;
 }
 ```
+
+## Assets
+
+Thanks to [@pixel_poem](https://twitter.com/pixel_poem) for the art package he published on Itch.io which made this game looks cool instantly.
+
+## Licenses
+
+This project is under the [MIT](https://github.com/halftheopposite/dungeon/blob/main/LICENSE) license.
