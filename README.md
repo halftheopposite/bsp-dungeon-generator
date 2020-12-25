@@ -43,3 +43,16 @@ const dungeon = generate({
   corridorTrapChance: 0.5, // Probability of a trap spawning into a corridor
 });
 ```
+
+This will return:
+
+```typescript
+{
+    width: number;
+    height: number;
+    tree: TreeNode<Container>;
+    tiles: TileMap;
+    props: TileMap;
+    monsters: TileMap;
+}
+```
