@@ -73,6 +73,8 @@ export const tilesSprites = {
   17: textures["w-e"],
   18: textures["w-e"],
   20: textures["w-e"],
+  21: textures["w-e"],
+  25: textures["w-e"],
   26: textures["n-ne-e"],
   27: textures["n-ne-e"],
   29: textures["n-ne-e"],
@@ -84,9 +86,11 @@ export const tilesSprites = {
   37: textures["n-nw-w"],
   41: textures["w"],
   42: textures["n"],
+  43: textures["w-e"],
   44: textures["ne"],
   45: textures["nw"],
   46: textures["all"],
+  47: textures["s"],
 };
 
 export const propsSprites = {
