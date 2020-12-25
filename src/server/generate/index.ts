@@ -7,10 +7,10 @@ import {
 } from "../common/textures";
 
 const dungeon = generate({
-  mapWidth: 72,
+  mapWidth: 96,
   mapHeight: 56,
   mapGutterWidth: 1,
-  iterations: 4,
+  iterations: 5,
   containerSizeRatio: 0.45,
   roomSpawnChance: 0.9,
   corridorWidth: 2,

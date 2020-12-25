@@ -195,9 +195,13 @@ export const PropTypes = Object.keys(PropType);
 //
 export enum MonsterType {
   Bandit = 1,
-  Mushroom = 2,
-  Skeleton = 3,
-  Troll = 4,
+  CentaurFemale = 2,
+  CentaurMale = 3,
+  MushroomLarge = 4,
+  MushroomSmall = 5,
+  Skeleton = 6,
+  Troll = 7,
+  Wolf = 8,
 }
 export const MonsterTypes = Object.keys(MonsterType);
 
