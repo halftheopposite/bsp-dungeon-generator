@@ -3,13 +3,11 @@ import { computeTilesMask } from "../../../../generate/dungeon";
 import { TileLayer, TileMaps, TileMap } from "../../../../generate/types";
 import { tilesSprites, propsSprites, monstersSprites } from "../../utils";
 
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
-
 const TILE_SIZE = 32;
 
 type TileClickCallback = (x: number, y: number) => void;
 
-export class CanvasDrawer {
+export class EditorDrawer {
   private app: PIXI.Application;
 
   private tilesContainer: PIXI.Container;
@@ -22,8 +20,10 @@ export class CanvasDrawer {
 
   onTileClick: TileClickCallback;
 
+  //
   // Lifecycle
-  constructor(container: HTMLDivElement, width: number, height: number) {
+  //
+  constructor(container: HTMLDivElement) {
     this.app = new PIXI.Application({
       width: container.getBoundingClientRect().width,
       height: container.getBoundingClientRect().height,
@@ -91,6 +91,7 @@ export class CanvasDrawer {
     this.drawTiles(tiles, selectedLayer === "tiles");
     this.drawProps(props, selectedLayer === "props");
     this.drawMonsters(monsters, selectedLayer === "monsters");
+    this.drawGrid(tiles);
   };
 
   private drawTiles = (tiles: TileMap, selected: boolean) => {
@@ -162,16 +163,28 @@ export class CanvasDrawer {
   //
   // Debug
   //
-  resizeGrid = (width: number, height: number) => {
+  private drawGrid = (tiles: TileMap) => {
+    tiles = computeTilesMask(tiles);
+
     this.gridContainer.removeChildren();
     this.gridContainer.addChild(this.cursorGridHover);
 
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
+    for (let y = 0; y < tiles.length; y++) {
+      for (let x = 0; x < tiles[y].length; x++) {
         const rectangle = new PIXI.Graphics();
         rectangle.lineStyle(1, 0x00ff00, 0.5);
         rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
         rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
+
+        const tileId = tiles[y][x];
+        const text = new PIXI.Text(`${tileId}`, {
+          fontSize: 10,
+          fill: 0xffffff,
+        });
+        text.anchor.set(0.5);
+        text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
+        rectangle.addChild(text);
+
         this.gridContainer.addChild(rectangle);
       }
     }

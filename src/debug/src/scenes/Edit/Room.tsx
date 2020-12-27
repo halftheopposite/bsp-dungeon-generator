@@ -13,7 +13,7 @@ import {
   TileTypes,
 } from "../../../../generate/types";
 import { resizeTileMap } from "../../../../generate/utils";
-import { CanvasDrawer } from "./CanvasDrawer";
+import { EditorDrawer } from "./EditorDrawer";
 import { BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
 import { useRooms } from "./hooks/rooms";
 import { Separator } from "../../components";
@@ -289,7 +289,7 @@ function RoomLayers(props: {
 }): React.ReactElement {
   const { room, onUpdate } = props;
   const canvasRef = React.useRef<HTMLDivElement>();
-  const canvasDrawer = React.useRef<CanvasDrawer>();
+  const canvasDrawer = React.useRef<EditorDrawer>();
   const { selectedLayer, selectedTile } = useRooms();
 
   const onTileClick = (x: number, y: number) => {
@@ -315,7 +315,7 @@ function RoomLayers(props: {
     }
 
     if (!canvasDrawer.current) {
-      canvasDrawer.current = new CanvasDrawer(canvasRef.current, 500, 500);
+      canvasDrawer.current = new EditorDrawer(canvasRef.current);
     }
 
     canvasDrawer.current.onTileClick = onTileClick;
@@ -324,7 +324,6 @@ function RoomLayers(props: {
   /** Update drawer when room changes */
   React.useEffect(() => {
     canvasDrawer.current.drawLayers(room.layers, selectedLayer);
-    canvasDrawer.current.resizeGrid(room.width, room.height);
   }, [room, selectedLayer]);
 
   return (
