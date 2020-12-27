@@ -12,12 +12,8 @@
   },
   "license": "MIT",
   "scripts": {
-    "build:edit": "esbuild src/server/edit/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --sourcemap --outfile=src/server/edit/public/script.js",
-    "build:generate": "esbuild src/server/generate/index.ts --bundle --loader:.png=base64 --sourcemap --outfile=src/server/generate/public/script.js",
-    "build": "yarn run build:edit && yarn run build:generate",
-    "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json,html\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run build && ts-node src/server/index.ts\"",
-    "test:build": "esbuild src/debug/src/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --outfile=src/debug/public/script.js",
-    "test:start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json,html\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run test:build && ts-node src/debug/server.ts\""
+    "build": "esbuild src/app/src/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --outfile=src/app/public/script.js",
+    "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json,html\" --ignore \"src/**/*.spec.ts\" --exec \"yarn run build && ts-node src/app/server.ts\""
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
