@@ -1,10 +1,6 @@
 import React from "react";
-import {
-  RoomTemplate,
-  RoomType,
-  TileLayer,
-} from "../../../../../generate/types";
-import { createTilemap } from "../../../../../generate/utils";
+import { RoomTemplate, RoomType, TileLayer } from "../../../../generate/types";
+import { createTilemap } from "../../../../generate/utils";
 
 export interface RoomsValue {
   rooms: RoomTemplate[];

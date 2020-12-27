@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import { Dungeon } from "../../../../generate/dungeon";
-import { Container, TileMap, TreeNode } from "../../../../generate/types";
+import { Dungeon } from "../../../generate/dungeon";
+import { Container, TileMap, TreeNode } from "../../../generate/types";
 import { tilesSprites, propsSprites, monstersSprites } from "../../utils";
 
 export interface TexturesMap {
@@ -48,9 +48,9 @@ export class DungeonDrawer {
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;
 
-    this.drawTiles(dungeon.tiles, tilesSprites);
-    this.drawProps(dungeon.props, propsSprites);
-    this.drawMonsters(dungeon.monsters, monstersSprites);
+    this.drawTiles(dungeon.layers.tiles, tilesSprites);
+    this.drawProps(dungeon.layers.props, propsSprites);
+    this.drawMonsters(dungeon.layers.monsters, monstersSprites);
 
     if (options.debug) {
       this.drawGrid(dungeon);

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { RoomTemplate } from "../../../../generate/types";
+import { RoomTemplate } from "../../../generate/types";
 import { BORDER_COLOR } from "../../constants";
 import { useRooms } from "./hooks/rooms";
 

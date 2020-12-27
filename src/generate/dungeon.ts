@@ -41,9 +41,11 @@ export interface Dungeon {
   width: number;
   height: number;
   tree: TreeNode<Container>;
-  tiles: TileMap;
-  props: TileMap;
-  monsters: TileMap;
+  layers: {
+    tiles: TileMap;
+    props: TileMap;
+    monsters: TileMap;
+  };
 }
 
 export function generate(args: Args): Dungeon {
@@ -61,9 +63,11 @@ export function generate(args: Args): Dungeon {
     width: args.mapWidth,
     height: args.mapHeight,
     tree,
-    tiles,
-    props,
-    monsters,
+    layers: {
+      tiles,
+      props,
+      monsters,
+    },
   };
 }
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "@reach/router";
-import { generate } from "../../../../generate/dungeon";
+import { generate } from "../../../generate/dungeon";
 
 import { DungeonDrawer } from "./DungeonDrawer";
 

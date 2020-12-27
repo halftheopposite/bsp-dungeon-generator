@@ -11,8 +11,8 @@ import {
   TileLayers,
   TileType,
   TileTypes,
-} from "../../../../generate/types";
-import { resizeTileMap } from "../../../../generate/utils";
+} from "../../../generate/types";
+import { resizeTileMap } from "../../../generate/utils";
 import { EditorDrawer } from "./EditorDrawer";
 import { BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
 import { useRooms } from "./hooks/rooms";

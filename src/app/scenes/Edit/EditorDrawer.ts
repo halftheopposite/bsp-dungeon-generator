@@ -1,6 +1,6 @@
 import * as PIXI from "pixi.js";
-import { computeTilesMask } from "../../../../generate/dungeon";
-import { TileLayer, TileMaps, TileMap } from "../../../../generate/types";
+import { computeTilesMask } from "../../../generate/dungeon";
+import { TileLayer, TileMaps, TileMap } from "../../../generate/types";
 import { tilesSprites, propsSprites, monstersSprites } from "../../utils";
 
 const TILE_SIZE = 32;

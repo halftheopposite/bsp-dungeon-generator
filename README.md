@@ -25,6 +25,13 @@ When using the **edit** mode you can create, edit, or remove the rooms that are 
 - You can **load** a `rooms.json` file to start with.
 - You can **save** the current editing session to a `rooms.json` file inside the `/src/generate/` folder to use it when generating dungeons.
 
+## Generate
+
+When in the **generate** mode you can render dungeons by tuning some key parameters.
+
+- You can **right click** and save the generated image.
+- You can **download** a JSON representation of the dungeon.
+
 ## Want to use the dungeon generation algorithm in you project?
 
 You can copy the content of the `/src/generate/` folder into your project and call it like so:
@@ -51,9 +58,11 @@ This will return:
     width: number;
     height: number;
     tree: TreeNode<Container>;
-    tiles: TileMap;
-    props: TileMap;
-    monsters: TileMap;
+    layers: {
+        tiles: TileMap;
+        props: TileMap;
+        monsters: TileMap;
+    };
 }
 ```
 
