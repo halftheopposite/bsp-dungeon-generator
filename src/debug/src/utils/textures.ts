@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { MonsterType, PropType } from "../../generate/types";
+import { MonsterType, PropType } from "../../../generate/types";
 
 export const textures = {
   // Tiles
