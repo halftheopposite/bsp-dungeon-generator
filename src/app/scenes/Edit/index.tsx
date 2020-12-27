@@ -1,11 +1,10 @@
 import * as React from "react";
-import { RouteComponentProps } from "@reach/router";
 
 import { CollectionsProvider } from "./hooks/rooms";
 import { Room } from "./Room";
 import { Sidebar } from "./Sidebar";
 
-export function Edit(props: RouteComponentProps): React.ReactElement {
+export function Edit(props: {}): React.ReactElement {
   return (
     <div
       style={{

@@ -1,10 +1,9 @@
 import * as React from "react";
-import { RouteComponentProps } from "@reach/router";
 import { generate } from "../../../generate/dungeon";
 
 import { DungeonDrawer } from "./DungeonDrawer";
 
-export function Generate(props: RouteComponentProps): React.ReactElement {
+export function Generate(props: {}): React.ReactElement {
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<DungeonDrawer>();
 
