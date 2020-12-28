@@ -6,6 +6,7 @@ import {
   TileLayer,
 } from "../../../../generate/types";
 import { createTilemap } from "../../../../generate/utils";
+import { Data } from "../../../utils";
 
 export type RoomsFilter = RoomType | "all";
 export const RoomsFilters = [...RoomTypes, "all"];
@@ -76,7 +77,7 @@ export function CollectionsProvider(props: {
         },
       });
 
-      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+      Data.saveRooms(updatedRooms);
 
       return updatedRooms;
     });
@@ -93,7 +94,7 @@ export function CollectionsProvider(props: {
         ...updated,
       };
 
-      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+      Data.saveRooms(updatedRooms);
 
       return updatedRooms;
     });
@@ -110,7 +111,7 @@ export function CollectionsProvider(props: {
         updatedRooms.splice(index, 1);
       }
 
-      localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+      Data.saveRooms(updatedRooms);
 
       return updatedRooms;
     });
@@ -174,16 +175,7 @@ export function CollectionsProvider(props: {
 
   // Load rooms from localstorage when initialized
   React.useEffect(() => {
-    const saved = localStorage.getItem("rooms");
-    let parsed;
-    try {
-      parsed = JSON.parse(saved) || [];
-    } catch (error) {
-      console.warn("Error loading rooms from local storage.");
-      parsed = [];
-    }
-
-    loadRooms(parsed);
+    loadRooms(Data.loadRooms());
   }, []);
 
   // Filter and sort rooms

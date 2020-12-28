@@ -1,4 +1,3 @@
-import { Rooms } from "./rooms";
 import { Traps } from "./traps";
 import {
   Container,
@@ -6,6 +5,7 @@ import {
   Direction,
   PropType,
   Room,
+  RoomTemplate,
   TileDirection,
   TileMap,
   TreeNode,
@@ -19,6 +19,8 @@ import {
 } from "./utils";
 
 export interface Args {
+  /** A list of rooms to be used in the dungeon */
+  rooms: RoomTemplate[];
   /** Width of the map */
   mapWidth: number;
   /** Height of the map */
@@ -224,7 +226,7 @@ function generateRooms(tree: TreeNode<Container>, args: Args) {
       return;
     }
 
-    const filteredRooms = Rooms.filter(
+    const filteredRooms = args.rooms.filter(
       (room) => room.width <= leaf.width && room.height <= leaf.height
     );
     if (!filteredRooms.length) {

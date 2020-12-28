@@ -1,5 +1,6 @@
 import * as React from "react";
 import { generate } from "../../../generate/dungeon";
+import { Data } from "../../utils";
 
 import { DungeonDrawer } from "./DungeonDrawer";
 
@@ -10,6 +11,7 @@ export function Generate(props: {}): React.ReactElement {
   React.useEffect(() => {
     canvasDrawer.current = new DungeonDrawer(canvasRef.current);
     const dungeon = generate({
+      rooms: Data.loadRooms(),
       mapWidth: 96,
       mapHeight: 56,
       mapGutterWidth: 1,

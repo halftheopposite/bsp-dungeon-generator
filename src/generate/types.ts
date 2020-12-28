@@ -104,19 +104,12 @@ export class Corridor extends Rectangle {
 //
 // Patterns
 //
-export type RoomType =
-  | "entrance"
-  | "monsters"
-  | "heal"
-  | "treasure"
-  | "mini-boss"
-  | "boss";
+export type RoomType = "entrance" | "monsters" | "heal" | "treasure" | "boss";
 export const RoomTypes: RoomType[] = [
   "entrance",
   "monsters",
   "heal",
   "treasure",
-  "mini-boss",
   "boss",
 ];
 export interface RoomTemplate {

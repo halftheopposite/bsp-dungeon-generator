@@ -13,6 +13,11 @@
     }
     return module.exports;
   };
+  var __export = (target, all) => {
+    __markAsModule(target);
+    for (var name in all)
+      __defProp(target, name, {get: all[name], enumerable: true});
+  };
   var __exportStar = (target, module, desc) => {
     __markAsModule(target);
     if (module && typeof module === "object" || typeof module === "function") {
@@ -25373,7 +25378,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "monsters",
     "heal",
     "treasure",
-    "mini-boss",
     "boss"
   ];
   var TileDirection;
@@ -25472,179 +25476,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
   }
 
-  // src/app/scenes/Edit/hooks/rooms.tsx
-  var RoomsFilters = [...RoomTypes, "all"];
-  var RoomsContext = react4.default.createContext({
-    rooms: [],
-    roomsFilter: "all",
-    selectedRoomId: null,
-    selectedLayer: "tiles",
-    selectedTile: "",
-    debug: false,
-    addRoom: () => {
-    },
-    updateRoom: () => {
-    },
-    removeRoom: () => {
-    },
-    selectRoom: () => {
-    },
-    selectLayer: () => {
-    },
-    selectTile: () => {
-    },
-    filterRooms: () => {
-    },
-    saveRooms: () => {
-    },
-    loadRooms: () => {
-    },
-    setDebug: () => {
-    }
+  // src/app/utils/textures.ts
+  var textures_exports = {};
+  __export(textures_exports, {
+    monstersSprites: () => monstersSprites,
+    propsSprites: () => propsSprites,
+    tilesSprites: () => tilesSprites
   });
-  function CollectionsProvider(props) {
-    const {children} = props;
-    const [rooms9, setRooms] = react4.default.useState([]);
-    const [roomsFilter, setRoomsFilter] = react4.default.useState("all");
-    const [selectedRoomId, setSelectedRoomId] = react4.default.useState(null);
-    const [selectedLayer, setSelectedLayer] = react4.default.useState("tiles");
-    const [selectedTile, setSelectedTile] = react4.default.useState("");
-    const [debug, setDebug] = react4.default.useState(false);
-    const addRoom = () => {
-      const id = String(Date.now());
-      setRooms((prev) => {
-        const updatedRooms = [...prev];
-        updatedRooms.push({
-          id,
-          width: 8,
-          height: 8,
-          type: roomsFilter === "all" ? "monsters" : roomsFilter,
-          layers: {
-            tiles: createTilemap(8, 8, 0),
-            props: createTilemap(8, 8, 0),
-            monsters: createTilemap(8, 8, 0)
-          }
-        });
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-      setSelectedRoomId(id);
-    };
-    const updateRoom = (updated, oldRoomId) => {
-      setRooms((prev) => {
-        const index3 = prev.findIndex((item) => item.id === oldRoomId);
-        const updatedRooms = [...prev];
-        updatedRooms[index3] = {
-          ...updatedRooms[index3],
-          ...updated
-        };
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-      setSelectedRoomId(updated.id);
-    };
-    const removeRoom = (roomId) => {
-      setRooms((prev) => {
-        const updatedRooms = [...prev];
-        const index3 = prev.findIndex((item) => item.id === roomId);
-        if (index3 !== -1) {
-          updatedRooms.splice(index3, 1);
-        }
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-    };
-    const selectRoom = (roomId) => {
-      setSelectedRoomId(roomId);
-      setSelectedLayer("tiles");
-    };
-    const selectLayer = (layer) => {
-      setSelectedLayer(layer);
-    };
-    const selectTile = (tileName) => {
-      setSelectedTile(tileName);
-    };
-    const filterRooms = (type) => {
-      setRoomsFilter(type);
-    };
-    const saveRooms = () => {
-      const element = document.createElement("a");
-      const file = new Blob([JSON.stringify(rooms9, null, 2)], {
-        type: "text/json"
-      });
-      element.href = URL.createObjectURL(file);
-      element.download = "rooms.json";
-      const added = document.body.appendChild(element);
-      element.click();
-      added.remove();
-    };
-    const loadRooms = (loadedRooms) => {
-      setRooms(loadedRooms);
-      setSelectedRoomId(null);
-      setRoomsFilter("all");
-    };
-    react4.default.useEffect(() => {
-      switch (selectedLayer) {
-        case "tiles":
-          setSelectedTile("Wall");
-          break;
-        case "props":
-          setSelectedTile("Peak");
-          break;
-        case "monsters":
-          setSelectedTile("Bandit");
-          break;
-      }
-    }, [selectedLayer]);
-    react4.default.useEffect(() => {
-      const saved = localStorage.getItem("rooms");
-      let parsed;
-      try {
-        parsed = JSON.parse(saved) || [];
-      } catch (error) {
-        console.warn("Error loading rooms from local storage.");
-        parsed = [];
-      }
-      loadRooms(parsed);
-    }, []);
-    const filtered = react4.default.useMemo(() => {
-      const sorted = rooms9.sort((a, b) => a.id.localeCompare(b.id));
-      const filtered2 = sorted.filter((item) => roomsFilter === "all" || item.type === roomsFilter);
-      return filtered2;
-    }, [rooms9, roomsFilter]);
-    const value = react4.default.useMemo(() => {
-      return {
-        rooms: filtered,
-        roomsFilter,
-        selectedRoomId,
-        selectedLayer,
-        selectedTile,
-        debug,
-        addRoom,
-        updateRoom,
-        removeRoom,
-        selectRoom,
-        selectLayer,
-        selectTile,
-        filterRooms,
-        saveRooms,
-        loadRooms,
-        setDebug
-      };
-    }, [rooms9, roomsFilter, selectedRoomId, selectedLayer, selectedTile, debug]);
-    return /* @__PURE__ */ react4.default.createElement(RoomsContext.Provider, {
-      value
-    }, children);
-  }
-  function useRooms() {
-    return react4.default.useContext(RoomsContext);
-  }
-
-  // src/app/scenes/Edit/Room/index.tsx
-  var React11 = __toModule(require_react());
-
-  // src/app/scenes/Edit/Room/RoomContent.tsx
-  var React5 = __toModule(require_react());
 
   // node_modules/@pixi/polyfill/lib/polyfill.es.js
   var es6_promise_polyfill = __toModule(require_promise());
@@ -45677,8 +45515,147 @@ void main() {
   Application.registerPlugin(TickerPlugin);
   Application.registerPlugin(AppLoaderPlugin);
 
-  // src/generate/rooms.json
-  var rooms_default = [
+  // src/app/utils/textures.ts
+  settings.SCALE_MODE = SCALE_MODES.NEAREST;
+  var textures = {
+    hole: Texture.from("assets/tiles/hole.png"),
+    edge: Texture.from("assets/tiles/edge.png"),
+    ground: Texture.from("assets/tiles/ground.png"),
+    n: Texture.from("assets/tiles/n.png"),
+    s: Texture.from("assets/tiles/s.png"),
+    e: Texture.from("assets/tiles/e.png"),
+    w: Texture.from("assets/tiles/w.png"),
+    ne: Texture.from("assets/tiles/ne.png"),
+    nw: Texture.from("assets/tiles/nw.png"),
+    "w-e": Texture.from("assets/tiles/w-e.png"),
+    "n-nw-w": Texture.from("assets/tiles/n-nw-w.png"),
+    "n-ne-e": Texture.from("assets/tiles/n-ne-e.png"),
+    all: Texture.from("assets/tiles/all.png"),
+    peak: Texture.from("assets/props/peak.png"),
+    bone: Texture.from("assets/props/bone.png"),
+    "crate-silver": Texture.from("assets/props/crate-silver.png"),
+    "crate-wood": Texture.from("assets/props/crate-wood.png"),
+    flag: Texture.from("assets/props/flag.png"),
+    "handcuff-1": Texture.from("assets/props/handcuff-1.png"),
+    "handcuff-2": Texture.from("assets/props/handcuff-2.png"),
+    lamp: Texture.from("assets/props/lamp.png"),
+    skull: Texture.from("assets/props/skull.png"),
+    "stones-large": Texture.from("assets/props/stones-large.png"),
+    "stones-small": Texture.from("assets/props/stones-small.png"),
+    torch: Texture.from("assets/props/torch.png"),
+    "web-left": Texture.from("assets/props/web-left.png"),
+    "web-right": Texture.from("assets/props/web-right.png"),
+    "health-large": Texture.from("assets/props/health-large.png"),
+    "health-small": Texture.from("assets/props/health-small.png"),
+    "key-gold": Texture.from("assets/props/key-gold.png"),
+    "key-silver": Texture.from("assets/props/key-silver.png"),
+    "mana-large": Texture.from("assets/props/mana-large.png"),
+    "mana-small": Texture.from("assets/props/mana-small.png"),
+    ladder: Texture.from("assets/props/ladder.png"),
+    bandit: Texture.from("assets/monsters/bandit.png"),
+    "centaur-female": Texture.from("assets/monsters/centaur-female.png"),
+    "centaur-male": Texture.from("assets/monsters/centaur-male.png"),
+    "mushroom-large": Texture.from("assets/monsters/mushroom-large.png"),
+    "mushroom-small": Texture.from("assets/monsters/mushroom-small.png"),
+    skeleton: Texture.from("assets/monsters/skeleton.png"),
+    troll: Texture.from("assets/monsters/troll.png"),
+    wolf: Texture.from("assets/monsters/wolf.png")
+  };
+  var tilesSprites = {
+    "-2": textures["hole"],
+    "-1": textures["edge"],
+    0: textures["ground"],
+    1: textures["s"],
+    2: textures["s"],
+    3: textures["s"],
+    4: textures["s"],
+    5: textures["s"],
+    7: textures["s"],
+    6: textures["s"],
+    8: textures["s"],
+    9: textures["s"],
+    10: textures["s"],
+    11: textures["s"],
+    12: textures["s"],
+    13: textures["w-e"],
+    14: textures["w-e"],
+    15: textures["w-e"],
+    16: textures["w-e"],
+    17: textures["w-e"],
+    18: textures["w-e"],
+    19: textures["w-e"],
+    20: textures["w-e"],
+    21: textures["w-e"],
+    22: textures["w-e"],
+    23: textures["w-e"],
+    24: textures["w-e"],
+    25: textures["w-e"],
+    26: textures["n-ne-e"],
+    27: textures["n-ne-e"],
+    28: textures["e"],
+    29: textures["n-ne-e"],
+    30: textures["n-ne-e"],
+    31: textures["e"],
+    32: textures["n-ne-e"],
+    33: textures["e"],
+    34: textures["n-nw-w"],
+    35: textures["n-nw-w"],
+    36: textures["w"],
+    37: textures["n-nw-w"],
+    38: textures["n-nw-w"],
+    39: textures["n-nw-w"],
+    40: textures["w"],
+    41: textures["w"],
+    42: textures["n"],
+    43: textures["n"],
+    44: textures["ne"],
+    45: textures["nw"],
+    46: textures["all"],
+    47: textures["s"]
+  };
+  var propsSprites = {
+    [`${PropType.Peak}`]: textures["peak"],
+    [`${PropType.Bone}`]: textures["bone"],
+    [`${PropType.Flag}`]: textures["flag"],
+    [`${PropType.CrateSilver}`]: textures["crate-silver"],
+    [`${PropType.CrateWood}`]: textures["crate-wood"],
+    [`${PropType.Handcuff1}`]: textures["handcuff-1"],
+    [`${PropType.Handcuff2}`]: textures["handcuff-2"],
+    [`${PropType.Lamp}`]: textures["lamp"],
+    [`${PropType.Skull}`]: textures["skull"],
+    [`${PropType.StonesLarge}`]: textures["stones-large"],
+    [`${PropType.StonesSmall}`]: textures["stones-small"],
+    [`${PropType.Torch}`]: textures["torch"],
+    [`${PropType.WebLeft}`]: textures["web-left"],
+    [`${PropType.WebRight}`]: textures["web-right"],
+    [`${PropType.HealthLarge}`]: textures["health-large"],
+    [`${PropType.HealthSmall}`]: textures["health-small"],
+    [`${PropType.KeyGold}`]: textures["key-gold"],
+    [`${PropType.KeySilver}`]: textures["key-silver"],
+    [`${PropType.ManaLarge}`]: textures["mana-large"],
+    [`${PropType.ManaSmall}`]: textures["mana-small"],
+    [`${PropType.Ladder}`]: textures["ladder"]
+  };
+  var monstersSprites = {
+    [`${MonsterType.Bandit}`]: textures["bandit"],
+    [`${MonsterType.CentaurFemale}`]: textures["centaur-female"],
+    [`${MonsterType.CentaurMale}`]: textures["centaur-male"],
+    [`${MonsterType.MushroomLarge}`]: textures["mushroom-large"],
+    [`${MonsterType.MushroomSmall}`]: textures["mushroom-small"],
+    [`${MonsterType.Skeleton}`]: textures["skeleton"],
+    [`${MonsterType.Troll}`]: textures["troll"],
+    [`${MonsterType.Wolf}`]: textures["wolf"]
+  };
+
+  // src/app/utils/data.ts
+  var data_exports = {};
+  __export(data_exports, {
+    loadRooms: () => loadRooms,
+    saveRooms: () => saveRooms
+  });
+
+  // src/app/utils/default.json
+  var default_default = [
     {
       id: "boss_01",
       width: 14,
@@ -52575,8 +52552,190 @@ void main() {
     }
   ];
 
-  // src/generate/rooms.ts
-  var Rooms = rooms_default;
+  // src/app/utils/data.ts
+  var ROOMS_DEFAULT = default_default;
+  function saveRooms(rooms7) {
+    localStorage.setItem("rooms", JSON.stringify(rooms7));
+  }
+  function loadRooms() {
+    let parsed = [];
+    try {
+      const saved = localStorage.getItem("rooms");
+      if (!saved) {
+        return ROOMS_DEFAULT;
+      }
+      parsed = JSON.parse(saved);
+    } catch (error) {
+      console.warn("Error loading rooms from local storage.");
+    }
+    return parsed;
+  }
+
+  // src/app/scenes/Edit/hooks/rooms.tsx
+  var RoomsFilters = [...RoomTypes, "all"];
+  var RoomsContext = react4.default.createContext({
+    rooms: [],
+    roomsFilter: "all",
+    selectedRoomId: null,
+    selectedLayer: "tiles",
+    selectedTile: "",
+    debug: false,
+    addRoom: () => {
+    },
+    updateRoom: () => {
+    },
+    removeRoom: () => {
+    },
+    selectRoom: () => {
+    },
+    selectLayer: () => {
+    },
+    selectTile: () => {
+    },
+    filterRooms: () => {
+    },
+    saveRooms: () => {
+    },
+    loadRooms: () => {
+    },
+    setDebug: () => {
+    }
+  });
+  function CollectionsProvider(props) {
+    const {children} = props;
+    const [rooms7, setRooms] = react4.default.useState([]);
+    const [roomsFilter, setRoomsFilter] = react4.default.useState("all");
+    const [selectedRoomId, setSelectedRoomId] = react4.default.useState(null);
+    const [selectedLayer, setSelectedLayer] = react4.default.useState("tiles");
+    const [selectedTile, setSelectedTile] = react4.default.useState("");
+    const [debug, setDebug] = react4.default.useState(false);
+    const addRoom = () => {
+      const id = String(Date.now());
+      setRooms((prev) => {
+        const updatedRooms = [...prev];
+        updatedRooms.push({
+          id,
+          width: 8,
+          height: 8,
+          type: roomsFilter === "all" ? "monsters" : roomsFilter,
+          layers: {
+            tiles: createTilemap(8, 8, 0),
+            props: createTilemap(8, 8, 0),
+            monsters: createTilemap(8, 8, 0)
+          }
+        });
+        data_exports.saveRooms(updatedRooms);
+        return updatedRooms;
+      });
+      setSelectedRoomId(id);
+    };
+    const updateRoom = (updated, oldRoomId) => {
+      setRooms((prev) => {
+        const index3 = prev.findIndex((item) => item.id === oldRoomId);
+        const updatedRooms = [...prev];
+        updatedRooms[index3] = {
+          ...updatedRooms[index3],
+          ...updated
+        };
+        data_exports.saveRooms(updatedRooms);
+        return updatedRooms;
+      });
+      setSelectedRoomId(updated.id);
+    };
+    const removeRoom = (roomId) => {
+      setRooms((prev) => {
+        const updatedRooms = [...prev];
+        const index3 = prev.findIndex((item) => item.id === roomId);
+        if (index3 !== -1) {
+          updatedRooms.splice(index3, 1);
+        }
+        data_exports.saveRooms(updatedRooms);
+        return updatedRooms;
+      });
+    };
+    const selectRoom = (roomId) => {
+      setSelectedRoomId(roomId);
+      setSelectedLayer("tiles");
+    };
+    const selectLayer = (layer) => {
+      setSelectedLayer(layer);
+    };
+    const selectTile = (tileName) => {
+      setSelectedTile(tileName);
+    };
+    const filterRooms = (type) => {
+      setRoomsFilter(type);
+    };
+    const saveRooms2 = () => {
+      const element = document.createElement("a");
+      const file = new Blob([JSON.stringify(rooms7, null, 2)], {
+        type: "text/json"
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = "rooms.json";
+      const added = document.body.appendChild(element);
+      element.click();
+      added.remove();
+    };
+    const loadRooms2 = (loadedRooms) => {
+      setRooms(loadedRooms);
+      setSelectedRoomId(null);
+      setRoomsFilter("all");
+    };
+    react4.default.useEffect(() => {
+      switch (selectedLayer) {
+        case "tiles":
+          setSelectedTile("Wall");
+          break;
+        case "props":
+          setSelectedTile("Peak");
+          break;
+        case "monsters":
+          setSelectedTile("Bandit");
+          break;
+      }
+    }, [selectedLayer]);
+    react4.default.useEffect(() => {
+      loadRooms2(data_exports.loadRooms());
+    }, []);
+    const filtered = react4.default.useMemo(() => {
+      const sorted = rooms7.sort((a, b) => a.id.localeCompare(b.id));
+      const filtered2 = sorted.filter((item) => roomsFilter === "all" || item.type === roomsFilter);
+      return filtered2;
+    }, [rooms7, roomsFilter]);
+    const value = react4.default.useMemo(() => {
+      return {
+        rooms: filtered,
+        roomsFilter,
+        selectedRoomId,
+        selectedLayer,
+        selectedTile,
+        debug,
+        addRoom,
+        updateRoom,
+        removeRoom,
+        selectRoom,
+        selectLayer,
+        selectTile,
+        filterRooms,
+        saveRooms: saveRooms2,
+        loadRooms: loadRooms2,
+        setDebug
+      };
+    }, [rooms7, roomsFilter, selectedRoomId, selectedLayer, selectedTile, debug]);
+    return /* @__PURE__ */ react4.default.createElement(RoomsContext.Provider, {
+      value
+    }, children);
+  }
+  function useRooms() {
+    return react4.default.useContext(RoomsContext);
+  }
+
+  // src/app/scenes/Edit/Room/index.tsx
+  var React11 = __toModule(require_react());
+
+  // src/app/scenes/Edit/Room/RoomContent.tsx
+  var React5 = __toModule(require_react());
 
   // src/generate/traps.json
   var traps_default = [
@@ -52687,7 +52846,7 @@ void main() {
       if (!randomProbability(args.roomSpawnChance)) {
         return;
       }
-      const filteredRooms = Rooms.filter((room) => room.width <= leaf.width && room.height <= leaf.height);
+      const filteredRooms = args.rooms.filter((room) => room.width <= leaf.width && room.height <= leaf.height);
       if (!filteredRooms.length) {
         return;
       }
@@ -52952,138 +53111,6 @@ void main() {
     }
   }
 
-  // src/app/utils/textures.ts
-  settings.SCALE_MODE = SCALE_MODES.NEAREST;
-  var textures = {
-    hole: Texture.from("assets/tiles/hole.png"),
-    edge: Texture.from("assets/tiles/edge.png"),
-    ground: Texture.from("assets/tiles/ground.png"),
-    n: Texture.from("assets/tiles/n.png"),
-    s: Texture.from("assets/tiles/s.png"),
-    e: Texture.from("assets/tiles/e.png"),
-    w: Texture.from("assets/tiles/w.png"),
-    ne: Texture.from("assets/tiles/ne.png"),
-    nw: Texture.from("assets/tiles/nw.png"),
-    "w-e": Texture.from("assets/tiles/w-e.png"),
-    "n-nw-w": Texture.from("assets/tiles/n-nw-w.png"),
-    "n-ne-e": Texture.from("assets/tiles/n-ne-e.png"),
-    all: Texture.from("assets/tiles/all.png"),
-    peak: Texture.from("assets/props/peak.png"),
-    bone: Texture.from("assets/props/bone.png"),
-    "crate-silver": Texture.from("assets/props/crate-silver.png"),
-    "crate-wood": Texture.from("assets/props/crate-wood.png"),
-    flag: Texture.from("assets/props/flag.png"),
-    "handcuff-1": Texture.from("assets/props/handcuff-1.png"),
-    "handcuff-2": Texture.from("assets/props/handcuff-2.png"),
-    lamp: Texture.from("assets/props/lamp.png"),
-    skull: Texture.from("assets/props/skull.png"),
-    "stones-large": Texture.from("assets/props/stones-large.png"),
-    "stones-small": Texture.from("assets/props/stones-small.png"),
-    torch: Texture.from("assets/props/torch.png"),
-    "web-left": Texture.from("assets/props/web-left.png"),
-    "web-right": Texture.from("assets/props/web-right.png"),
-    "health-large": Texture.from("assets/props/health-large.png"),
-    "health-small": Texture.from("assets/props/health-small.png"),
-    "key-gold": Texture.from("assets/props/key-gold.png"),
-    "key-silver": Texture.from("assets/props/key-silver.png"),
-    "mana-large": Texture.from("assets/props/mana-large.png"),
-    "mana-small": Texture.from("assets/props/mana-small.png"),
-    ladder: Texture.from("assets/props/ladder.png"),
-    bandit: Texture.from("assets/monsters/bandit.png"),
-    "centaur-female": Texture.from("assets/monsters/centaur-female.png"),
-    "centaur-male": Texture.from("assets/monsters/centaur-male.png"),
-    "mushroom-large": Texture.from("assets/monsters/mushroom-large.png"),
-    "mushroom-small": Texture.from("assets/monsters/mushroom-small.png"),
-    skeleton: Texture.from("assets/monsters/skeleton.png"),
-    troll: Texture.from("assets/monsters/troll.png"),
-    wolf: Texture.from("assets/monsters/wolf.png")
-  };
-  var tilesSprites = {
-    "-2": textures["hole"],
-    "-1": textures["edge"],
-    0: textures["ground"],
-    1: textures["s"],
-    2: textures["s"],
-    3: textures["s"],
-    4: textures["s"],
-    5: textures["s"],
-    7: textures["s"],
-    6: textures["s"],
-    8: textures["s"],
-    9: textures["s"],
-    10: textures["s"],
-    11: textures["s"],
-    12: textures["s"],
-    13: textures["w-e"],
-    14: textures["w-e"],
-    15: textures["w-e"],
-    16: textures["w-e"],
-    17: textures["w-e"],
-    18: textures["w-e"],
-    19: textures["w-e"],
-    20: textures["w-e"],
-    21: textures["w-e"],
-    22: textures["w-e"],
-    23: textures["w-e"],
-    24: textures["w-e"],
-    25: textures["w-e"],
-    26: textures["n-ne-e"],
-    27: textures["n-ne-e"],
-    28: textures["e"],
-    29: textures["n-ne-e"],
-    30: textures["n-ne-e"],
-    31: textures["e"],
-    32: textures["n-ne-e"],
-    33: textures["e"],
-    34: textures["n-nw-w"],
-    35: textures["n-nw-w"],
-    36: textures["w"],
-    37: textures["n-nw-w"],
-    38: textures["n-nw-w"],
-    39: textures["n-nw-w"],
-    40: textures["w"],
-    41: textures["w"],
-    42: textures["n"],
-    43: textures["n"],
-    44: textures["ne"],
-    45: textures["nw"],
-    46: textures["all"],
-    47: textures["s"]
-  };
-  var propsSprites = {
-    [`${PropType.Peak}`]: textures["peak"],
-    [`${PropType.Bone}`]: textures["bone"],
-    [`${PropType.Flag}`]: textures["flag"],
-    [`${PropType.CrateSilver}`]: textures["crate-silver"],
-    [`${PropType.CrateWood}`]: textures["crate-wood"],
-    [`${PropType.Handcuff1}`]: textures["handcuff-1"],
-    [`${PropType.Handcuff2}`]: textures["handcuff-2"],
-    [`${PropType.Lamp}`]: textures["lamp"],
-    [`${PropType.Skull}`]: textures["skull"],
-    [`${PropType.StonesLarge}`]: textures["stones-large"],
-    [`${PropType.StonesSmall}`]: textures["stones-small"],
-    [`${PropType.Torch}`]: textures["torch"],
-    [`${PropType.WebLeft}`]: textures["web-left"],
-    [`${PropType.WebRight}`]: textures["web-right"],
-    [`${PropType.HealthLarge}`]: textures["health-large"],
-    [`${PropType.HealthSmall}`]: textures["health-small"],
-    [`${PropType.KeyGold}`]: textures["key-gold"],
-    [`${PropType.KeySilver}`]: textures["key-silver"],
-    [`${PropType.ManaLarge}`]: textures["mana-large"],
-    [`${PropType.ManaSmall}`]: textures["mana-small"],
-    [`${PropType.Ladder}`]: textures["ladder"]
-  };
-  var monstersSprites = {
-    [`${MonsterType.Bandit}`]: textures["bandit"],
-    [`${MonsterType.CentaurFemale}`]: textures["centaur-female"],
-    [`${MonsterType.CentaurMale}`]: textures["centaur-male"],
-    [`${MonsterType.MushroomLarge}`]: textures["mushroom-large"],
-    [`${MonsterType.MushroomSmall}`]: textures["mushroom-small"],
-    [`${MonsterType.Skeleton}`]: textures["skeleton"],
-    [`${MonsterType.Troll}`]: textures["troll"],
-    [`${MonsterType.Wolf}`]: textures["wolf"]
-  };
-
   // src/app/scenes/Edit/Room/EditorDrawer.ts
   var TILE_SIZE = 32;
   var EditorDrawer = class {
@@ -53119,7 +53146,7 @@ void main() {
         for (let y = 0; y < tiles.length; y++) {
           for (let x = 0; x < tiles[y].length; x++) {
             const tileId = tiles[y][x];
-            const texture = tilesSprites[tileId];
+            const texture = textures_exports.tilesSprites[tileId];
             if (texture) {
               const sprite5 = new Sprite(texture);
               sprite5.scale.set(TILE_SIZE / texture.width);
@@ -53145,7 +53172,7 @@ void main() {
             if (tileId === 0) {
               continue;
             }
-            const texture = propsSprites[tileId];
+            const texture = textures_exports.propsSprites[tileId];
             const sprite5 = new Sprite(texture);
             sprite5.scale.set(TILE_SIZE / texture.width);
             sprite5.position.set(x * TILE_SIZE, y * TILE_SIZE);
@@ -53162,7 +53189,7 @@ void main() {
             if (tileId === 0) {
               continue;
             }
-            const texture = monstersSprites[tileId];
+            const texture = textures_exports.monstersSprites[tileId];
             const sprite5 = new Sprite(texture);
             sprite5.scale.set(TILE_SIZE / texture.width);
             sprite5.position.set(x * TILE_SIZE, y * TILE_SIZE);
@@ -53450,8 +53477,8 @@ void main() {
 
   // src/app/scenes/Edit/Room/index.tsx
   function Room2(props) {
-    const {rooms: rooms9, selectedRoomId, updateRoom} = useRooms();
-    const room = rooms9.find((item) => item.id === selectedRoomId);
+    const {rooms: rooms7, selectedRoomId, updateRoom} = useRooms();
+    const room = rooms7.find((item) => item.id === selectedRoomId);
     if (!room) {
       return /* @__PURE__ */ React11.createElement(RoomEmpty, null);
     }
@@ -53499,7 +53526,7 @@ void main() {
   // src/app/scenes/Edit/RoomsList.tsx
   var React12 = __toModule(require_react());
   function RoomsList(props) {
-    const {rooms: rooms9, selectedRoomId, addRoom, selectRoom, removeRoom} = useRooms();
+    const {rooms: rooms7, selectedRoomId, addRoom, selectRoom, removeRoom} = useRooms();
     return /* @__PURE__ */ React12.createElement("div", {
       style: {
         overflow: "hidden",
@@ -53511,7 +53538,7 @@ void main() {
         display: "flex",
         flexDirection: "column"
       }
-    }, rooms9.map((room, index3) => /* @__PURE__ */ React12.createElement(RoomListItem, {
+    }, rooms7.map((room, index3) => /* @__PURE__ */ React12.createElement(RoomListItem, {
       key: room.id,
       index: index3,
       room,
@@ -53598,14 +53625,14 @@ void main() {
     }, /* @__PURE__ */ React13.createElement(SidebarHeader, null), /* @__PURE__ */ React13.createElement(Separator, null), /* @__PURE__ */ React13.createElement(RoomsList, null));
   }
   function SidebarHeader(props) {
-    const {saveRooms, loadRooms} = useRooms();
+    const {saveRooms: saveRooms2, loadRooms: loadRooms2} = useRooms();
     const onFileChange = (event) => {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.addEventListener("load", (event2) => {
         const rawJSON = event2.target.result;
         const parsedJSON = JSON.parse(rawJSON);
-        loadRooms(parsedJSON);
+        loadRooms2(parsedJSON);
       });
       reader.readAsText(file);
     };
@@ -53622,7 +53649,7 @@ void main() {
     }), /* @__PURE__ */ React13.createElement("p", null, "Save:"), /* @__PURE__ */ React13.createElement("input", {
       type: "button",
       value: "Save file",
-      onClick: saveRooms
+      onClick: saveRooms2
     })));
   }
 
@@ -53649,9 +53676,9 @@ void main() {
         this.tilemapContainer.removeChildren();
         this.shapesContainer.removeChildren();
         this.unitInPixels = options.unitWidthInPixels;
-        this.drawTiles(dungeon3.layers.tiles, tilesSprites);
-        this.drawProps(dungeon3.layers.props, propsSprites);
-        this.drawMonsters(dungeon3.layers.monsters, monstersSprites);
+        this.drawTiles(dungeon3.layers.tiles, textures_exports.tilesSprites);
+        this.drawProps(dungeon3.layers.props, textures_exports.propsSprites);
+        this.drawMonsters(dungeon3.layers.monsters, textures_exports.monstersSprites);
         if (options.debug) {
           this.drawGrid(dungeon3);
           this.drawContainers(dungeon3.tree);
@@ -53802,6 +53829,7 @@ void main() {
     React15.useEffect(() => {
       canvasDrawer.current = new DungeonDrawer(canvasRef.current);
       const dungeon3 = generate({
+        rooms: data_exports.loadRooms(),
         mapWidth: 96,
         mapHeight: 56,
         mapGutterWidth: 1,

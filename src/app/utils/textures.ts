@@ -3,7 +3,7 @@ import { MonsterType, PropType } from "../../generate/types";
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-export const textures = {
+const textures = {
   // Tiles
   hole: PIXI.Texture.from("assets/tiles/hole.png"),
   edge: PIXI.Texture.from("assets/tiles/edge.png"),

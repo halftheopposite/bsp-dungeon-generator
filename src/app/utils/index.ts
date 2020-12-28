@@ -1,1 +1,2 @@
-export * from "./textures";
+export * as Textures from "./textures";
+export * as Data from "./data";
