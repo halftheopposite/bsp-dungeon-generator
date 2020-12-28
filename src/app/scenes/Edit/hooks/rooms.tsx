@@ -1,9 +1,18 @@
 import React from "react";
-import { RoomTemplate, RoomType, TileLayer } from "../../../../generate/types";
+import {
+  RoomTemplate,
+  RoomType,
+  RoomTypes,
+  TileLayer,
+} from "../../../../generate/types";
 import { createTilemap } from "../../../../generate/utils";
+
+export type RoomsFilter = RoomType | "all";
+export const RoomsFilters = [...RoomTypes, "all"];
 
 export interface RoomsValue {
   rooms: RoomTemplate[];
+  roomsFilter: RoomsFilter;
   selectedRoomId: string;
   selectedLayer: TileLayer;
   selectedTile: string;
@@ -20,6 +29,7 @@ export interface RoomsValue {
 
 export const RoomsContext = React.createContext<RoomsValue>({
   rooms: [],
+  roomsFilter: "all",
   selectedRoomId: null,
   selectedLayer: "tiles",
   selectedTile: "",
@@ -39,10 +49,10 @@ export function CollectionsProvider(props: {
 }): React.ReactElement {
   const { children } = props;
   const [rooms, setRooms] = React.useState<RoomTemplate[]>([]);
+  const [roomsFilter, setRoomsFilter] = React.useState<RoomsFilter>("all");
   const [selectedRoomId, setSelectedRoomId] = React.useState<string>(null);
   const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
   const [selectedTile, setSelectedTile] = React.useState<string>("");
-  const [filter, setFilter] = React.useState<RoomType | "all">("all");
 
   /** Add a room */
   const addRoom = () => {
@@ -53,7 +63,7 @@ export function CollectionsProvider(props: {
         id,
         width: 8,
         height: 8,
-        type: "monsters",
+        type: roomsFilter === "all" ? "monsters" : roomsFilter,
         layers: {
           tiles: createTilemap(8, 8, 0),
           props: createTilemap(8, 8, 0),
@@ -104,6 +114,7 @@ export function CollectionsProvider(props: {
   /** Select a room */
   const selectRoom = (roomId: string) => {
     setSelectedRoomId(roomId);
+    setSelectedLayer("tiles");
   };
 
   /** Select a tile layer in the room */
@@ -118,7 +129,7 @@ export function CollectionsProvider(props: {
 
   /** Filter rooms on their type */
   const filterRooms = (type: RoomType | "all") => {
-    setFilter(type);
+    setRoomsFilter(type);
   };
 
   /** Save and download a JSON representation of the rooms */
@@ -138,7 +149,7 @@ export function CollectionsProvider(props: {
   const loadRooms = (loadedRooms: RoomTemplate[]) => {
     setRooms(loadedRooms);
     setSelectedRoomId(null);
-    setFilter("all");
+    setRoomsFilter("all");
   };
 
   // When updating the selected layer, update the selected tile accordingly
@@ -174,15 +185,16 @@ export function CollectionsProvider(props: {
   const filtered = React.useMemo(() => {
     const sorted = rooms.sort((a, b) => a.id.localeCompare(b.id));
     const filtered = sorted.filter(
-      (item) => filter === "all" || item.type === filter
+      (item) => roomsFilter === "all" || item.type === roomsFilter
     );
 
     return filtered;
-  }, [rooms]);
+  }, [rooms, roomsFilter]);
 
   const value: RoomsValue = React.useMemo(() => {
     return {
       rooms: filtered,
+      roomsFilter,
       selectedRoomId,
       selectedLayer,
       selectedTile,
@@ -196,7 +208,7 @@ export function CollectionsProvider(props: {
       saveRooms,
       loadRooms,
     };
-  }, [rooms, selectedRoomId, selectedLayer, selectedTile, filter]);
+  }, [rooms, selectedRoomId, selectedLayer, selectedTile, roomsFilter]);
 
   return (
     <RoomsContext.Provider value={value}>{children}</RoomsContext.Provider>

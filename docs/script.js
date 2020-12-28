@@ -515,7 +515,7 @@
           }
           return element;
         };
-        function createElement11(type, config, children) {
+        function createElement14(type, config, children) {
           var propName;
           var props = {};
           var key = null;
@@ -1073,7 +1073,7 @@
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect3(create, deps) {
+        function useEffect4(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1563,7 +1563,7 @@
               error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
             }
           }
-          var element = createElement11.apply(this, arguments);
+          var element = createElement14.apply(this, arguments);
           if (element == null) {
             return element;
           }
@@ -1643,7 +1643,7 @@
         exports.useCallback = useCallback;
         exports.useContext = useContext2;
         exports.useDebugValue = useDebugValue;
-        exports.useEffect = useEffect3;
+        exports.useEffect = useEffect4;
         exports.useImperativeHandle = useImperativeHandle;
         exports.useLayoutEffect = useLayoutEffect;
         exports.useMemo = useMemo;
@@ -2636,11 +2636,11 @@
     if (true) {
       (function() {
         "use strict";
-        var React15 = require_react();
+        var React18 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React15.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React18.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2672,7 +2672,7 @@
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React15) {
+        if (!React18) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3888,7 +3888,7 @@
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React15.Children.forEach(children, function(child) {
+          React18.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3899,7 +3899,7 @@
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React15.Children.forEach(props.children, function(child) {
+              React18.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -8666,7 +8666,7 @@
             }
           }
         }
-        function createElement11(type, props, rootContainerElement, parentNamespace) {
+        function createElement14(type, props, rootContainerElement, parentNamespace) {
           var isCustomComponentTag;
           var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
           var domElement;
@@ -9543,7 +9543,7 @@
             }
             parentNamespace = hostContextDev.namespace;
           }
-          var domElement = createElement11(type, props, rootContainerInstance, parentNamespace);
+          var domElement = createElement14(type, props, rootContainerInstance, parentNamespace);
           precacheFiberNode(internalInstanceHandle, domElement);
           updateFiberProps(domElement, props);
           return domElement;
@@ -11105,7 +11105,7 @@
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React15.Component().refs;
+        var emptyRefsObject = new React18.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -19324,14 +19324,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var findHostInstancesForRefresh = function(root2, families) {
           {
             var hostInstances = new Set();
-            var types4 = new Set(families.map(function(family) {
+            var types6 = new Set(families.map(function(family) {
               return family.current;
             }));
-            findHostInstancesForMatchingFibersRecursively(root2.current, types4, hostInstances);
+            findHostInstancesForMatchingFibersRecursively(root2.current, types6, hostInstances);
             return hostInstances;
           }
         };
-        function findHostInstancesForMatchingFibersRecursively(fiber, types4, hostInstances) {
+        function findHostInstancesForMatchingFibersRecursively(fiber, types6, hostInstances) {
           {
             var child = fiber.child, sibling = fiber.sibling, tag = fiber.tag, type = fiber.type;
             var candidateType = null;
@@ -19347,7 +19347,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             }
             var didMatch = false;
             if (candidateType !== null) {
-              if (types4.has(candidateType)) {
+              if (types6.has(candidateType)) {
                 didMatch = true;
               }
             }
@@ -19355,11 +19355,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               findHostInstancesForFiberShallowly(fiber, hostInstances);
             } else {
               if (child !== null) {
-                findHostInstancesForMatchingFibersRecursively(child, types4, hostInstances);
+                findHostInstancesForMatchingFibersRecursively(child, types6, hostInstances);
               }
             }
             if (sibling !== null) {
-              findHostInstancesForMatchingFibersRecursively(sibling, types4, hostInstances);
+              findHostInstancesForMatchingFibersRecursively(sibling, types6, hostInstances);
             }
           }
         }
@@ -23542,11 +23542,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   });
 
   // src/app/index.tsx
-  var React14 = __toModule(require_react());
+  var React17 = __toModule(require_react());
   var ReactDOM = __toModule(require_react_dom());
 
   // src/app/App.tsx
-  var React13 = __toModule(require_react());
+  var React16 = __toModule(require_react());
 
   // node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
   function _inheritsLoose(subClass, superClass) {
@@ -25304,211 +25304,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var SIDEBAR_WIDTH = 250;
 
   // src/app/scenes/Edit/index.tsx
-  var React11 = __toModule(require_react());
+  var React14 = __toModule(require_react());
 
   // src/app/scenes/Edit/hooks/rooms.tsx
   var react4 = __toModule(require_react());
-
-  // src/generate/utils.ts
-  function createTilemap(width, height, value) {
-    const tilemap = [];
-    for (let y = 0; y < height; y++) {
-      tilemap[y] = [];
-      for (let x = 0; x < width; x++) {
-        tilemap[y][x] = value;
-      }
-    }
-    return tilemap;
-  }
-  function resizeTileMap(tilemap, width, height) {
-    const result = [];
-    for (let y = 0; y < height; y++) {
-      result[y] = [];
-      for (let x = 0; x < width; x++) {
-        let value = 0;
-        if (y < tilemap.length && x < tilemap[y].length) {
-          value = tilemap[y][x];
-        }
-        result[y][x] = value;
-      }
-    }
-    return result;
-  }
-  function random(min, max) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-  function randomChoice(values) {
-    return values[Math.floor(Math.random() * values.length)];
-  }
-  function randomProbability(probability) {
-    return Math.random() > 1 - probability;
-  }
-  function duplicateTilemap(tilemap) {
-    return tilemap.map((row) => {
-      return [...row];
-    });
-  }
-
-  // src/app/scenes/Edit/hooks/rooms.tsx
-  var RoomsContext = react4.default.createContext({
-    rooms: [],
-    selectedRoomId: null,
-    selectedLayer: "tiles",
-    selectedTile: "",
-    addRoom: () => {
-    },
-    updateRoom: () => {
-    },
-    removeRoom: () => {
-    },
-    selectRoom: () => {
-    },
-    selectLayer: () => {
-    },
-    selectTile: () => {
-    },
-    filterRooms: () => {
-    },
-    saveRooms: () => {
-    },
-    loadRooms: () => {
-    }
-  });
-  function CollectionsProvider(props) {
-    const {children} = props;
-    const [rooms7, setRooms] = react4.default.useState([]);
-    const [selectedRoomId, setSelectedRoomId] = react4.default.useState(null);
-    const [selectedLayer, setSelectedLayer] = react4.default.useState("tiles");
-    const [selectedTile, setSelectedTile] = react4.default.useState("");
-    const [filter, setFilter] = react4.default.useState("all");
-    const addRoom = () => {
-      const id = String(Date.now());
-      setRooms((prev) => {
-        const updatedRooms = [...prev];
-        updatedRooms.push({
-          id,
-          width: 8,
-          height: 8,
-          type: "monsters",
-          layers: {
-            tiles: createTilemap(8, 8, 0),
-            props: createTilemap(8, 8, 0),
-            monsters: createTilemap(8, 8, 0)
-          }
-        });
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-      setSelectedRoomId(id);
-    };
-    const updateRoom = (updated, oldRoomId) => {
-      setRooms((prev) => {
-        const index3 = prev.findIndex((item) => item.id === oldRoomId);
-        const updatedRooms = [...prev];
-        updatedRooms[index3] = {
-          ...updatedRooms[index3],
-          ...updated
-        };
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-      setSelectedRoomId(updated.id);
-    };
-    const removeRoom = (roomId) => {
-      setRooms((prev) => {
-        const updatedRooms = [...prev];
-        const index3 = prev.findIndex((item) => item.id === roomId);
-        if (index3 !== -1) {
-          updatedRooms.splice(index3, 1);
-        }
-        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
-        return updatedRooms;
-      });
-    };
-    const selectRoom = (roomId) => {
-      setSelectedRoomId(roomId);
-    };
-    const selectLayer = (layer) => {
-      setSelectedLayer(layer);
-    };
-    const selectTile = (tileName) => {
-      setSelectedTile(tileName);
-    };
-    const filterRooms = (type) => {
-      setFilter(type);
-    };
-    const saveRooms = () => {
-      const element = document.createElement("a");
-      const file = new Blob([JSON.stringify(rooms7, null, 2)], {
-        type: "text/json"
-      });
-      element.href = URL.createObjectURL(file);
-      element.download = "rooms.json";
-      const added = document.body.appendChild(element);
-      element.click();
-      added.remove();
-    };
-    const loadRooms = (loadedRooms) => {
-      setRooms(loadedRooms);
-      setSelectedRoomId(null);
-      setFilter("all");
-    };
-    react4.default.useEffect(() => {
-      switch (selectedLayer) {
-        case "tiles":
-          setSelectedTile("Wall");
-          break;
-        case "props":
-          setSelectedTile("Peak");
-          break;
-        case "monsters":
-          setSelectedTile("Bandit");
-          break;
-      }
-    }, [selectedLayer]);
-    react4.default.useEffect(() => {
-      const saved = localStorage.getItem("rooms");
-      let parsed;
-      try {
-        parsed = JSON.parse(saved) || [];
-      } catch (error) {
-        console.warn("Error loading rooms from local storage.");
-        parsed = [];
-      }
-      loadRooms(parsed);
-    }, []);
-    const filtered = react4.default.useMemo(() => {
-      const sorted = rooms7.sort((a, b) => a.id.localeCompare(b.id));
-      const filtered2 = sorted.filter((item) => filter === "all" || item.type === filter);
-      return filtered2;
-    }, [rooms7]);
-    const value = react4.default.useMemo(() => {
-      return {
-        rooms: filtered,
-        selectedRoomId,
-        selectedLayer,
-        selectedTile,
-        addRoom,
-        updateRoom,
-        removeRoom,
-        selectRoom,
-        selectLayer,
-        selectTile,
-        filterRooms,
-        saveRooms,
-        loadRooms
-      };
-    }, [rooms7, selectedRoomId, selectedLayer, selectedTile, filter]);
-    return /* @__PURE__ */ react4.default.createElement(RoomsContext.Provider, {
-      value
-    }, children);
-  }
-  function useRooms() {
-    return react4.default.useContext(RoomsContext);
-  }
-
-  // src/app/scenes/Edit/Room.tsx
-  var React8 = __toModule(require_react());
 
   // src/generate/types.ts
   var TreeNode = class {
@@ -25632,6 +25431,214 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   })(MonsterType || (MonsterType = {}));
   var MonsterTypes = Object.keys(MonsterType);
   var TileLayers = ["tiles", "props", "monsters"];
+
+  // src/generate/utils.ts
+  function createTilemap(width, height, value) {
+    const tilemap = [];
+    for (let y = 0; y < height; y++) {
+      tilemap[y] = [];
+      for (let x = 0; x < width; x++) {
+        tilemap[y][x] = value;
+      }
+    }
+    return tilemap;
+  }
+  function resizeTileMap(tilemap, width, height) {
+    const result = [];
+    for (let y = 0; y < height; y++) {
+      result[y] = [];
+      for (let x = 0; x < width; x++) {
+        let value = 0;
+        if (y < tilemap.length && x < tilemap[y].length) {
+          value = tilemap[y][x];
+        }
+        result[y][x] = value;
+      }
+    }
+    return result;
+  }
+  function random(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  function randomChoice(values) {
+    return values[Math.floor(Math.random() * values.length)];
+  }
+  function randomProbability(probability) {
+    return Math.random() > 1 - probability;
+  }
+  function duplicateTilemap(tilemap) {
+    return tilemap.map((row) => {
+      return [...row];
+    });
+  }
+
+  // src/app/scenes/Edit/hooks/rooms.tsx
+  var RoomsFilters = [...RoomTypes, "all"];
+  var RoomsContext = react4.default.createContext({
+    rooms: [],
+    roomsFilter: "all",
+    selectedRoomId: null,
+    selectedLayer: "tiles",
+    selectedTile: "",
+    addRoom: () => {
+    },
+    updateRoom: () => {
+    },
+    removeRoom: () => {
+    },
+    selectRoom: () => {
+    },
+    selectLayer: () => {
+    },
+    selectTile: () => {
+    },
+    filterRooms: () => {
+    },
+    saveRooms: () => {
+    },
+    loadRooms: () => {
+    }
+  });
+  function CollectionsProvider(props) {
+    const {children} = props;
+    const [rooms9, setRooms] = react4.default.useState([]);
+    const [roomsFilter, setRoomsFilter] = react4.default.useState("all");
+    const [selectedRoomId, setSelectedRoomId] = react4.default.useState(null);
+    const [selectedLayer, setSelectedLayer] = react4.default.useState("tiles");
+    const [selectedTile, setSelectedTile] = react4.default.useState("");
+    const addRoom = () => {
+      const id = String(Date.now());
+      setRooms((prev) => {
+        const updatedRooms = [...prev];
+        updatedRooms.push({
+          id,
+          width: 8,
+          height: 8,
+          type: roomsFilter === "all" ? "monsters" : roomsFilter,
+          layers: {
+            tiles: createTilemap(8, 8, 0),
+            props: createTilemap(8, 8, 0),
+            monsters: createTilemap(8, 8, 0)
+          }
+        });
+        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+        return updatedRooms;
+      });
+      setSelectedRoomId(id);
+    };
+    const updateRoom = (updated, oldRoomId) => {
+      setRooms((prev) => {
+        const index3 = prev.findIndex((item) => item.id === oldRoomId);
+        const updatedRooms = [...prev];
+        updatedRooms[index3] = {
+          ...updatedRooms[index3],
+          ...updated
+        };
+        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+        return updatedRooms;
+      });
+      setSelectedRoomId(updated.id);
+    };
+    const removeRoom = (roomId) => {
+      setRooms((prev) => {
+        const updatedRooms = [...prev];
+        const index3 = prev.findIndex((item) => item.id === roomId);
+        if (index3 !== -1) {
+          updatedRooms.splice(index3, 1);
+        }
+        localStorage.setItem("rooms", JSON.stringify(updatedRooms));
+        return updatedRooms;
+      });
+    };
+    const selectRoom = (roomId) => {
+      setSelectedRoomId(roomId);
+      setSelectedLayer("tiles");
+    };
+    const selectLayer = (layer) => {
+      setSelectedLayer(layer);
+    };
+    const selectTile = (tileName) => {
+      setSelectedTile(tileName);
+    };
+    const filterRooms = (type) => {
+      setRoomsFilter(type);
+    };
+    const saveRooms = () => {
+      const element = document.createElement("a");
+      const file = new Blob([JSON.stringify(rooms9, null, 2)], {
+        type: "text/json"
+      });
+      element.href = URL.createObjectURL(file);
+      element.download = "rooms.json";
+      const added = document.body.appendChild(element);
+      element.click();
+      added.remove();
+    };
+    const loadRooms = (loadedRooms) => {
+      setRooms(loadedRooms);
+      setSelectedRoomId(null);
+      setRoomsFilter("all");
+    };
+    react4.default.useEffect(() => {
+      switch (selectedLayer) {
+        case "tiles":
+          setSelectedTile("Wall");
+          break;
+        case "props":
+          setSelectedTile("Peak");
+          break;
+        case "monsters":
+          setSelectedTile("Bandit");
+          break;
+      }
+    }, [selectedLayer]);
+    react4.default.useEffect(() => {
+      const saved = localStorage.getItem("rooms");
+      let parsed;
+      try {
+        parsed = JSON.parse(saved) || [];
+      } catch (error) {
+        console.warn("Error loading rooms from local storage.");
+        parsed = [];
+      }
+      loadRooms(parsed);
+    }, []);
+    const filtered = react4.default.useMemo(() => {
+      const sorted = rooms9.sort((a, b) => a.id.localeCompare(b.id));
+      const filtered2 = sorted.filter((item) => roomsFilter === "all" || item.type === roomsFilter);
+      return filtered2;
+    }, [rooms9, roomsFilter]);
+    const value = react4.default.useMemo(() => {
+      return {
+        rooms: filtered,
+        roomsFilter,
+        selectedRoomId,
+        selectedLayer,
+        selectedTile,
+        addRoom,
+        updateRoom,
+        removeRoom,
+        selectRoom,
+        selectLayer,
+        selectTile,
+        filterRooms,
+        saveRooms,
+        loadRooms
+      };
+    }, [rooms9, selectedRoomId, selectedLayer, selectedTile, roomsFilter]);
+    return /* @__PURE__ */ react4.default.createElement(RoomsContext.Provider, {
+      value
+    }, children);
+  }
+  function useRooms() {
+    return react4.default.useContext(RoomsContext);
+  }
+
+  // src/app/scenes/Edit/Room/index.tsx
+  var React11 = __toModule(require_react());
+
+  // src/app/scenes/Edit/Room/RoomContent.tsx
+  var React5 = __toModule(require_react());
 
   // node_modules/@pixi/polyfill/lib/polyfill.es.js
   var es6_promise_polyfill = __toModule(require_promise());
@@ -45667,7 +45674,7 @@ void main() {
   // src/generate/rooms.json
   var rooms_default = [
     {
-      id: "boss_1",
+      id: "boss_01",
       width: 14,
       height: 14,
       type: "boss",
@@ -46353,7 +46360,7 @@ void main() {
       }
     },
     {
-      id: "boss_2",
+      id: "boss_02",
       width: 12,
       height: 12,
       type: "boss",
@@ -46871,7 +46878,693 @@ void main() {
       }
     },
     {
-      id: "entrance_1",
+      id: "boss_03",
+      width: 14,
+      height: 14,
+      type: "boss",
+      layers: {
+        tiles: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        props: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        monsters: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0,
+            7,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      id: "entrance_01",
       width: 5,
       height: 5,
       type: "entrance",
@@ -46990,7 +47683,7 @@ void main() {
       }
     },
     {
-      id: "entrance_2",
+      id: "entrance_02",
       width: 5,
       height: 5,
       type: "entrance",
@@ -47109,10 +47802,10 @@ void main() {
       }
     },
     {
-      id: "entrance_3",
+      id: "entrance_03",
       width: 6,
       height: 6,
-      type: "monsters",
+      type: "entrance",
       layers: {
         tiles: [
           [
@@ -47125,7 +47818,7 @@ void main() {
           ],
           [
             0,
-            1,
+            0,
             1,
             1,
             0,
@@ -47175,7 +47868,7 @@ void main() {
           ],
           [
             0,
-            6,
+            4,
             0,
             0,
             0,
@@ -47183,7 +47876,7 @@ void main() {
           ],
           [
             0,
-            14,
+            4,
             5,
             0,
             0,
@@ -47199,7 +47892,7 @@ void main() {
           ],
           [
             0,
-            4,
+            0,
             0,
             0,
             0,
@@ -47267,7 +47960,7 @@ void main() {
       }
     },
     {
-      id: "heal_1",
+      id: "heal_01",
       width: 6,
       height: 6,
       type: "heal",
@@ -47425,7 +48118,7 @@ void main() {
       }
     },
     {
-      id: "heal_2",
+      id: "heal_02",
       width: 6,
       height: 6,
       type: "heal",
@@ -47583,7 +48276,851 @@ void main() {
       }
     },
     {
-      id: "monster_1",
+      id: "monster_h_01",
+      width: 12,
+      height: 8,
+      type: "monsters",
+      layers: {
+        tiles: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0
+          ],
+          [
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            0
+          ],
+          [
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        props: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            0,
+            6,
+            7,
+            0,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            9,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        monsters: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      id: "monster_h_02",
+      width: 14,
+      height: 10,
+      type: "monsters",
+      layers: {
+        tiles: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        props: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            12,
+            0,
+            0,
+            0,
+            0,
+            12,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            13,
+            0,
+            0,
+            0,
+            0,
+            14,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            11,
+            0,
+            12,
+            0,
+            0,
+            0,
+            0,
+            12,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        monsters: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            0,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            6,
+            0,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            8,
+            8,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      id: "monster_s_01",
       width: 6,
       height: 6,
       type: "monsters",
@@ -47741,7 +49278,7 @@ void main() {
       }
     },
     {
-      id: "monster_2",
+      id: "monster_s_02",
       width: 8,
       height: 8,
       type: "monsters",
@@ -47935,8 +49472,8 @@ void main() {
             0,
             0,
             3,
-            0,
-            0,
+            6,
+            6,
             3,
             0,
             0
@@ -47944,20 +49481,20 @@ void main() {
           [
             0,
             0,
+            6,
             0,
             0,
-            0,
-            0,
+            6,
             0,
             0
           ],
           [
             0,
             0,
+            6,
             0,
             0,
-            0,
-            0,
+            6,
             0,
             0
           ],
@@ -47965,8 +49502,8 @@ void main() {
             0,
             0,
             3,
-            0,
-            0,
+            6,
+            6,
             3,
             0,
             0
@@ -47995,7 +49532,7 @@ void main() {
       }
     },
     {
-      id: "monster_3",
+      id: "monster_s_03",
       width: 10,
       height: 10,
       type: "monsters",
@@ -48369,7 +49906,7 @@ void main() {
       }
     },
     {
-      id: "monster_4",
+      id: "monster_s_04",
       width: 12,
       height: 12,
       type: "monsters",
@@ -48887,7 +50424,7 @@ void main() {
       }
     },
     {
-      id: "monster_5",
+      id: "monster_s_05",
       width: 12,
       height: 12,
       type: "monsters",
@@ -49405,7 +50942,7 @@ void main() {
       }
     },
     {
-      id: "monster_6",
+      id: "monster_s_06",
       width: 7,
       height: 7,
       type: "monsters",
@@ -49608,7 +51145,7 @@ void main() {
       }
     },
     {
-      id: "monster_7",
+      id: "monster_s_07",
       width: 6,
       height: 6,
       type: "monsters",
@@ -49766,357 +51303,7 @@ void main() {
       }
     },
     {
-      id: "monster_8",
-      width: 12,
-      height: 8,
-      type: "monsters",
-      layers: {
-        tiles: [
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            -1,
-            -1,
-            0,
-            0,
-            -1,
-            -1,
-            0,
-            0,
-            -1,
-            -1,
-            0
-          ],
-          [
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            -1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            -1,
-            0
-          ],
-          [
-            0,
-            -1,
-            -1,
-            0,
-            0,
-            -1,
-            -1,
-            0,
-            0,
-            -1,
-            -1,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ]
-        ],
-        props: [
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            0,
-            1,
-            0,
-            0,
-            0,
-            6,
-            7,
-            0,
-            0,
-            0,
-            1,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            2,
-            9,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ]
-        ],
-        monsters: [
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            8,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            8,
-            1,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-          ]
-        ]
-      }
-    },
-    {
-      id: "monster_9",
+      id: "monster_v_01",
       width: 8,
       height: 12,
       type: "monsters",
@@ -50490,7 +51677,525 @@ void main() {
       }
     },
     {
-      id: "treasure_1",
+      id: "monster_v_02",
+      width: 10,
+      height: 14,
+      type: "monsters",
+      layers: {
+        tiles: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            0,
+            0,
+            0,
+            0,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0,
+            -1,
+            -1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        props: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            4,
+            0,
+            0,
+            0,
+            0,
+            9,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            4,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        monsters: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            6,
+            0,
+            5,
+            6,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            5
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            0,
+            6,
+            0,
+            5,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            5,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      id: "treasure_01",
       width: 5,
       height: 5,
       type: "treasure",
@@ -50599,6 +52304,260 @@ void main() {
             0
           ],
           [
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    {
+      id: "treasure_02",
+      width: 8,
+      height: 8,
+      type: "treasure",
+      layers: {
+        tiles: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        props: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            12,
+            12,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            4,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            5,
+            0,
+            0,
+            5,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        monsters: [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -51119,7 +53078,7 @@ void main() {
     [`${MonsterType.Wolf}`]: textures["wolf"]
   };
 
-  // src/app/scenes/Edit/EditorDrawer.ts
+  // src/app/scenes/Edit/Room/EditorDrawer.ts
   var TILE_SIZE = 32;
   var EditorDrawer = class {
     constructor(container) {
@@ -51251,39 +53210,225 @@ void main() {
     }
   };
 
+  // src/app/scenes/Edit/Room/RoomContent.tsx
+  function RoomContent(props) {
+    const {room, onUpdate} = props;
+    const canvasRef = React5.useRef();
+    const canvasDrawer = React5.useRef();
+    const {selectedLayer, selectedTile} = useRooms();
+    const onTileClick = (x, y) => {
+      const layer = room.layers[selectedLayer];
+      if (x >= room.width || y >= room.height) {
+        return;
+      }
+      const tileId = layer[y][x];
+      const newTileId = getTileIdFromName(selectedLayer, selectedTile);
+      onUpdate(selectedLayer, x, y, tileId !== 0 && tileId === newTileId ? 0 : newTileId);
+    };
+    React5.useEffect(() => {
+      if (!canvasRef.current) {
+        return;
+      }
+      if (!canvasDrawer.current) {
+        canvasDrawer.current = new EditorDrawer(canvasRef.current);
+      }
+      canvasDrawer.current.onTileClick = onTileClick;
+    }, [canvasRef, room, selectedLayer, selectedTile]);
+    React5.useEffect(() => {
+      canvasDrawer.current.drawLayers(room.layers, selectedLayer);
+    }, [room, selectedLayer]);
+    return /* @__PURE__ */ React5.createElement("div", {
+      style: {
+        position: "absolute",
+        left: SIDEBAR_WIDTH + 4,
+        bottom: 0,
+        top: 0,
+        right: 0
+      }
+    }, /* @__PURE__ */ React5.createElement("div", {
+      ref: canvasRef,
+      style: {
+        position: "absolute",
+        left: 0,
+        bottom: 0,
+        top: 0,
+        right: 0
+      }
+    }));
+  }
+  function getTileIdFromName(layer, tileName) {
+    switch (layer) {
+      case "tiles":
+        return TileType[tileName];
+      case "props":
+        return PropType[tileName];
+      case "monsters":
+        return MonsterType[tileName];
+    }
+  }
+
+  // src/app/scenes/Edit/Room/RoomEmpty.tsx
+  var React6 = __toModule(require_react());
+  function RoomEmpty() {
+    return /* @__PURE__ */ React6.createElement("div", {
+      style: {
+        position: "absolute",
+        left: SIDEBAR_WIDTH,
+        bottom: 0,
+        top: 0,
+        right: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      }
+    }, "Select an existing room or create a new one.");
+  }
+
+  // src/app/scenes/Edit/Room/RoomSidebar.tsx
+  var React10 = __toModule(require_react());
+
   // src/app/components/SectionTitle.tsx
-  var React5 = __toModule(require_react());
+  var React7 = __toModule(require_react());
   function SectionTitle(props) {
     const {children} = props;
-    return /* @__PURE__ */ React5.createElement("p", {
+    return /* @__PURE__ */ React7.createElement("p", {
       style: {fontSize: 16, color: BACKGROUND_DARK, textAlign: "center"}
     }, children);
   }
 
   // src/app/components/Separator.tsx
-  var React6 = __toModule(require_react());
+  var React8 = __toModule(require_react());
   function Separator(props) {
     const {size = 2} = props;
-    return /* @__PURE__ */ React6.createElement("div", {
+    return /* @__PURE__ */ React8.createElement("div", {
       style: {height: size, backgroundColor: BORDER_COLOR}
     });
   }
 
   // src/app/components/Spacer.tsx
-  var React7 = __toModule(require_react());
+  var React9 = __toModule(require_react());
   function Spacer(props) {
     const {size = 8} = props;
-    return /* @__PURE__ */ React7.createElement("div", {
+    return /* @__PURE__ */ React9.createElement("div", {
       style: {height: size, minHeight: size}
     });
   }
 
-  // src/app/scenes/Edit/Room.tsx
+  // src/app/scenes/Edit/Room/RoomSidebar.tsx
+  function RoomSidebar(props) {
+    const {room, onUpdate} = props;
+    const [oldId, setOldId] = React10.useState(room.id);
+    const [id, setId] = React10.useState(room.id);
+    const [type, setType] = React10.useState(room.type);
+    const [width, setWidth] = React10.useState(room.width);
+    const [height, setHeight] = React10.useState(room.height);
+    const {selectedLayer, selectedTile, selectLayer, selectTile} = useRooms();
+    React10.useEffect(() => {
+      setOldId(room.id);
+      setId(room.id);
+      setType(room.type);
+      setWidth(room.width);
+      setHeight(room.height);
+    }, [room.id]);
+    React10.useEffect(() => {
+      if (room.id !== id || room.type !== type || room.width !== width || room.height !== height) {
+        onUpdate({
+          id,
+          type,
+          width,
+          height
+        }, oldId);
+      }
+    }, [id, type, width, height]);
+    return /* @__PURE__ */ React10.createElement("div", {
+      style: {
+        position: "absolute",
+        left: 2,
+        bottom: 0,
+        top: 0,
+        width: SIDEBAR_WIDTH,
+        borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
+        display: "flex",
+        flexDirection: "column"
+      }
+    }, /* @__PURE__ */ React10.createElement("div", {
+      style: {
+        padding: 16
+      }
+    }, /* @__PURE__ */ React10.createElement(SectionTitle, null, "Params"), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Id:"), /* @__PURE__ */ React10.createElement("input", {
+      style: {width: "100%"},
+      type: "text",
+      value: id,
+      onChange: (event) => setId(event.target.value)
+    }), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Type:"), /* @__PURE__ */ React10.createElement("select", {
+      style: {width: "100%"},
+      value: type,
+      onChange: (event) => setType(event.target.value)
+    }, RoomTypes.map((roomType) => /* @__PURE__ */ React10.createElement("option", {
+      key: roomType,
+      value: roomType
+    }, roomType))), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Width:"), /* @__PURE__ */ React10.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      value: width,
+      onChange: (event) => setWidth(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Height:"), /* @__PURE__ */ React10.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      value: height,
+      onChange: (event) => setHeight(Number.parseInt(event.target.value))
+    })), /* @__PURE__ */ React10.createElement(Separator, {
+      size: 2
+    }), /* @__PURE__ */ React10.createElement("div", {
+      style: {
+        padding: 16
+      }
+    }, /* @__PURE__ */ React10.createElement(SectionTitle, null, "Layer"), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Selected layer:"), /* @__PURE__ */ React10.createElement("select", {
+      value: selectedLayer,
+      onChange: (event) => selectLayer(event.target.value)
+    }, TileLayers.map((item) => /* @__PURE__ */ React10.createElement("option", {
+      key: item,
+      value: item
+    }, item))), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Selected tile:"), /* @__PURE__ */ React10.createElement("select", {
+      value: selectedTile,
+      onChange: (event) => selectTile(event.target.value)
+    }, getTilesForLayer(selectedLayer).map((item) => /* @__PURE__ */ React10.createElement("option", {
+      key: item,
+      value: item
+    }, item)))), /* @__PURE__ */ React10.createElement(Separator, {
+      size: 2
+    }));
+  }
+  function getTilesForLayer(layer) {
+    switch (layer) {
+      case "tiles":
+        return TileTypes;
+      case "props":
+        return PropTypes4;
+      case "monsters":
+        return MonsterTypes;
+    }
+  }
+
+  // src/app/scenes/Edit/Room/index.tsx
   function Room2(props) {
-    const {rooms: rooms7, selectedRoomId, updateRoom} = useRooms();
-    const room = rooms7.find((item) => item.id === selectedRoomId);
+    const {rooms: rooms9, selectedRoomId, updateRoom} = useRooms();
+    const room = rooms9.find((item) => item.id === selectedRoomId);
     if (!room) {
-      return /* @__PURE__ */ React8.createElement(RoomEmpty, null);
+      return /* @__PURE__ */ React11.createElement(RoomEmpty, null);
     }
     const onDetailsUpdate = (params, oldRoomId) => {
       const updated = {
@@ -51304,7 +53449,7 @@ void main() {
       updated.layers[layer][y][x] = value;
       updateRoom(updated, room.id);
     };
-    return /* @__PURE__ */ React8.createElement("div", {
+    return /* @__PURE__ */ React11.createElement("div", {
       style: {
         position: "absolute",
         left: SIDEBAR_WIDTH,
@@ -51314,210 +53459,34 @@ void main() {
         display: "flex",
         flexDirection: "row"
       }
-    }, /* @__PURE__ */ React8.createElement(RoomSidebar, {
+    }, /* @__PURE__ */ React11.createElement(RoomSidebar, {
       room,
       onUpdate: onDetailsUpdate
-    }), /* @__PURE__ */ React8.createElement(RoomContent, {
+    }), /* @__PURE__ */ React11.createElement(RoomContent, {
       room,
       onUpdate: onTileUpdate
     }));
   }
-  function RoomEmpty() {
-    return /* @__PURE__ */ React8.createElement("div", {
-      style: {
-        position: "absolute",
-        left: SIDEBAR_WIDTH,
-        bottom: 0,
-        top: 0,
-        right: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }
-    }, "Select an existing room or create a new one.");
-  }
-  function RoomSidebar(props) {
-    const {room, onUpdate} = props;
-    const [oldId, setOldId] = React8.useState(room.id);
-    const [id, setId] = React8.useState(room.id);
-    const [type, setType] = React8.useState(room.type);
-    const [width, setWidth] = React8.useState(room.width);
-    const [height, setHeight] = React8.useState(room.height);
-    const {selectedLayer, selectedTile, selectLayer, selectTile} = useRooms();
-    React8.useEffect(() => {
-      setOldId(room.id);
-      setId(room.id);
-      setType(room.type);
-      setWidth(room.width);
-      setHeight(room.height);
-    }, [room.id]);
-    React8.useEffect(() => {
-      if (room.id !== id || room.type !== type || room.width !== width || room.height !== height) {
-        onUpdate({
-          id,
-          type,
-          width,
-          height
-        }, oldId);
-      }
-    }, [id, type, width, height]);
-    return /* @__PURE__ */ React8.createElement("div", {
-      style: {
-        position: "absolute",
-        left: 2,
-        bottom: 0,
-        top: 0,
-        width: SIDEBAR_WIDTH,
-        borderRight: `2px solid ${BORDER_COLOR}`,
-        backgroundColor: BACKGROUND_LIGHT,
-        display: "flex",
-        flexDirection: "column"
-      }
-    }, /* @__PURE__ */ React8.createElement("div", {
-      style: {
-        padding: 16
-      }
-    }, /* @__PURE__ */ React8.createElement(SectionTitle, null, "Params"), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Id:"), /* @__PURE__ */ React8.createElement("input", {
-      style: {width: "100%"},
-      type: "text",
-      value: id,
-      onChange: (event) => setId(event.target.value)
-    }), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Type:"), /* @__PURE__ */ React8.createElement("select", {
-      style: {width: "100%"},
-      value: type,
-      onChange: (event) => setType(event.target.value)
-    }, RoomTypes.map((roomType) => /* @__PURE__ */ React8.createElement("option", {
-      key: roomType,
-      value: roomType
-    }, roomType))), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Width:"), /* @__PURE__ */ React8.createElement("input", {
-      style: {width: "100%"},
-      type: "number",
-      value: width,
-      onChange: (event) => setWidth(Number.parseInt(event.target.value))
-    }), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Height:"), /* @__PURE__ */ React8.createElement("input", {
-      style: {width: "100%"},
-      type: "number",
-      value: height,
-      onChange: (event) => setHeight(Number.parseInt(event.target.value))
-    })), /* @__PURE__ */ React8.createElement(Separator, {
-      size: 2
-    }), /* @__PURE__ */ React8.createElement("div", {
-      style: {
-        padding: 16
-      }
-    }, /* @__PURE__ */ React8.createElement(SectionTitle, null, "Layer"), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Selected layer:"), /* @__PURE__ */ React8.createElement("select", {
-      value: selectedLayer,
-      onChange: (event) => selectLayer(event.target.value)
-    }, TileLayers.map((item) => /* @__PURE__ */ React8.createElement("option", {
-      key: item,
-      value: item
-    }, item))), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement("p", null, "Selected tile:"), /* @__PURE__ */ React8.createElement("select", {
-      value: selectedTile,
-      onChange: (event) => selectTile(event.target.value)
-    }, getTilesForLayer(selectedLayer).map((item) => /* @__PURE__ */ React8.createElement("option", {
-      key: item,
-      value: item
-    }, item)))), /* @__PURE__ */ React8.createElement(Separator, {
-      size: 2
-    }));
-  }
-  function RoomContent(props) {
-    const {room, onUpdate} = props;
-    const canvasRef = React8.useRef();
-    const canvasDrawer = React8.useRef();
-    const {selectedLayer, selectedTile} = useRooms();
-    const onTileClick = (x, y) => {
-      const layer = room.layers[selectedLayer];
-      if (x >= room.width || y >= room.height) {
-        return;
-      }
-      const tileId = layer[y][x];
-      const newTileId = getTileIdFromName(selectedLayer, selectedTile);
-      onUpdate(selectedLayer, x, y, tileId !== 0 && tileId === newTileId ? 0 : newTileId);
-    };
-    React8.useEffect(() => {
-      if (!canvasRef.current) {
-        return;
-      }
-      if (!canvasDrawer.current) {
-        canvasDrawer.current = new EditorDrawer(canvasRef.current);
-      }
-      canvasDrawer.current.onTileClick = onTileClick;
-    }, [canvasRef, room, selectedLayer, selectedTile]);
-    React8.useEffect(() => {
-      canvasDrawer.current.drawLayers(room.layers, selectedLayer);
-    }, [room, selectedLayer]);
-    return /* @__PURE__ */ React8.createElement("div", {
-      style: {
-        position: "absolute",
-        left: SIDEBAR_WIDTH + 4,
-        bottom: 0,
-        top: 0,
-        right: 0
-      }
-    }, /* @__PURE__ */ React8.createElement("div", {
-      ref: canvasRef,
-      style: {
-        position: "absolute",
-        left: 0,
-        bottom: 0,
-        top: 0,
-        right: 0
-      }
-    }));
-  }
-  function getTilesForLayer(layer) {
-    switch (layer) {
-      case "tiles":
-        return TileTypes;
-      case "props":
-        return PropTypes4;
-      case "monsters":
-        return MonsterTypes;
-    }
-  }
-  function getTileIdFromName(layer, tileName) {
-    switch (layer) {
-      case "tiles":
-        return TileType[tileName];
-      case "props":
-        return PropType[tileName];
-      case "monsters":
-        return MonsterType[tileName];
-    }
-  }
 
   // src/app/scenes/Edit/Sidebar.tsx
-  var React10 = __toModule(require_react());
+  var React13 = __toModule(require_react());
 
   // src/app/scenes/Edit/RoomsList.tsx
-  var React9 = __toModule(require_react());
+  var React12 = __toModule(require_react());
   function RoomsList(props) {
-    const {rooms: rooms7, selectedRoomId, addRoom, selectRoom, removeRoom} = useRooms();
-    return /* @__PURE__ */ React9.createElement("div", {
+    const {rooms: rooms9, selectedRoomId, addRoom, selectRoom, removeRoom} = useRooms();
+    return /* @__PURE__ */ React12.createElement("div", {
       style: {
         overflow: "hidden",
         overflowY: "scroll"
       }
-    }, /* @__PURE__ */ React9.createElement(RoomsListHeader, null), /* @__PURE__ */ React9.createElement(Spacer, null), /* @__PURE__ */ React9.createElement("div", {
+    }, /* @__PURE__ */ React12.createElement(RoomsListHeader, null), /* @__PURE__ */ React12.createElement(Spacer, null), /* @__PURE__ */ React12.createElement("div", {
       style: {
         flex: 1,
         display: "flex",
         flexDirection: "column"
       }
-    }, rooms7.map((room, index3) => /* @__PURE__ */ React9.createElement(RoomListItem, {
+    }, rooms9.map((room, index3) => /* @__PURE__ */ React12.createElement(RoomListItem, {
       key: room.id,
       index: index3,
       room,
@@ -51527,14 +53496,23 @@ void main() {
     }))));
   }
   function RoomsListHeader(props) {
-    const {addRoom} = useRooms();
-    return /* @__PURE__ */ React9.createElement("div", {
+    const {roomsFilter, filterRooms, addRoom} = useRooms();
+    return /* @__PURE__ */ React12.createElement("div", {
       style: {
         padding: 16
       }
-    }, /* @__PURE__ */ React9.createElement(SectionTitle, null, "Rooms"), /* @__PURE__ */ React9.createElement(Spacer, {
+    }, /* @__PURE__ */ React12.createElement(SectionTitle, null, "Rooms"), /* @__PURE__ */ React12.createElement(Spacer, {
       size: 16
-    }), /* @__PURE__ */ React9.createElement("input", {
+    }), /* @__PURE__ */ React12.createElement("p", null, "Filter rooms:"), /* @__PURE__ */ React12.createElement("select", {
+      style: {width: "100%"},
+      value: roomsFilter,
+      onChange: (event) => filterRooms(event.target.value)
+    }, RoomsFilters.map((filter) => /* @__PURE__ */ React12.createElement("option", {
+      key: filter,
+      value: filter
+    }, filter))), /* @__PURE__ */ React12.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React12.createElement("input", {
       style: {width: "100%"},
       type: "button",
       value: "+ Add room",
@@ -51543,12 +53521,12 @@ void main() {
   }
   function RoomListItem(props) {
     const {index: index3, room, selected, onClick, onDelete} = props;
-    const [hovered, setHovered] = React9.useState(false);
+    const [hovered, setHovered] = React12.useState(false);
     const handleDelete = (event) => {
       event.preventDefault();
       onDelete(room.id);
     };
-    return /* @__PURE__ */ React9.createElement("div", {
+    return /* @__PURE__ */ React12.createElement("div", {
       style: {
         position: "relative",
         height: 40,
@@ -51565,7 +53543,7 @@ void main() {
       onClick: () => onClick(room.id),
       onMouseEnter: () => setHovered(true),
       onMouseLeave: () => setHovered(false)
-    }, /* @__PURE__ */ React9.createElement("p", null, room.id), /* @__PURE__ */ React9.createElement("div", {
+    }, /* @__PURE__ */ React12.createElement("p", null, room.id), /* @__PURE__ */ React12.createElement("div", {
       style: {
         position: "absolute",
         right: 8
@@ -51576,7 +53554,7 @@ void main() {
 
   // src/app/scenes/Edit/Sidebar.tsx
   function Sidebar(props) {
-    return /* @__PURE__ */ React10.createElement("div", {
+    return /* @__PURE__ */ React13.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51590,7 +53568,7 @@ void main() {
         flexDirection: "column",
         overflow: "hidden"
       }
-    }, /* @__PURE__ */ React10.createElement(SidebarHeader, null), /* @__PURE__ */ React10.createElement(Separator, null), /* @__PURE__ */ React10.createElement(RoomsList, null));
+    }, /* @__PURE__ */ React13.createElement(SidebarHeader, null), /* @__PURE__ */ React13.createElement(Separator, null), /* @__PURE__ */ React13.createElement(RoomsList, null));
   }
   function SidebarHeader(props) {
     const {saveRooms, loadRooms} = useRooms();
@@ -51604,17 +53582,17 @@ void main() {
       });
       reader.readAsText(file);
     };
-    return /* @__PURE__ */ React10.createElement("div", null, /* @__PURE__ */ React10.createElement("div", {
+    return /* @__PURE__ */ React13.createElement("div", null, /* @__PURE__ */ React13.createElement("div", {
       style: {display: "flex", flexDirection: "column", margin: 16}
-    }, /* @__PURE__ */ React10.createElement(SectionTitle, null, "Data"), /* @__PURE__ */ React10.createElement(Spacer, {
+    }, /* @__PURE__ */ React13.createElement(SectionTitle, null, "Data"), /* @__PURE__ */ React13.createElement(Spacer, {
       size: 16
-    }), /* @__PURE__ */ React10.createElement("p", null, "Load:"), /* @__PURE__ */ React10.createElement("input", {
+    }), /* @__PURE__ */ React13.createElement("p", null, "Load:"), /* @__PURE__ */ React13.createElement("input", {
       type: "file",
       accept: "application/json",
       onChange: onFileChange
-    }), /* @__PURE__ */ React10.createElement(Spacer, {
+    }), /* @__PURE__ */ React13.createElement(Spacer, {
       size: 16
-    }), /* @__PURE__ */ React10.createElement("p", null, "Save:"), /* @__PURE__ */ React10.createElement("input", {
+    }), /* @__PURE__ */ React13.createElement("p", null, "Save:"), /* @__PURE__ */ React13.createElement("input", {
       type: "button",
       value: "Save file",
       onClick: saveRooms
@@ -51623,7 +53601,7 @@ void main() {
 
   // src/app/scenes/Edit/index.tsx
   function Edit(props) {
-    return /* @__PURE__ */ React11.createElement("div", {
+    return /* @__PURE__ */ React14.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51631,11 +53609,11 @@ void main() {
         right: 0,
         bottom: 0
       }
-    }, /* @__PURE__ */ React11.createElement(CollectionsProvider, null, /* @__PURE__ */ React11.createElement(Sidebar, null), /* @__PURE__ */ React11.createElement(Room2, null)));
+    }, /* @__PURE__ */ React14.createElement(CollectionsProvider, null, /* @__PURE__ */ React14.createElement(Sidebar, null), /* @__PURE__ */ React14.createElement(Room2, null)));
   }
 
   // src/app/scenes/Generate/index.tsx
-  var React12 = __toModule(require_react());
+  var React15 = __toModule(require_react());
 
   // src/app/scenes/Generate/DungeonDrawer.ts
   var DungeonDrawer = class {
@@ -51792,9 +53770,9 @@ void main() {
 
   // src/app/scenes/Generate/index.tsx
   function Generate(props) {
-    const canvasRef = React12.useRef();
-    const canvasDrawer = React12.useRef();
-    React12.useEffect(() => {
+    const canvasRef = React15.useRef();
+    const canvasDrawer = React15.useRef();
+    React15.useEffect(() => {
       canvasDrawer.current = new DungeonDrawer(canvasRef.current);
       const dungeon3 = generate({
         mapWidth: 96,
@@ -51811,7 +53789,7 @@ void main() {
         unitWidthInPixels: 16
       });
     }, []);
-    return /* @__PURE__ */ React12.createElement("div", {
+    return /* @__PURE__ */ React15.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51819,7 +53797,7 @@ void main() {
         top: 0,
         right: 0
       }
-    }, /* @__PURE__ */ React12.createElement("div", {
+    }, /* @__PURE__ */ React15.createElement("div", {
       ref: canvasRef,
       style: {
         position: "absolute",
@@ -51834,12 +53812,12 @@ void main() {
   // src/app/App.tsx
   var HEADER_HEIGHT = 50;
   function App() {
-    return /* @__PURE__ */ React13.createElement(BrowserRouter, {
+    return /* @__PURE__ */ React16.createElement(BrowserRouter, {
       basename: PUBLIC_URL
-    }, /* @__PURE__ */ React13.createElement(Header, null), /* @__PURE__ */ React13.createElement(Body, null));
+    }, /* @__PURE__ */ React16.createElement(Header, null), /* @__PURE__ */ React16.createElement(Body, null));
   }
   function Header() {
-    return /* @__PURE__ */ React13.createElement("div", {
+    return /* @__PURE__ */ React16.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51851,14 +53829,14 @@ void main() {
         justifyContent: "center",
         borderBottom: `2px solid ${BORDER_COLOR}`
       }
-    }, /* @__PURE__ */ React13.createElement(Link, {
+    }, /* @__PURE__ */ React16.createElement(Link, {
       to: "/edit"
-    }, "Edit"), "\u2022", /* @__PURE__ */ React13.createElement(Link, {
+    }, "Edit"), "\u2022", /* @__PURE__ */ React16.createElement(Link, {
       to: "/generate"
     }, "Generate"));
   }
   function Body() {
-    return /* @__PURE__ */ React13.createElement("div", {
+    return /* @__PURE__ */ React16.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51867,16 +53845,16 @@ void main() {
         bottom: 0,
         backgroundColor: BACKGROUND_DARK
       }
-    }, /* @__PURE__ */ React13.createElement(Switch, null, /* @__PURE__ */ React13.createElement(Route, {
+    }, /* @__PURE__ */ React16.createElement(Switch, null, /* @__PURE__ */ React16.createElement(Route, {
       exact: true,
       path: "/edit",
       component: Edit
-    }), /* @__PURE__ */ React13.createElement(Route, {
+    }), /* @__PURE__ */ React16.createElement(Route, {
       path: "/generate",
       component: Generate
     })));
   }
 
   // src/app/index.tsx
-  ReactDOM.render(/* @__PURE__ */ React14.createElement(App, null), document.getElementById("root"));
+  ReactDOM.render(/* @__PURE__ */ React17.createElement(App, null), document.getElementById("root"));
 })();

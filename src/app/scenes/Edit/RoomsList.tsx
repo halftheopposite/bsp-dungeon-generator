@@ -1,9 +1,9 @@
 import * as React from "react";
 import { RoomTemplate } from "../../../generate/types";
 import { BORDER_COLOR } from "../../constants";
-import { useRooms } from "./hooks/rooms";
+import { useRooms, RoomsFilters, RoomsFilter } from "./hooks/rooms";
 
-import { Spacer, Separator, SectionTitle } from "../../components";
+import { Spacer, SectionTitle } from "../../components";
 
 /**
  * A list of all rooms.
@@ -43,7 +43,7 @@ export function RoomsList(props: {}): React.ReactElement {
 }
 
 function RoomsListHeader(props: {}): React.ReactElement {
-  const { addRoom } = useRooms();
+  const { roomsFilter, filterRooms, addRoom } = useRooms();
 
   return (
     <div
@@ -52,6 +52,20 @@ function RoomsListHeader(props: {}): React.ReactElement {
       }}
     >
       <SectionTitle>Rooms</SectionTitle>
+      <Spacer size={16} />
+
+      <p>Filter rooms:</p>
+      <select
+        style={{ width: "100%" }}
+        value={roomsFilter}
+        onChange={(event) => filterRooms(event.target.value as RoomsFilter)}
+      >
+        {RoomsFilters.map((filter) => (
+          <option key={filter} value={filter}>
+            {filter}
+          </option>
+        ))}
+      </select>
       <Spacer size={16} />
 
       {/* Add room button */}
