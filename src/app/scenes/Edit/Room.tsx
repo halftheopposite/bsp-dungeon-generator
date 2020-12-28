@@ -14,9 +14,9 @@ import {
 } from "../../../generate/types";
 import { resizeTileMap } from "../../../generate/utils";
 import { EditorDrawer } from "./EditorDrawer";
-import { BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
+import { BACKGROUND_LIGHT, BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
 import { useRooms } from "./hooks/rooms";
-import { Separator } from "../../components";
+import { SectionTitle, Separator, Spacer } from "../../components";
 
 /**
  * The selected room's editor.
@@ -93,8 +93,8 @@ export function Room(props: {}): React.ReactElement {
         flexDirection: "row",
       }}
     >
-      <RoomDetails room={room} onUpdate={onDetailsUpdate} />
-      <RoomLayers room={room} onUpdate={onTileUpdate} />
+      <RoomSidebar room={room} onUpdate={onDetailsUpdate} />
+      <RoomContent room={room} onUpdate={onTileUpdate} />
     </div>
   );
 }
@@ -113,15 +113,15 @@ function RoomEmpty(): React.ReactElement {
         justifyContent: "center",
       }}
     >
-      Select a room or create one.
+      Select an existing room or create a new one.
     </div>
   );
 }
 
 /**
- * The selected room's base parameters.
+ * The selected room base parameters.
  */
-function RoomDetails(props: {
+function RoomSidebar(props: {
   room: RoomTemplate;
   onUpdate: (
     params: {
@@ -173,46 +173,39 @@ function RoomDetails(props: {
     <div
       style={{
         position: "absolute",
-        left: 0,
+        left: 2,
         bottom: 0,
         top: 0,
         width: SIDEBAR_WIDTH,
         borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <h2
-        style={{
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {room.id}
-      </h2>
-      <Separator size={2} />
-
       {/* Params */}
       <div
         style={{
-          padding: 8,
+          padding: 16,
         }}
       >
-        <h3>Params:</h3>
+        <SectionTitle>Params</SectionTitle>
+        <Spacer size={16} />
 
         {/* Id */}
-        <p style={{ marginTop: 16 }}>Id:</p>
+        <p>Id:</p>
         <input
+          style={{ width: "100%" }}
           type="text"
           value={id}
           onChange={(event) => setId(event.target.value)}
         />
+        <Spacer size={16} />
 
         {/* Type */}
-        <p style={{ marginTop: 16 }}>Type:</p>
+        <p>Type:</p>
         <select
+          style={{ width: "100%" }}
           value={type}
           onChange={(event) => setType(event.target.value as RoomType)}
         >
@@ -222,18 +215,22 @@ function RoomDetails(props: {
             </option>
           ))}
         </select>
+        <Spacer size={16} />
 
         {/* Width */}
-        <p style={{ marginTop: 16 }}>Width:</p>
+        <p>Width:</p>
         <input
+          style={{ width: "100%" }}
           type="number"
           value={width}
           onChange={(event) => setWidth(Number.parseInt(event.target.value))}
         />
+        <Spacer size={16} />
 
         {/* Height */}
-        <p style={{ marginTop: 16 }}>Height:</p>
+        <p>Height:</p>
         <input
+          style={{ width: "100%" }}
           type="number"
           value={height}
           onChange={(event) => setHeight(Number.parseInt(event.target.value))}
@@ -244,14 +241,14 @@ function RoomDetails(props: {
       {/* Layers */}
       <div
         style={{
-          marginTop: 16,
-          padding: 8,
+          padding: 16,
         }}
       >
-        <h3>Selected layer:</h3>
+        <SectionTitle>Layer</SectionTitle>
+        <Spacer size={16} />
 
         {/* Layer */}
-        <p style={{ marginTop: 16 }}>Layer:</p>
+        <p>Selected layer:</p>
         <select
           value={selectedLayer}
           onChange={(event) => selectLayer(event.target.value as TileLayer)}
@@ -262,9 +259,10 @@ function RoomDetails(props: {
             </option>
           ))}
         </select>
+        <Spacer size={16} />
 
         {/* Tile */}
-        <p style={{ marginTop: 16 }}>Tile:</p>
+        <p>Selected tile:</p>
         <select
           value={selectedTile}
           onChange={(event) => selectTile(event.target.value)}
@@ -276,14 +274,15 @@ function RoomDetails(props: {
           ))}
         </select>
       </div>
+      <Separator size={2} />
     </div>
   );
 }
 
 /**
- * The selected room's tile editor.
+ * The selected room tiles editor.
  */
-function RoomLayers(props: {
+function RoomContent(props: {
   room: RoomTemplate;
   onUpdate: (layer: TileLayer, x: number, y: number, value: number) => void;
 }): React.ReactElement {
@@ -330,7 +329,7 @@ function RoomLayers(props: {
     <div
       style={{
         position: "absolute",
-        left: SIDEBAR_WIDTH + 2,
+        left: SIDEBAR_WIDTH + 4,
         bottom: 0,
         top: 0,
         right: 0,

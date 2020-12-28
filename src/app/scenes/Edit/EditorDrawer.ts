@@ -27,7 +27,7 @@ export class EditorDrawer {
     this.app = new PIXI.Application({
       width: container.getBoundingClientRect().width,
       height: container.getBoundingClientRect().height,
-      backgroundColor: 0xffffff,
+      backgroundColor: 0x200b13,
     });
 
     if (container.hasChildNodes()) {

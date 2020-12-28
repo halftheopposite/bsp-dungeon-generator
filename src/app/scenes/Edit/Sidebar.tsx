@@ -1,8 +1,8 @@
 import * as React from "react";
-import { BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
+import { BACKGROUND_LIGHT, BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
 import { useRooms } from "./hooks/rooms";
 
-import { Separator } from "../../components";
+import { SectionTitle, Separator, Spacer } from "../../components";
 import { RoomsList } from "./RoomsList";
 
 export function Sidebar(props: {}): React.ReactElement {
@@ -16,6 +16,7 @@ export function Sidebar(props: {}): React.ReactElement {
         width: SIDEBAR_WIDTH,
         cursor: "pointer",
         borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
@@ -45,24 +46,17 @@ function SidebarHeader(props: {}): React.ReactElement {
 
   return (
     <div>
-      <h1
-        style={{
-          height: 40,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        Editor
-      </h1>
-      <Separator />
-      <div style={{ display: "flex", flexDirection: "column", margin: 8 }}>
+      <div style={{ display: "flex", flexDirection: "column", margin: 16 }}>
+        <SectionTitle>Data</SectionTitle>
+        <Spacer size={16} />
+
         {/* Load */}
-        <p style={{ fontWeight: "bold" }}>Load:</p>
+        <p>Load:</p>
         <input type="file" accept="application/json" onChange={onFileChange} />
+        <Spacer size={16} />
 
         {/* Save */}
-        <p style={{ marginTop: 8, fontWeight: "bold" }}>Save:</p>
+        <p>Save:</p>
         <input type="button" value="Save file" onClick={saveRooms} />
       </div>
     </div>

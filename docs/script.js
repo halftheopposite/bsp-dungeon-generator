@@ -515,7 +515,7 @@
           }
           return element;
         };
-        function createElement10(type, config, children) {
+        function createElement11(type, config, children) {
           var propName;
           var props = {};
           var key = null;
@@ -1563,7 +1563,7 @@
               error("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
             }
           }
-          var element = createElement10.apply(this, arguments);
+          var element = createElement11.apply(this, arguments);
           if (element == null) {
             return element;
           }
@@ -2636,11 +2636,11 @@
     if (true) {
       (function() {
         "use strict";
-        var React14 = require_react();
+        var React15 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React14.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React15.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2672,7 +2672,7 @@
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React14) {
+        if (!React15) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3888,7 +3888,7 @@
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React14.Children.forEach(children, function(child) {
+          React15.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3899,7 +3899,7 @@
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React14.Children.forEach(props.children, function(child) {
+              React15.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -8666,7 +8666,7 @@
             }
           }
         }
-        function createElement10(type, props, rootContainerElement, parentNamespace) {
+        function createElement11(type, props, rootContainerElement, parentNamespace) {
           var isCustomComponentTag;
           var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
           var domElement;
@@ -9543,7 +9543,7 @@
             }
             parentNamespace = hostContextDev.namespace;
           }
-          var domElement = createElement10(type, props, rootContainerInstance, parentNamespace);
+          var domElement = createElement11(type, props, rootContainerInstance, parentNamespace);
           precacheFiberNode(internalInstanceHandle, domElement);
           updateFiberProps(domElement, props);
           return domElement;
@@ -11105,7 +11105,7 @@
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React14.Component().refs;
+        var emptyRefsObject = new React15.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -23542,11 +23542,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   });
 
   // src/app/index.tsx
-  var React13 = __toModule(require_react());
+  var React14 = __toModule(require_react());
   var ReactDOM = __toModule(require_react_dom());
 
   // src/app/App.tsx
-  var React12 = __toModule(require_react());
+  var React13 = __toModule(require_react());
 
   // node_modules/@babel/runtime/helpers/esm/inheritsLoose.js
   function _inheritsLoose(subClass, superClass) {
@@ -25296,8 +25296,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   var ariaCurrentType;
 
+  // src/app/constants.ts
+  var PUBLIC_URL = "/";
+  var BACKGROUND_DARK = "#200b13";
+  var BACKGROUND_LIGHT = "#4c2a37";
+  var BORDER_COLOR = BACKGROUND_DARK;
+  var SIDEBAR_WIDTH = 250;
+
   // src/app/scenes/Edit/index.tsx
-  var React10 = __toModule(require_react());
+  var React11 = __toModule(require_react());
 
   // src/app/scenes/Edit/hooks/rooms.tsx
   var react4 = __toModule(require_react());
@@ -25501,7 +25508,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
 
   // src/app/scenes/Edit/Room.tsx
-  var React7 = __toModule(require_react());
+  var React8 = __toModule(require_react());
 
   // src/generate/types.ts
   var TreeNode = class {
@@ -51219,7 +51226,7 @@ void main() {
       this.app = new Application({
         width: container.getBoundingClientRect().width,
         height: container.getBoundingClientRect().height,
-        backgroundColor: 16777215
+        backgroundColor: 2099987
       });
       if (container.hasChildNodes()) {
         container.firstChild.remove();
@@ -51244,24 +51251,29 @@ void main() {
     }
   };
 
-  // src/app/constants.ts
-  var BORDER_COLOR = "#0A1045";
-  var SIDEBAR_WIDTH = 200;
+  // src/app/components/SectionTitle.tsx
+  var React5 = __toModule(require_react());
+  function SectionTitle(props) {
+    const {children} = props;
+    return /* @__PURE__ */ React5.createElement("p", {
+      style: {fontSize: 16, color: BACKGROUND_DARK, textAlign: "center"}
+    }, children);
+  }
 
   // src/app/components/Separator.tsx
-  var React5 = __toModule(require_react());
+  var React6 = __toModule(require_react());
   function Separator(props) {
     const {size = 2} = props;
-    return /* @__PURE__ */ React5.createElement("div", {
+    return /* @__PURE__ */ React6.createElement("div", {
       style: {height: size, backgroundColor: BORDER_COLOR}
     });
   }
 
   // src/app/components/Spacer.tsx
-  var React6 = __toModule(require_react());
+  var React7 = __toModule(require_react());
   function Spacer(props) {
     const {size = 8} = props;
-    return /* @__PURE__ */ React6.createElement("div", {
+    return /* @__PURE__ */ React7.createElement("div", {
       style: {height: size, minHeight: size}
     });
   }
@@ -51271,7 +51283,7 @@ void main() {
     const {rooms: rooms7, selectedRoomId, updateRoom} = useRooms();
     const room = rooms7.find((item) => item.id === selectedRoomId);
     if (!room) {
-      return /* @__PURE__ */ React7.createElement(RoomEmpty, null);
+      return /* @__PURE__ */ React8.createElement(RoomEmpty, null);
     }
     const onDetailsUpdate = (params, oldRoomId) => {
       const updated = {
@@ -51292,7 +51304,7 @@ void main() {
       updated.layers[layer][y][x] = value;
       updateRoom(updated, room.id);
     };
-    return /* @__PURE__ */ React7.createElement("div", {
+    return /* @__PURE__ */ React8.createElement("div", {
       style: {
         position: "absolute",
         left: SIDEBAR_WIDTH,
@@ -51302,16 +51314,16 @@ void main() {
         display: "flex",
         flexDirection: "row"
       }
-    }, /* @__PURE__ */ React7.createElement(RoomDetails, {
+    }, /* @__PURE__ */ React8.createElement(RoomSidebar, {
       room,
       onUpdate: onDetailsUpdate
-    }), /* @__PURE__ */ React7.createElement(RoomLayers, {
+    }), /* @__PURE__ */ React8.createElement(RoomContent, {
       room,
       onUpdate: onTileUpdate
     }));
   }
   function RoomEmpty() {
-    return /* @__PURE__ */ React7.createElement("div", {
+    return /* @__PURE__ */ React8.createElement("div", {
       style: {
         position: "absolute",
         left: SIDEBAR_WIDTH,
@@ -51322,24 +51334,24 @@ void main() {
         alignItems: "center",
         justifyContent: "center"
       }
-    }, "Select a room or create one.");
+    }, "Select an existing room or create a new one.");
   }
-  function RoomDetails(props) {
+  function RoomSidebar(props) {
     const {room, onUpdate} = props;
-    const [oldId, setOldId] = React7.useState(room.id);
-    const [id, setId] = React7.useState(room.id);
-    const [type, setType] = React7.useState(room.type);
-    const [width, setWidth] = React7.useState(room.width);
-    const [height, setHeight] = React7.useState(room.height);
+    const [oldId, setOldId] = React8.useState(room.id);
+    const [id, setId] = React8.useState(room.id);
+    const [type, setType] = React8.useState(room.type);
+    const [width, setWidth] = React8.useState(room.width);
+    const [height, setHeight] = React8.useState(room.height);
     const {selectedLayer, selectedTile, selectLayer, selectTile} = useRooms();
-    React7.useEffect(() => {
+    React8.useEffect(() => {
       setOldId(room.id);
       setId(room.id);
       setType(room.type);
       setWidth(room.width);
       setHeight(room.height);
     }, [room.id]);
-    React7.useEffect(() => {
+    React8.useEffect(() => {
       if (room.id !== id || room.type !== type || room.width !== width || room.height !== height) {
         onUpdate({
           id,
@@ -51349,85 +51361,82 @@ void main() {
         }, oldId);
       }
     }, [id, type, width, height]);
-    return /* @__PURE__ */ React7.createElement("div", {
+    return /* @__PURE__ */ React8.createElement("div", {
       style: {
         position: "absolute",
-        left: 0,
+        left: 2,
         bottom: 0,
         top: 0,
         width: SIDEBAR_WIDTH,
         borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
         display: "flex",
         flexDirection: "column"
       }
-    }, /* @__PURE__ */ React7.createElement("h2", {
+    }, /* @__PURE__ */ React8.createElement("div", {
       style: {
-        height: 40,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
+        padding: 16
       }
-    }, room.id), /* @__PURE__ */ React7.createElement(Separator, {
-      size: 2
-    }), /* @__PURE__ */ React7.createElement("div", {
-      style: {
-        padding: 8
-      }
-    }, /* @__PURE__ */ React7.createElement("h3", null, "Params:"), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Id:"), /* @__PURE__ */ React7.createElement("input", {
+    }, /* @__PURE__ */ React8.createElement(SectionTitle, null, "Params"), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Id:"), /* @__PURE__ */ React8.createElement("input", {
+      style: {width: "100%"},
       type: "text",
       value: id,
       onChange: (event) => setId(event.target.value)
-    }), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Type:"), /* @__PURE__ */ React7.createElement("select", {
+    }), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Type:"), /* @__PURE__ */ React8.createElement("select", {
+      style: {width: "100%"},
       value: type,
       onChange: (event) => setType(event.target.value)
-    }, RoomTypes.map((roomType) => /* @__PURE__ */ React7.createElement("option", {
+    }, RoomTypes.map((roomType) => /* @__PURE__ */ React8.createElement("option", {
       key: roomType,
       value: roomType
-    }, roomType))), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Width:"), /* @__PURE__ */ React7.createElement("input", {
+    }, roomType))), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Width:"), /* @__PURE__ */ React8.createElement("input", {
+      style: {width: "100%"},
       type: "number",
       value: width,
       onChange: (event) => setWidth(Number.parseInt(event.target.value))
-    }), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Height:"), /* @__PURE__ */ React7.createElement("input", {
+    }), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Height:"), /* @__PURE__ */ React8.createElement("input", {
+      style: {width: "100%"},
       type: "number",
       value: height,
       onChange: (event) => setHeight(Number.parseInt(event.target.value))
-    })), /* @__PURE__ */ React7.createElement(Separator, {
+    })), /* @__PURE__ */ React8.createElement(Separator, {
       size: 2
-    }), /* @__PURE__ */ React7.createElement("div", {
+    }), /* @__PURE__ */ React8.createElement("div", {
       style: {
-        marginTop: 16,
-        padding: 8
+        padding: 16
       }
-    }, /* @__PURE__ */ React7.createElement("h3", null, "Selected layer:"), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Layer:"), /* @__PURE__ */ React7.createElement("select", {
+    }, /* @__PURE__ */ React8.createElement(SectionTitle, null, "Layer"), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Selected layer:"), /* @__PURE__ */ React8.createElement("select", {
       value: selectedLayer,
       onChange: (event) => selectLayer(event.target.value)
-    }, TileLayers.map((item) => /* @__PURE__ */ React7.createElement("option", {
+    }, TileLayers.map((item) => /* @__PURE__ */ React8.createElement("option", {
       key: item,
       value: item
-    }, item))), /* @__PURE__ */ React7.createElement("p", {
-      style: {marginTop: 16}
-    }, "Tile:"), /* @__PURE__ */ React7.createElement("select", {
+    }, item))), /* @__PURE__ */ React8.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React8.createElement("p", null, "Selected tile:"), /* @__PURE__ */ React8.createElement("select", {
       value: selectedTile,
       onChange: (event) => selectTile(event.target.value)
-    }, getTilesForLayer(selectedLayer).map((item) => /* @__PURE__ */ React7.createElement("option", {
+    }, getTilesForLayer(selectedLayer).map((item) => /* @__PURE__ */ React8.createElement("option", {
       key: item,
       value: item
-    }, item)))));
+    }, item)))), /* @__PURE__ */ React8.createElement(Separator, {
+      size: 2
+    }));
   }
-  function RoomLayers(props) {
+  function RoomContent(props) {
     const {room, onUpdate} = props;
-    const canvasRef = React7.useRef();
-    const canvasDrawer = React7.useRef();
+    const canvasRef = React8.useRef();
+    const canvasDrawer = React8.useRef();
     const {selectedLayer, selectedTile} = useRooms();
     const onTileClick = (x, y) => {
       const layer = room.layers[selectedLayer];
@@ -51438,7 +51447,7 @@ void main() {
       const newTileId = getTileIdFromName(selectedLayer, selectedTile);
       onUpdate(selectedLayer, x, y, tileId !== 0 && tileId === newTileId ? 0 : newTileId);
     };
-    React7.useEffect(() => {
+    React8.useEffect(() => {
       if (!canvasRef.current) {
         return;
       }
@@ -51447,18 +51456,18 @@ void main() {
       }
       canvasDrawer.current.onTileClick = onTileClick;
     }, [canvasRef, room, selectedLayer, selectedTile]);
-    React7.useEffect(() => {
+    React8.useEffect(() => {
       canvasDrawer.current.drawLayers(room.layers, selectedLayer);
     }, [room, selectedLayer]);
-    return /* @__PURE__ */ React7.createElement("div", {
+    return /* @__PURE__ */ React8.createElement("div", {
       style: {
         position: "absolute",
-        left: SIDEBAR_WIDTH + 2,
+        left: SIDEBAR_WIDTH + 4,
         bottom: 0,
         top: 0,
         right: 0
       }
-    }, /* @__PURE__ */ React7.createElement("div", {
+    }, /* @__PURE__ */ React8.createElement("div", {
       ref: canvasRef,
       style: {
         position: "absolute",
@@ -51491,73 +51500,83 @@ void main() {
   }
 
   // src/app/scenes/Edit/Sidebar.tsx
-  var React9 = __toModule(require_react());
+  var React10 = __toModule(require_react());
 
   // src/app/scenes/Edit/RoomsList.tsx
-  var React8 = __toModule(require_react());
+  var React9 = __toModule(require_react());
   function RoomsList(props) {
     const {rooms: rooms7, selectedRoomId, addRoom, selectRoom, removeRoom} = useRooms();
-    return /* @__PURE__ */ React8.createElement("div", {
+    return /* @__PURE__ */ React9.createElement("div", {
       style: {
-        padding: 8,
         overflow: "hidden",
         overflowY: "scroll"
       }
-    }, /* @__PURE__ */ React8.createElement("h2", null, "Rooms"), /* @__PURE__ */ React8.createElement(Spacer, null), /* @__PURE__ */ React8.createElement("input", {
-      type: "button",
-      value: "+ Add room",
-      onClick: addRoom
-    }), /* @__PURE__ */ React8.createElement(Spacer, {
-      size: 16
-    }), /* @__PURE__ */ React8.createElement(Separator, {
-      size: 2
-    }), /* @__PURE__ */ React8.createElement("div", {
+    }, /* @__PURE__ */ React9.createElement(RoomsListHeader, null), /* @__PURE__ */ React9.createElement(Spacer, null), /* @__PURE__ */ React9.createElement("div", {
       style: {
         flex: 1,
         display: "flex",
         flexDirection: "column"
       }
-    }, rooms7.map((room) => /* @__PURE__ */ React8.createElement(RoomListItem, {
+    }, rooms7.map((room, index3) => /* @__PURE__ */ React9.createElement(RoomListItem, {
       key: room.id,
+      index: index3,
       room,
       selected: selectedRoomId === room.id,
       onClick: () => selectRoom(room.id),
       onDelete: () => removeRoom(room.id)
     }))));
   }
+  function RoomsListHeader(props) {
+    const {addRoom} = useRooms();
+    return /* @__PURE__ */ React9.createElement("div", {
+      style: {
+        padding: 16
+      }
+    }, /* @__PURE__ */ React9.createElement(SectionTitle, null, "Rooms"), /* @__PURE__ */ React9.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React9.createElement("input", {
+      style: {width: "100%"},
+      type: "button",
+      value: "+ Add room",
+      onClick: addRoom
+    }));
+  }
   function RoomListItem(props) {
-    const {room, selected, onClick, onDelete} = props;
-    const [hovered, setHovered] = React8.useState(false);
+    const {index: index3, room, selected, onClick, onDelete} = props;
+    const [hovered, setHovered] = React9.useState(false);
     const handleDelete = (event) => {
       event.preventDefault();
       onDelete(room.id);
     };
-    return /* @__PURE__ */ React8.createElement("div", {
+    return /* @__PURE__ */ React9.createElement("div", {
       style: {
+        position: "relative",
         height: 40,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        borderTop: index3 === 0 ? `1px solid ${BORDER_COLOR}` : null,
         borderBottom: `1px solid ${BORDER_COLOR}`,
-        backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
+        backgroundColor: hovered || selected ? `rgba(0,0,0,0.2)` : "transparent",
         width: "100%"
       },
+      title: room.id,
       onClick: () => onClick(room.id),
       onMouseEnter: () => setHovered(true),
       onMouseLeave: () => setHovered(false)
-    }, room.id, hovered ? /* @__PURE__ */ React8.createElement("div", {
+    }, /* @__PURE__ */ React9.createElement("p", null, room.id), /* @__PURE__ */ React9.createElement("div", {
       style: {
         position: "absolute",
         right: 8
       },
       onClick: handleDelete
-    }, "\u{1F5D1}\uFE0F") : null);
+    }, "\u{1F5D1}\uFE0F"));
   }
 
   // src/app/scenes/Edit/Sidebar.tsx
   function Sidebar(props) {
-    return /* @__PURE__ */ React9.createElement("div", {
+    return /* @__PURE__ */ React10.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51566,11 +51585,12 @@ void main() {
         width: SIDEBAR_WIDTH,
         cursor: "pointer",
         borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
         display: "flex",
         flexDirection: "column",
         overflow: "hidden"
       }
-    }, /* @__PURE__ */ React9.createElement(SidebarHeader, null), /* @__PURE__ */ React9.createElement(Separator, null), /* @__PURE__ */ React9.createElement(RoomsList, null));
+    }, /* @__PURE__ */ React10.createElement(SidebarHeader, null), /* @__PURE__ */ React10.createElement(Separator, null), /* @__PURE__ */ React10.createElement(RoomsList, null));
   }
   function SidebarHeader(props) {
     const {saveRooms, loadRooms} = useRooms();
@@ -51584,24 +51604,17 @@ void main() {
       });
       reader.readAsText(file);
     };
-    return /* @__PURE__ */ React9.createElement("div", null, /* @__PURE__ */ React9.createElement("h1", {
-      style: {
-        height: 40,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }
-    }, "Editor"), /* @__PURE__ */ React9.createElement(Separator, null), /* @__PURE__ */ React9.createElement("div", {
-      style: {display: "flex", flexDirection: "column", margin: 8}
-    }, /* @__PURE__ */ React9.createElement("p", {
-      style: {fontWeight: "bold"}
-    }, "Load:"), /* @__PURE__ */ React9.createElement("input", {
+    return /* @__PURE__ */ React10.createElement("div", null, /* @__PURE__ */ React10.createElement("div", {
+      style: {display: "flex", flexDirection: "column", margin: 16}
+    }, /* @__PURE__ */ React10.createElement(SectionTitle, null, "Data"), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Load:"), /* @__PURE__ */ React10.createElement("input", {
       type: "file",
       accept: "application/json",
       onChange: onFileChange
-    }), /* @__PURE__ */ React9.createElement("p", {
-      style: {marginTop: 8, fontWeight: "bold"}
-    }, "Save:"), /* @__PURE__ */ React9.createElement("input", {
+    }), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("p", null, "Save:"), /* @__PURE__ */ React10.createElement("input", {
       type: "button",
       value: "Save file",
       onClick: saveRooms
@@ -51610,7 +51623,7 @@ void main() {
 
   // src/app/scenes/Edit/index.tsx
   function Edit(props) {
-    return /* @__PURE__ */ React10.createElement("div", {
+    return /* @__PURE__ */ React11.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51618,11 +51631,11 @@ void main() {
         right: 0,
         bottom: 0
       }
-    }, /* @__PURE__ */ React10.createElement(CollectionsProvider, null, /* @__PURE__ */ React10.createElement(Sidebar, null), /* @__PURE__ */ React10.createElement(Room2, null)));
+    }, /* @__PURE__ */ React11.createElement(CollectionsProvider, null, /* @__PURE__ */ React11.createElement(Sidebar, null), /* @__PURE__ */ React11.createElement(Room2, null)));
   }
 
   // src/app/scenes/Generate/index.tsx
-  var React11 = __toModule(require_react());
+  var React12 = __toModule(require_react());
 
   // src/app/scenes/Generate/DungeonDrawer.ts
   var DungeonDrawer = class {
@@ -51764,7 +51777,7 @@ void main() {
       this.app = new Application({
         width: container.getBoundingClientRect().width,
         height: container.getBoundingClientRect().height,
-        backgroundColor: 16777215
+        backgroundColor: 2099987
       });
       if (container.hasChildNodes()) {
         container.firstChild.remove();
@@ -51779,9 +51792,9 @@ void main() {
 
   // src/app/scenes/Generate/index.tsx
   function Generate(props) {
-    const canvasRef = React11.useRef();
-    const canvasDrawer = React11.useRef();
-    React11.useEffect(() => {
+    const canvasRef = React12.useRef();
+    const canvasDrawer = React12.useRef();
+    React12.useEffect(() => {
       canvasDrawer.current = new DungeonDrawer(canvasRef.current);
       const dungeon3 = generate({
         mapWidth: 96,
@@ -51798,7 +51811,7 @@ void main() {
         unitWidthInPixels: 16
       });
     }, []);
-    return /* @__PURE__ */ React11.createElement("div", {
+    return /* @__PURE__ */ React12.createElement("div", {
       style: {
         position: "absolute",
         left: 0,
@@ -51806,7 +51819,7 @@ void main() {
         top: 0,
         right: 0
       }
-    }, /* @__PURE__ */ React11.createElement("div", {
+    }, /* @__PURE__ */ React12.createElement("div", {
       ref: canvasRef,
       style: {
         position: "absolute",
@@ -51819,19 +51832,51 @@ void main() {
   }
 
   // src/app/App.tsx
+  var HEADER_HEIGHT = 50;
   function App() {
-    return /* @__PURE__ */ React12.createElement(BrowserRouter, {
-      basename: "/"
-    }, /* @__PURE__ */ React12.createElement(Route, {
+    return /* @__PURE__ */ React13.createElement(BrowserRouter, {
+      basename: PUBLIC_URL
+    }, /* @__PURE__ */ React13.createElement(Header, null), /* @__PURE__ */ React13.createElement(Body, null));
+  }
+  function Header() {
+    return /* @__PURE__ */ React13.createElement("div", {
+      style: {
+        position: "absolute",
+        left: 0,
+        top: 0,
+        right: 0,
+        height: HEADER_HEIGHT,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        borderBottom: `2px solid ${BORDER_COLOR}`
+      }
+    }, /* @__PURE__ */ React13.createElement(Link, {
+      to: "/edit"
+    }, "Edit"), "\u2022", /* @__PURE__ */ React13.createElement(Link, {
+      to: "/generate"
+    }, "Generate"));
+  }
+  function Body() {
+    return /* @__PURE__ */ React13.createElement("div", {
+      style: {
+        position: "absolute",
+        left: 0,
+        top: HEADER_HEIGHT + 2,
+        right: 0,
+        bottom: 0,
+        backgroundColor: BACKGROUND_DARK
+      }
+    }, /* @__PURE__ */ React13.createElement(Switch, null, /* @__PURE__ */ React13.createElement(Route, {
       exact: true,
       path: "/edit",
       component: Edit
-    }), /* @__PURE__ */ React12.createElement(Route, {
+    }), /* @__PURE__ */ React13.createElement(Route, {
       path: "/generate",
       component: Generate
-    }));
+    })));
   }
 
   // src/app/index.tsx
-  ReactDOM.render(/* @__PURE__ */ React13.createElement(App, null), document.getElementById("root"));
+  ReactDOM.render(/* @__PURE__ */ React14.createElement(App, null), document.getElementById("root"));
 })();

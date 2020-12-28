@@ -3,7 +3,7 @@ import { RoomTemplate } from "../../../generate/types";
 import { BORDER_COLOR } from "../../constants";
 import { useRooms } from "./hooks/rooms";
 
-import { Spacer, Separator } from "../../components";
+import { Spacer, Separator, SectionTitle } from "../../components";
 
 /**
  * A list of all rooms.
@@ -14,20 +14,12 @@ export function RoomsList(props: {}): React.ReactElement {
   return (
     <div
       style={{
-        padding: 8,
         overflow: "hidden",
         overflowY: "scroll",
       }}
     >
-      <h2>Rooms</h2>
+      <RoomsListHeader />
       <Spacer />
-
-      {/* Add room button */}
-      <input type="button" value="+ Add room" onClick={addRoom} />
-      <Spacer size={16} />
-      <Separator size={2} />
-
-      {/* Rooms list */}
       <div
         style={{
           flex: 1,
@@ -35,9 +27,10 @@ export function RoomsList(props: {}): React.ReactElement {
           flexDirection: "column",
         }}
       >
-        {rooms.map((room) => (
+        {rooms.map((room, index) => (
           <RoomListItem
             key={room.id}
+            index={index}
             room={room}
             selected={selectedRoomId === room.id}
             onClick={() => selectRoom(room.id)}
@@ -49,13 +42,37 @@ export function RoomsList(props: {}): React.ReactElement {
   );
 }
 
+function RoomsListHeader(props: {}): React.ReactElement {
+  const { addRoom } = useRooms();
+
+  return (
+    <div
+      style={{
+        padding: 16,
+      }}
+    >
+      <SectionTitle>Rooms</SectionTitle>
+      <Spacer size={16} />
+
+      {/* Add room button */}
+      <input
+        style={{ width: "100%" }}
+        type="button"
+        value="+ Add room"
+        onClick={addRoom}
+      />
+    </div>
+  );
+}
+
 function RoomListItem(props: {
+  index: number;
   room: RoomTemplate;
   selected: boolean;
   onClick: (roomId: string) => void;
   onDelete: (roomId: string) => void;
 }): React.ReactElement {
-  const { room, selected, onClick, onDelete } = props;
+  const { index, room, selected, onClick, onDelete } = props;
   const [hovered, setHovered] = React.useState(false);
 
   const handleDelete = (
@@ -69,22 +86,26 @@ function RoomListItem(props: {
   return (
     <div
       style={{
+        position: "relative",
         height: 40,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "row",
+        borderTop: index === 0 ? `1px solid ${BORDER_COLOR}` : null,
         borderBottom: `1px solid ${BORDER_COLOR}`,
-        backgroundColor: hovered || selected ? `rgba(0,0,0,0.1)` : "white",
+        backgroundColor:
+          hovered || selected ? `rgba(0,0,0,0.2)` : "transparent",
         width: "100%",
       }}
+      title={room.id}
       onClick={() => onClick(room.id)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      {room.id}
+      <p>{room.id}</p>
       {/* When hovered, display a delete button */}
-      {hovered ? (
+      {true ? (
         <div
           style={{
             position: "absolute",
