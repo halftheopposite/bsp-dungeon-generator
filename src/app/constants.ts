@@ -1,8 +1,3 @@
-export const PUBLIC_URL =
-  process.env.NODE_ENV === "production"
-    ? "https://halftheopposite.github.io/dungeon"
-    : "/";
-
 export const BACKGROUND_DARK = "#200b13";
 export const BACKGROUND_LIGHT = "#4c2a37";
 

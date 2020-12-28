@@ -1,6 +1,6 @@
 import * as React from "react";
-import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
-import { BACKGROUND_DARK, BORDER_COLOR, PUBLIC_URL } from "./constants";
+import { HashRouter, Link, Redirect, Route, Switch } from "react-router-dom";
+import { BACKGROUND_DARK, BORDER_COLOR } from "./constants";
 
 import { Edit } from "./scenes/Edit";
 import { Generate } from "./scenes/Generate";
@@ -9,10 +9,10 @@ const HEADER_HEIGHT = 50;
 
 export function App(): React.ReactElement {
   return (
-    <BrowserRouter basename={PUBLIC_URL}>
+    <HashRouter>
       <Header />
       <Body />
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
@@ -50,7 +50,8 @@ function Body(): React.ReactElement {
     >
       <Switch>
         <Route exact path="/edit" component={Edit} />
-        <Route path="/generate" component={Generate} />
+        <Route exact path="/generate" component={Generate} />
+        <Redirect to="/generate" />
       </Switch>
     </div>
   );

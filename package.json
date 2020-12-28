@@ -12,8 +12,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "build": "esbuild src/app/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --sourcemap=external --outfile=docs/script.js",
-    "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json\" --exec \"yarn run build && ts-node src/dev/server.ts\""
+    "build": "esbuild src/app/index.tsx --define:process.env.NODE_ENV=\\\"$NODE_ENV\\\" --bundle --sourcemap=external --outfile=docs/script.js",
+    "deploy": "NODE_ENV=production yarn run build",
+    "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json\" --exec \"NODE_ENV=development yarn run build && ts-node src/dev/server.ts\""
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
