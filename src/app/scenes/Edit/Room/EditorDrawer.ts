@@ -14,9 +14,11 @@ export class EditorDrawer {
   private propsContainer: PIXI.Container;
   private monstersContainer: PIXI.Container;
 
-  private gridContainer: PIXI.Container;
-  private cursorGridPos: PIXI.Point;
-  private cursorGridHover: PIXI.Graphics;
+  private cursorContainer: PIXI.Container;
+  private cursorPosition: PIXI.Point;
+  private cursorSprite: PIXI.Graphics;
+
+  private debugContainer: PIXI.Container;
 
   onTileClick: TileClickCallback;
 
@@ -44,18 +46,23 @@ export class EditorDrawer {
     this.tilesContainer = new PIXI.Container();
     this.propsContainer = new PIXI.Container();
     this.monstersContainer = new PIXI.Container();
-    this.gridContainer = new PIXI.Container();
     this.app.stage.addChild(this.tilesContainer);
     this.app.stage.addChild(this.propsContainer);
     this.app.stage.addChild(this.monstersContainer);
-    this.app.stage.addChild(this.gridContainer);
 
     // Cursor
-    this.cursorGridPos = new PIXI.Point(0, 0);
-    this.cursorGridHover = new PIXI.Graphics();
-    this.cursorGridHover.beginFill(0x0000ff, 0.5);
-    this.cursorGridHover.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
-    this.cursorGridHover.endFill();
+    this.cursorPosition = new PIXI.Point(0, 0);
+    this.cursorSprite = new PIXI.Graphics();
+    this.cursorSprite.beginFill(0x0000ff, 0.5);
+    this.cursorSprite.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+    this.cursorSprite.endFill();
+    this.cursorContainer = new PIXI.Container();
+    this.cursorContainer.addChild(this.cursorSprite);
+    this.app.stage.addChild(this.cursorContainer);
+
+    // Debug
+    this.debugContainer = new PIXI.Container();
+    this.app.stage.addChild(this.debugContainer);
   }
 
   //
@@ -67,10 +74,10 @@ export class EditorDrawer {
     const gridX = Math.floor(x / TILE_SIZE);
     const gridY = Math.floor(y / TILE_SIZE);
 
-    this.cursorGridPos.set(gridX, gridY);
-    this.cursorGridHover.position.set(
-      this.cursorGridPos.x * TILE_SIZE,
-      this.cursorGridPos.y * TILE_SIZE
+    this.cursorPosition.set(gridX, gridY);
+    this.cursorSprite.position.set(
+      this.cursorPosition.x * TILE_SIZE,
+      this.cursorPosition.y * TILE_SIZE
     );
   };
 
@@ -79,19 +86,24 @@ export class EditorDrawer {
       console.warn("No listener attached to onMouseClick.");
     }
 
-    this.onTileClick(this.cursorGridPos.x, this.cursorGridPos.y);
+    this.onTileClick(this.cursorPosition.x, this.cursorPosition.y);
   };
 
   //
   // Layers
   //
-  drawLayers = (layers: TileMaps, selectedLayer: TileLayer) => {
+  drawLayers = (layers: TileMaps, selectedLayer: TileLayer, debug: boolean) => {
     const { tiles, props, monsters } = layers;
 
     this.drawTiles(tiles, selectedLayer === "tiles");
     this.drawProps(props, selectedLayer === "props");
     this.drawMonsters(monsters, selectedLayer === "monsters");
-    this.drawGrid(tiles);
+
+    if (debug) {
+      this.drawGrid(tiles);
+    } else {
+      this.clearGrid();
+    }
   };
 
   private drawTiles = (tiles: TileMap, selected: boolean) => {
@@ -166,8 +178,7 @@ export class EditorDrawer {
   private drawGrid = (tiles: TileMap) => {
     tiles = computeTilesMask(tiles);
 
-    this.gridContainer.removeChildren();
-    this.gridContainer.addChild(this.cursorGridHover);
+    this.debugContainer.removeChildren();
 
     for (let y = 0; y < tiles.length; y++) {
       for (let x = 0; x < tiles[y].length; x++) {
@@ -176,17 +187,22 @@ export class EditorDrawer {
         rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
         rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
 
-        const tileId = tiles[y][x];
-        const text = new PIXI.Text(`${tileId}`, {
-          fontSize: 10,
-          fill: 0xffffff,
-        });
-        text.anchor.set(0.5);
-        text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
-        rectangle.addChild(text);
+        // Drawing tiles ids is expensive, use when debugging.
+        // const tileId = tiles[y][x];
+        // const text = new PIXI.Text(`${tileId}`, {
+        //   fontSize: 10,
+        //   fill: 0xffffff,
+        // });
+        // text.anchor.set(0.5);
+        // text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
+        // rectangle.addChild(text);
 
-        this.gridContainer.addChild(rectangle);
+        this.debugContainer.addChild(rectangle);
       }
     }
+  };
+
+  private clearGrid = () => {
+    this.debugContainer.removeChildren();
   };
 }

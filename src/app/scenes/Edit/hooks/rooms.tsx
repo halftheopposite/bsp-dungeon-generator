@@ -16,6 +16,7 @@ export interface RoomsValue {
   selectedRoomId: string;
   selectedLayer: TileLayer;
   selectedTile: string;
+  debug: boolean;
   addRoom: () => void;
   updateRoom: (updated: RoomTemplate, oldRoomId: string) => void;
   removeRoom: (roomId: string) => void;
@@ -25,6 +26,7 @@ export interface RoomsValue {
   filterRooms: (type: RoomType | "all") => void;
   saveRooms: () => void;
   loadRooms: (rooms: RoomTemplate[]) => void;
+  setDebug: (debug: boolean) => void;
 }
 
 export const RoomsContext = React.createContext<RoomsValue>({
@@ -33,6 +35,7 @@ export const RoomsContext = React.createContext<RoomsValue>({
   selectedRoomId: null,
   selectedLayer: "tiles",
   selectedTile: "",
+  debug: false,
   addRoom: () => {},
   updateRoom: () => {},
   removeRoom: () => {},
@@ -42,6 +45,7 @@ export const RoomsContext = React.createContext<RoomsValue>({
   filterRooms: () => {},
   saveRooms: () => {},
   loadRooms: () => {},
+  setDebug: () => {},
 });
 
 export function CollectionsProvider(props: {
@@ -53,6 +57,7 @@ export function CollectionsProvider(props: {
   const [selectedRoomId, setSelectedRoomId] = React.useState<string>(null);
   const [selectedLayer, setSelectedLayer] = React.useState<TileLayer>("tiles");
   const [selectedTile, setSelectedTile] = React.useState<string>("");
+  const [debug, setDebug] = React.useState<boolean>(false);
 
   /** Add a room */
   const addRoom = () => {
@@ -198,6 +203,7 @@ export function CollectionsProvider(props: {
       selectedRoomId,
       selectedLayer,
       selectedTile,
+      debug,
       addRoom,
       updateRoom,
       removeRoom,
@@ -207,8 +213,9 @@ export function CollectionsProvider(props: {
       filterRooms,
       saveRooms,
       loadRooms,
+      setDebug,
     };
-  }, [rooms, selectedRoomId, selectedLayer, selectedTile, roomsFilter]);
+  }, [rooms, roomsFilter, selectedRoomId, selectedLayer, selectedTile, debug]);
 
   return (
     <RoomsContext.Provider value={value}>{children}</RoomsContext.Provider>

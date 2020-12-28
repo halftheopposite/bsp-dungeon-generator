@@ -20,7 +20,7 @@ export function RoomContent(props: {
   const { room, onUpdate } = props;
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<EditorDrawer>();
-  const { selectedLayer, selectedTile } = useRooms();
+  const { selectedLayer, selectedTile, debug } = useRooms();
 
   const onTileClick = (x: number, y: number) => {
     const layer = room.layers[selectedLayer];
@@ -53,8 +53,8 @@ export function RoomContent(props: {
 
   /** Update drawer when room changes */
   React.useEffect(() => {
-    canvasDrawer.current.drawLayers(room.layers, selectedLayer);
-  }, [room, selectedLayer]);
+    canvasDrawer.current.drawLayers(room.layers, selectedLayer, debug);
+  }, [room, selectedLayer, debug]);
 
   return (
     <div

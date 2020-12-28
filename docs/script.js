@@ -25480,6 +25480,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     selectedRoomId: null,
     selectedLayer: "tiles",
     selectedTile: "",
+    debug: false,
     addRoom: () => {
     },
     updateRoom: () => {
@@ -25497,6 +25498,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     saveRooms: () => {
     },
     loadRooms: () => {
+    },
+    setDebug: () => {
     }
   });
   function CollectionsProvider(props) {
@@ -25506,6 +25509,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const [selectedRoomId, setSelectedRoomId] = react4.default.useState(null);
     const [selectedLayer, setSelectedLayer] = react4.default.useState("tiles");
     const [selectedTile, setSelectedTile] = react4.default.useState("");
+    const [debug, setDebug] = react4.default.useState(false);
     const addRoom = () => {
       const id = String(Date.now());
       setRooms((prev) => {
@@ -25615,6 +25619,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         selectedRoomId,
         selectedLayer,
         selectedTile,
+        debug,
         addRoom,
         updateRoom,
         removeRoom,
@@ -25623,9 +25628,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         selectTile,
         filterRooms,
         saveRooms,
-        loadRooms
+        loadRooms,
+        setDebug
       };
-    }, [rooms9, selectedRoomId, selectedLayer, selectedTile, roomsFilter]);
+    }, [rooms9, roomsFilter, selectedRoomId, selectedLayer, selectedTile, debug]);
     return /* @__PURE__ */ react4.default.createElement(RoomsContext.Provider, {
       value
     }, children);
@@ -53086,21 +53092,25 @@ void main() {
         const {x, y} = event.data.global;
         const gridX = Math.floor(x / TILE_SIZE);
         const gridY = Math.floor(y / TILE_SIZE);
-        this.cursorGridPos.set(gridX, gridY);
-        this.cursorGridHover.position.set(this.cursorGridPos.x * TILE_SIZE, this.cursorGridPos.y * TILE_SIZE);
+        this.cursorPosition.set(gridX, gridY);
+        this.cursorSprite.position.set(this.cursorPosition.x * TILE_SIZE, this.cursorPosition.y * TILE_SIZE);
       };
       this.onMouseClick = () => {
         if (!this.onTileClick) {
           console.warn("No listener attached to onMouseClick.");
         }
-        this.onTileClick(this.cursorGridPos.x, this.cursorGridPos.y);
+        this.onTileClick(this.cursorPosition.x, this.cursorPosition.y);
       };
-      this.drawLayers = (layers, selectedLayer) => {
+      this.drawLayers = (layers, selectedLayer, debug) => {
         const {tiles, props, monsters} = layers;
         this.drawTiles(tiles, selectedLayer === "tiles");
         this.drawProps(props, selectedLayer === "props");
         this.drawMonsters(monsters, selectedLayer === "monsters");
-        this.drawGrid(tiles);
+        if (debug) {
+          this.drawGrid(tiles);
+        } else {
+          this.clearGrid();
+        }
       };
       this.drawTiles = (tiles, selected) => {
         this.tilesContainer.removeChildren();
@@ -53162,25 +53172,19 @@ void main() {
       };
       this.drawGrid = (tiles) => {
         tiles = computeTilesMask(tiles);
-        this.gridContainer.removeChildren();
-        this.gridContainer.addChild(this.cursorGridHover);
+        this.debugContainer.removeChildren();
         for (let y = 0; y < tiles.length; y++) {
           for (let x = 0; x < tiles[y].length; x++) {
             const rectangle = new Graphics();
             rectangle.lineStyle(1, 65280, 0.5);
             rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
             rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
-            const tileId = tiles[y][x];
-            const text3 = new Text(`${tileId}`, {
-              fontSize: 10,
-              fill: 16777215
-            });
-            text3.anchor.set(0.5);
-            text3.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
-            rectangle.addChild(text3);
-            this.gridContainer.addChild(rectangle);
+            this.debugContainer.addChild(rectangle);
           }
         }
+      };
+      this.clearGrid = () => {
+        this.debugContainer.removeChildren();
       };
       this.app = new Application({
         width: container.getBoundingClientRect().width,
@@ -53197,16 +53201,19 @@ void main() {
       this.tilesContainer = new Container2();
       this.propsContainer = new Container2();
       this.monstersContainer = new Container2();
-      this.gridContainer = new Container2();
       this.app.stage.addChild(this.tilesContainer);
       this.app.stage.addChild(this.propsContainer);
       this.app.stage.addChild(this.monstersContainer);
-      this.app.stage.addChild(this.gridContainer);
-      this.cursorGridPos = new Point2(0, 0);
-      this.cursorGridHover = new Graphics();
-      this.cursorGridHover.beginFill(255, 0.5);
-      this.cursorGridHover.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
-      this.cursorGridHover.endFill();
+      this.cursorPosition = new Point2(0, 0);
+      this.cursorSprite = new Graphics();
+      this.cursorSprite.beginFill(255, 0.5);
+      this.cursorSprite.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
+      this.cursorSprite.endFill();
+      this.cursorContainer = new Container2();
+      this.cursorContainer.addChild(this.cursorSprite);
+      this.app.stage.addChild(this.cursorContainer);
+      this.debugContainer = new Container2();
+      this.app.stage.addChild(this.debugContainer);
     }
   };
 
@@ -53215,7 +53222,7 @@ void main() {
     const {room, onUpdate} = props;
     const canvasRef = React5.useRef();
     const canvasDrawer = React5.useRef();
-    const {selectedLayer, selectedTile} = useRooms();
+    const {selectedLayer, selectedTile, debug} = useRooms();
     const onTileClick = (x, y) => {
       const layer = room.layers[selectedLayer];
       if (x >= room.width || y >= room.height) {
@@ -53235,8 +53242,8 @@ void main() {
       canvasDrawer.current.onTileClick = onTileClick;
     }, [canvasRef, room, selectedLayer, selectedTile]);
     React5.useEffect(() => {
-      canvasDrawer.current.drawLayers(room.layers, selectedLayer);
-    }, [room, selectedLayer]);
+      canvasDrawer.current.drawLayers(room.layers, selectedLayer, debug);
+    }, [room, selectedLayer, debug]);
     return /* @__PURE__ */ React5.createElement("div", {
       style: {
         position: "absolute",
@@ -53322,7 +53329,14 @@ void main() {
     const [type, setType] = React10.useState(room.type);
     const [width, setWidth] = React10.useState(room.width);
     const [height, setHeight] = React10.useState(room.height);
-    const {selectedLayer, selectedTile, selectLayer, selectTile} = useRooms();
+    const {
+      selectedLayer,
+      selectedTile,
+      debug,
+      selectLayer,
+      selectTile,
+      setDebug
+    } = useRooms();
     React10.useEffect(() => {
       setOldId(room.id);
       setId(room.id);
@@ -53410,7 +53424,18 @@ void main() {
       value: item
     }, item)))), /* @__PURE__ */ React10.createElement(Separator, {
       size: 2
-    }));
+    }), /* @__PURE__ */ React10.createElement("div", {
+      style: {
+        padding: 16
+      }
+    }, /* @__PURE__ */ React10.createElement(SectionTitle, null, "Debug"), /* @__PURE__ */ React10.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React10.createElement("label", null, /* @__PURE__ */ React10.createElement("input", {
+      type: "checkbox",
+      style: {marginRight: 8},
+      checked: debug,
+      onChange: (event) => setDebug(event.target.checked)
+    }), "Show grid?")));
   }
   function getTilesForLayer(layer) {
     switch (layer) {

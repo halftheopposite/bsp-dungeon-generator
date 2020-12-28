@@ -38,7 +38,14 @@ export function RoomSidebar(props: {
   const [type, setType] = React.useState<RoomType>(room.type);
   const [width, setWidth] = React.useState(room.width);
   const [height, setHeight] = React.useState(room.height);
-  const { selectedLayer, selectedTile, selectLayer, selectTile } = useRooms();
+  const {
+    selectedLayer,
+    selectedTile,
+    debug,
+    selectLayer,
+    selectTile,
+    setDebug,
+  } = useRooms();
 
   /** When the room is updated we reset all the fields */
   React.useEffect(() => {
@@ -174,6 +181,26 @@ export function RoomSidebar(props: {
         </select>
       </div>
       <Separator size={2} />
+
+      {/* Debug */}
+      <div
+        style={{
+          padding: 16,
+        }}
+      >
+        <SectionTitle>Debug</SectionTitle>
+        <Spacer size={16} />
+
+        <label>
+          <input
+            type="checkbox"
+            style={{ marginRight: 8 }}
+            checked={debug}
+            onChange={(event) => setDebug(event.target.checked)}
+          />
+          Show grid?
+        </label>
+      </div>
     </div>
   );
 }
