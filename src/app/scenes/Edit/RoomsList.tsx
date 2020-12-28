@@ -117,9 +117,9 @@ function RoomListItem(props: {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <p>{room.id}</p>
+      <p style={{ fontSize: 12 }}>{room.id}</p>
       {/* When hovered, display a delete button */}
-      {true ? (
+      {hovered ? (
         <div
           style={{
             position: "absolute",

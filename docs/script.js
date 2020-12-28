@@ -53543,13 +53543,15 @@ void main() {
       onClick: () => onClick(room.id),
       onMouseEnter: () => setHovered(true),
       onMouseLeave: () => setHovered(false)
-    }, /* @__PURE__ */ React12.createElement("p", null, room.id), /* @__PURE__ */ React12.createElement("div", {
+    }, /* @__PURE__ */ React12.createElement("p", {
+      style: {fontSize: 12}
+    }, room.id), hovered ? /* @__PURE__ */ React12.createElement("div", {
       style: {
         position: "absolute",
         right: 8
       },
       onClick: handleDelete
-    }, "\u{1F5D1}\uFE0F"));
+    }, "\u{1F5D1}\uFE0F") : null);
   }
 
   // src/app/scenes/Edit/Sidebar.tsx
