@@ -2,6 +2,8 @@
 
 A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms.
 
+You can use it here https://halftheopposite.github.io/dungeon.
+
 ![dungeon](images/dungeon.png "Screenshot of a generated dungeon")
 
 ## Running
@@ -15,19 +17,19 @@ yarn start
 
 This will launch the development server (using `express.js`):
 
-- Edit rooms at http://localhost:3000/edit/
-- Generate dungeons at http://localhost:3000/generate/
+- Edit rooms at http://localhost:3000/#/edit/
+- Generate dungeons at http://localhost:3000/#/generate/
 
 ## Edit
 
-When using the **edit** mode you can create, edit, or remove the rooms that are used for generating dungeons. The current editing session is saved to the local storage which makes it possible to continue editing later on.
+Using the **edit** mode you can: create, edit, or remove the rooms that are used for generating dungeons. The current editing session is saved to the local storage which makes it possible to continue editing later on.
 
 - You can **load** a `rooms.json` file to start with.
-- You can **save** the current editing session to a `rooms.json` file inside the `/src/generate/` folder to use it when generating dungeons.
+- You can **save** a `rooms.json` to use in your own project.
 
 ## Generate
 
-When in the **generate** mode you can render dungeons by tuning some key parameters.
+In the **generate** mode, you can render dungeons by tuning some key parameters.
 
 - You can **right click** and save the generated image.
 - You can **download** a JSON representation of the dungeon.
@@ -40,6 +42,7 @@ You can copy the content of the `/src/generate/` folder into your project and ca
 import { generate } from "./dungeon";
 
 const dungeon = generate({
+  rooms: [...] // List of rooms used in the generation
   mapWidth: 96, // Width of the dungeon in tiles
   mapHeight: 56, // Height of the dungeon in tiles
   mapGutterWidth: 1, // Gutter width of the dungeon
@@ -68,7 +71,7 @@ This will return:
 
 ## Assets
 
-Thanks to [@pixel_poem](https://twitter.com/pixel_poem) for the art package he published on Itch.io which made this game looks cool instantly.
+Thanks to [@pixel_poem](https://twitter.com/pixel_poem) for the art package he published on https://pixel-poem.itch.io/dungeon-assetpuck.
 
 ## Licenses
 
