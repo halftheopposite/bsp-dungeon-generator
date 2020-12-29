@@ -31,7 +31,10 @@ function Header(): React.ReactElement {
         borderBottom: `2px solid ${BORDER_COLOR}`,
       }}
     >
-      <Link to="/edit">Edit</Link>•<Link to="/generate">Generate</Link>
+      <Link to="/edit">Edit</Link>•<Link to="/generate">Generate</Link>•
+      <a href="https://github.com/halftheopposite/dungeon" target="_blank">
+        GitHub Project
+      </a>
     </div>
   );
 }
