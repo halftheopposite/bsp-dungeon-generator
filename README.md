@@ -42,15 +42,14 @@ You can copy the content of the `/src/generate/` folder into your project and ca
 import { generate } from "./dungeon";
 
 const dungeon = generate({
-  rooms: [...] // List of rooms used in the generation
-  mapWidth: 96, // Width of the dungeon in tiles
-  mapHeight: 56, // Height of the dungeon in tiles
-  mapGutterWidth: 1, // Gutter width of the dungeon
-  iterations: 5, // Number of subdivision of the BSP tree
-  containerSizeRatio: 0.45, // Minimum ratio of a container (under which it's retried)
-  roomSpawnChance: 0.9, // Probability of a room being spawned
-  corridorWidth: 2, // Width of the corridors joining containers
-  corridorTrapChance: 0.5, // Probability of a trap spawning into a corridor
+  rooms: [...],
+  mapWidth: 96,
+  mapHeight: 56,
+  mapGutterWidth: 1,
+  iterations: 5,
+  containerSizeRatio: 0.45,
+  roomSpawnChance: 0.9,
+  corridorWidth: 2,
 });
 ```
 
