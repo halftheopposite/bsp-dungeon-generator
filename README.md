@@ -4,7 +4,7 @@ A configurable and editable dungeon generator using Binary-Space Partitioning an
 
 You can use it here https://halftheopposite.github.io/dungeon.
 
-![dungeon](images/dungeon.png "Screenshot of a generated dungeon")
+![dungeon](images/dungeon.jpg "Screenshot of a generated dungeon")
 
 ## Running
 
@@ -27,12 +27,16 @@ Using the **edit** mode you can: create, edit, or remove the rooms that are used
 - You can **load** a `rooms.json` file to start with.
 - You can **save** a `rooms.json` to use in your own project.
 
+<img src="images/edit.jpg" alt="editor" width="400"/>
+
 ## Generate
 
 In the **generate** mode, you can render dungeons by tuning some key parameters.
 
 - You can **right click** and save the generated image.
 - You can **download** a JSON representation of the dungeon.
+
+<img src="images/generate.jpg" alt="generate" width="400"/>
 
 ## Want to use the dungeon generation algorithm in you project?
 
