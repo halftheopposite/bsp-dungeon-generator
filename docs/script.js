@@ -38786,7 +38786,7 @@ void main() {
     } else {
       corridor = new Corridor(x - Math.ceil(args.corridorWidth / 2), y - Math.ceil(args.corridorWidth / 2), Math.ceil(rightCenter.x) - x, Math.ceil(args.corridorWidth));
     }
-    const hasTrap = randomProbability(args.corridorTrapChance);
+    const hasTrap = randomProbability(args.corridorTrapProbability);
     if (hasTrap) {
       corridor.traps = corridor.direction === "horizontal" ? Traps[0] : Traps[1];
     }
@@ -38795,7 +38795,7 @@ void main() {
   function generateRooms(tree, args) {
     let roomId = 0;
     tree.leaves.forEach((leaf) => {
-      if (!randomProbability(args.roomSpawnChance)) {
+      if (!randomProbability(args.roomProbability)) {
         return;
       }
       const filteredRooms = args.rooms.filter((room) => room.width <= leaf.width && room.height <= leaf.height);
@@ -39628,9 +39628,9 @@ void main() {
         this.tilemapContainer.removeChildren();
         this.shapesContainer.removeChildren();
         this.unitInPixels = options.unitWidthInPixels;
-        this.drawTiles(dungeon3.layers.tiles, textures_exports.tilesSprites);
-        this.drawProps(dungeon3.layers.props, textures_exports.propsSprites);
-        this.drawMonsters(dungeon3.layers.monsters, textures_exports.monstersSprites);
+        this.drawTiles(dungeon3.layers.tiles, textures_exports.tilesSprites, options);
+        this.drawProps(dungeon3.layers.props, textures_exports.propsSprites, options);
+        this.drawMonsters(dungeon3.layers.monsters, textures_exports.monstersSprites, options);
         if (options.debug) {
           this.drawGrid(dungeon3);
           this.drawContainers(dungeon3.tree);
@@ -39638,13 +39638,14 @@ void main() {
           this.drawCorridors(dungeon3.tree);
         }
       };
-      this.drawTiles = (tilemap, sprites) => {
+      this.drawTiles = (tilemap, sprites, options) => {
         for (let y = 0; y < tilemap.length; y++) {
           for (let x = 0; x < tilemap[y].length; x++) {
             const id = tilemap[y][x];
             const texture = sprites[id];
             if (texture) {
               const sprite5 = new Sprite(texture);
+              sprite5.scale.set(options.unitWidthInPixels / texture.width);
               sprite5.position.set(x * this.unitInPixels, y * this.unitInPixels);
               this.tilemapContainer.addChild(sprite5);
             } else {
@@ -39658,7 +39659,7 @@ void main() {
           }
         }
       };
-      this.drawProps = (tilemap, sprites) => {
+      this.drawProps = (tilemap, sprites, options) => {
         for (let y = 0; y < tilemap.length; y++) {
           for (let x = 0; x < tilemap[y].length; x++) {
             const id = tilemap[y][x];
@@ -39668,6 +39669,7 @@ void main() {
             const texture = sprites[id];
             if (texture) {
               const sprite5 = new Sprite(texture);
+              sprite5.scale.set(options.unitWidthInPixels / texture.width);
               sprite5.position.set(x * this.unitInPixels, y * this.unitInPixels);
               this.tilemapContainer.addChild(sprite5);
             } else {
@@ -39681,7 +39683,7 @@ void main() {
           }
         }
       };
-      this.drawMonsters = (tilemap, sprites) => {
+      this.drawMonsters = (tilemap, sprites, options) => {
         for (let y = 0; y < tilemap.length; y++) {
           for (let x = 0; x < tilemap[y].length; x++) {
             const id = tilemap[y][x];
@@ -39692,6 +39694,7 @@ void main() {
             if (texture) {
               const sprite5 = new Sprite(texture);
               sprite5.anchor.set(0.5);
+              sprite5.scale.set(options.unitWidthInPixels / texture.width);
               sprite5.position.set(x * this.unitInPixels + this.unitInPixels / 2, y * this.unitInPixels + this.unitInPixels / 2);
               this.tilemapContainer.addChild(sprite5);
             } else {
@@ -39778,23 +39781,18 @@ void main() {
   function Generate(props) {
     const canvasRef = React15.useRef();
     const canvasDrawer = React15.useRef();
-    React15.useEffect(() => {
-      canvasDrawer.current = new DungeonDrawer(canvasRef.current);
+    const onGenerate = (args) => {
       const dungeon3 = generate({
-        rooms: data_exports.loadRooms(),
-        mapWidth: 96,
-        mapHeight: 56,
-        mapGutterWidth: 1,
-        iterations: 5,
-        containerSizeRatio: 0.45,
-        roomSpawnChance: 0.9,
-        corridorWidth: 2,
-        corridorTrapChance: 0.5
+        ...args,
+        rooms: data_exports.loadRooms()
       });
       canvasDrawer.current.draw(dungeon3, {
-        debug: true,
-        unitWidthInPixels: 16
+        debug: args.debug,
+        unitWidthInPixels: args.tileWidth
       });
+    };
+    React15.useEffect(() => {
+      canvasDrawer.current = new DungeonDrawer(canvasRef.current);
     }, []);
     return /* @__PURE__ */ React15.createElement("div", {
       style: {
@@ -39804,16 +39802,157 @@ void main() {
         top: 0,
         right: 0
       }
-    }, /* @__PURE__ */ React15.createElement("div", {
+    }, /* @__PURE__ */ React15.createElement(Sidebar3, {
+      onGenerate
+    }), /* @__PURE__ */ React15.createElement("div", {
       ref: canvasRef,
       style: {
         position: "absolute",
-        left: 0,
+        left: SIDEBAR_WIDTH,
         bottom: 0,
         top: 0,
         right: 0
       }
     }));
+  }
+  function Sidebar3(props) {
+    const {onGenerate} = props;
+    const [mapWidth, setMapWidth] = React15.useState(48);
+    const [mapHeight, setMapHeight] = React15.useState(48);
+    const [mapGutterWidth, setMapGutterWidth] = React15.useState(1);
+    const [iterations, setIterations] = React15.useState(4);
+    const [containerSizeRatio, setContainerSizeRatio] = React15.useState(0.45);
+    const [roomProbability, setRoomProbability] = React15.useState(0.9);
+    const [corridorWidth, setCorridorWidth] = React15.useState(2);
+    const [corridorTrapProbability, setCorridorTrapProbability] = React15.useState(0.9);
+    const [tileWidth, setTileWidth] = React15.useState(16);
+    const [debug, setDebug] = React15.useState(false);
+    const onGenerateClick = () => {
+      onGenerate({
+        mapWidth,
+        mapHeight,
+        mapGutterWidth,
+        iterations,
+        containerSizeRatio,
+        roomProbability,
+        corridorWidth,
+        corridorTrapProbability,
+        tileWidth,
+        debug
+      });
+    };
+    return /* @__PURE__ */ React15.createElement("div", {
+      style: {
+        position: "absolute",
+        left: 0,
+        bottom: 0,
+        top: 0,
+        width: SIDEBAR_WIDTH,
+        cursor: "pointer",
+        borderRight: `2px solid ${BORDER_COLOR}`,
+        backgroundColor: BACKGROUND_LIGHT,
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden"
+      }
+    }, /* @__PURE__ */ React15.createElement("div", {
+      style: {padding: 16}
+    }, /* @__PURE__ */ React15.createElement(SectionTitle, null, "Params"), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Map width:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      step: 1,
+      value: mapWidth,
+      onChange: (event) => setMapWidth(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Map height:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      step: 1,
+      value: mapHeight,
+      onChange: (event) => setMapHeight(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Map gutter width:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 0,
+      step: 1,
+      value: mapGutterWidth,
+      onChange: (event) => setMapGutterWidth(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Iterations:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 1,
+      step: 1,
+      value: iterations,
+      onChange: (event) => setIterations(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Container size ratio:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 0,
+      max: 1,
+      step: 0.05,
+      value: containerSizeRatio,
+      onChange: (event) => setContainerSizeRatio(Number.parseFloat(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Room spawn:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 0,
+      max: 1,
+      step: 0.05,
+      value: roomProbability,
+      onChange: (event) => setRoomProbability(Number.parseFloat(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Corridor width:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 1,
+      step: 1,
+      value: corridorWidth,
+      onChange: (event) => setCorridorWidth(Number.parseInt(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Corridor trap probability:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 0,
+      max: 1,
+      step: 0.1,
+      value: corridorTrapProbability,
+      onChange: (event) => setCorridorTrapProbability(Number.parseFloat(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("p", null, "Tile width:"), /* @__PURE__ */ React15.createElement("input", {
+      style: {width: "100%"},
+      type: "number",
+      min: 8,
+      step: 1,
+      value: tileWidth,
+      onChange: (event) => setTileWidth(Number.parseFloat(event.target.value))
+    }), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("label", null, /* @__PURE__ */ React15.createElement("input", {
+      type: "checkbox",
+      style: {marginRight: 8},
+      checked: debug,
+      onChange: (event) => setDebug(event.target.checked)
+    }), "Debug"), /* @__PURE__ */ React15.createElement(Spacer, {
+      size: 16
+    }), /* @__PURE__ */ React15.createElement("button", {
+      style: {width: "100%"},
+      type: "button",
+      onClick: onGenerateClick
+    }, "Generate")));
   }
 
   // src/app/App.tsx

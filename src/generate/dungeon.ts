@@ -18,7 +18,7 @@ import {
   randomProbability,
 } from "./utils";
 
-export interface Args {
+export interface DungeonArgs {
   /** A list of rooms to be used in the dungeon */
   rooms: RoomTemplate[];
   /** Width of the map */
@@ -31,12 +31,12 @@ export interface Args {
   iterations: number;
   /** Minimum size ratio for a container */
   containerSizeRatio: number;
-  /** Chance that a room spaws in a container */
-  roomSpawnChance: number;
+  /** Probability that a room spaws in a container */
+  roomProbability: number;
   /** Width of corridors */
   corridorWidth: number;
-  /** Chance that a trap will appear in a corridor */
-  corridorTrapChance: number;
+  /** Probability that a trap spawns in a corridor */
+  corridorTrapProbability: number;
 }
 
 export interface Dungeon {
@@ -50,7 +50,7 @@ export interface Dungeon {
   };
 }
 
-export function generate(args: Args): Dungeon {
+export function generate(args: DungeonArgs): Dungeon {
   const startAt = performance.now();
 
   const tree = createTree(args);
@@ -76,7 +76,7 @@ export function generate(args: Args): Dungeon {
 //
 // Tree
 //
-function createTree(args: Args): TreeNode<Container> {
+function createTree(args: DungeonArgs): TreeNode<Container> {
   const tree = generateTree(
     new Container(
       args.mapGutterWidth,
@@ -96,7 +96,7 @@ function createTree(args: Args): TreeNode<Container> {
 function generateTree(
   container: Container,
   iterations: number,
-  args: Args
+  args: DungeonArgs
 ): TreeNode<Container> {
   const node = new TreeNode<Container>(container);
 
@@ -119,7 +119,7 @@ function generateTree(
 
 function splitContainer(
   container: Container,
-  args: Args
+  args: DungeonArgs
 ): [Container, Container] {
   let left: Container;
   let right: Container;
@@ -182,7 +182,7 @@ function splitContainer(
 function generateCorridor(
   left: Container,
   right: Container,
-  args: Args
+  args: DungeonArgs
 ): Corridor {
   // Create the corridor
   const leftCenter = left.center;
@@ -210,7 +210,7 @@ function generateCorridor(
   }
 
   // Generate the corridor's traps (if any)
-  const hasTrap = randomProbability(args.corridorTrapChance);
+  const hasTrap = randomProbability(args.corridorTrapProbability);
   if (hasTrap) {
     corridor.traps = corridor.direction === "horizontal" ? Traps[0] : Traps[1];
   }
@@ -218,11 +218,11 @@ function generateCorridor(
   return corridor;
 }
 
-function generateRooms(tree: TreeNode<Container>, args: Args) {
+function generateRooms(tree: TreeNode<Container>, args: DungeonArgs) {
   let roomId = 0;
 
   tree.leaves.forEach((leaf) => {
-    if (!randomProbability(args.roomSpawnChance)) {
+    if (!randomProbability(args.roomProbability)) {
       return;
     }
 
@@ -246,7 +246,10 @@ function generateRooms(tree: TreeNode<Container>, args: Args) {
 //
 // Tiles
 //
-function createTilesLayer(tree: TreeNode<Container>, args: Args): TileMap {
+function createTilesLayer(
+  tree: TreeNode<Container>,
+  args: DungeonArgs
+): TileMap {
   let tiles = createTilemap(args.mapWidth, args.mapHeight, 1);
 
   tiles = carveCorridors(tree, duplicateTilemap(tiles));
@@ -326,7 +329,7 @@ export function computeTilesMask(tiles: TileMap) {
 function createPropsLayer(
   tree: TreeNode<Container>,
   tiles: TileMap,
-  args: Args
+  args: DungeonArgs
 ): TileMap {
   let props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
@@ -418,7 +421,10 @@ function carveTorches(tiles: TileMap, props: TileMap): TileMap {
 //
 // Monsters
 //
-function createMonstersLayer(tree: TreeNode<Container>, args: Args): TileMap {
+function createMonstersLayer(
+  tree: TreeNode<Container>,
+  args: DungeonArgs
+): TileMap {
   let monsters = createTilemap(args.mapWidth, args.mapHeight, 0);
 
   monsters = carveMonsters(tree, monsters);

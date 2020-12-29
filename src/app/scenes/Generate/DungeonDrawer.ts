@@ -48,9 +48,13 @@ export class DungeonDrawer {
     this.shapesContainer.removeChildren();
     this.unitInPixels = options.unitWidthInPixels;
 
-    this.drawTiles(dungeon.layers.tiles, Textures.tilesSprites);
-    this.drawProps(dungeon.layers.props, Textures.propsSprites);
-    this.drawMonsters(dungeon.layers.monsters, Textures.monstersSprites);
+    this.drawTiles(dungeon.layers.tiles, Textures.tilesSprites, options);
+    this.drawProps(dungeon.layers.props, Textures.propsSprites, options);
+    this.drawMonsters(
+      dungeon.layers.monsters,
+      Textures.monstersSprites,
+      options
+    );
 
     if (options.debug) {
       this.drawGrid(dungeon);
@@ -60,13 +64,18 @@ export class DungeonDrawer {
     }
   };
 
-  private drawTiles = (tilemap: TileMap, sprites: TexturesMap) => {
+  private drawTiles = (
+    tilemap: TileMap,
+    sprites: TexturesMap,
+    options: DrawOptions
+  ) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
         const texture = sprites[id];
         if (texture) {
           const sprite = new PIXI.Sprite(texture);
+          sprite.scale.set(options.unitWidthInPixels / texture.width);
           sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(sprite);
         } else {
@@ -81,7 +90,11 @@ export class DungeonDrawer {
     }
   };
 
-  private drawProps = (tilemap: TileMap, sprites: TexturesMap) => {
+  private drawProps = (
+    tilemap: TileMap,
+    sprites: TexturesMap,
+    options: DrawOptions
+  ) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
@@ -92,6 +105,7 @@ export class DungeonDrawer {
         const texture = sprites[id];
         if (texture) {
           const sprite = new PIXI.Sprite(texture);
+          sprite.scale.set(options.unitWidthInPixels / texture.width);
           sprite.position.set(x * this.unitInPixels, y * this.unitInPixels);
           this.tilemapContainer.addChild(sprite);
         } else {
@@ -106,7 +120,11 @@ export class DungeonDrawer {
     }
   };
 
-  private drawMonsters = (tilemap: TileMap, sprites: TexturesMap) => {
+  private drawMonsters = (
+    tilemap: TileMap,
+    sprites: TexturesMap,
+    options: DrawOptions
+  ) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
@@ -118,6 +136,7 @@ export class DungeonDrawer {
         if (texture) {
           const sprite = new PIXI.Sprite(texture);
           sprite.anchor.set(0.5);
+          sprite.scale.set(options.unitWidthInPixels / texture.width);
           sprite.position.set(
             x * this.unitInPixels + this.unitInPixels / 2,
             y * this.unitInPixels + this.unitInPixels / 2
