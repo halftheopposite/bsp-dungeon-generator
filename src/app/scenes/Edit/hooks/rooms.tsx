@@ -6,7 +6,7 @@ import {
   TileLayer,
 } from "../../../../generate/types";
 import { createTilemap } from "../../../../generate/utils";
-import { Data } from "../../../utils";
+import { Data, Download } from "../../../utils";
 
 export type RoomsFilter = RoomType | "all";
 export const RoomsFilters = [...RoomTypes, "all"];
@@ -140,15 +140,7 @@ export function CollectionsProvider(props: {
 
   /** Save and download a JSON representation of the rooms */
   const saveRooms = () => {
-    const element = document.createElement("a");
-    const file = new Blob([JSON.stringify(rooms, null, 2)], {
-      type: "text/json",
-    });
-    element.href = URL.createObjectURL(file);
-    element.download = "rooms.json";
-    const added = document.body.appendChild(element); // Required for this to work in FireFox
-    element.click();
-    added.remove();
+    Download.downloadJSON(rooms, "rooms.json");
   };
 
   /** Load and populate using a JSON representation of the rooms  */

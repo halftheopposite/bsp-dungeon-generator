@@ -201,6 +201,7 @@ export function RoomSidebar(props: {
           Show grid?
         </label>
       </div>
+      <Separator />
     </div>
   );
 }

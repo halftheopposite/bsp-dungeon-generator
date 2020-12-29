@@ -1,4 +1,3 @@
-import { Traps } from "./traps";
 import {
   Container,
   Corridor,
@@ -35,8 +34,6 @@ export interface DungeonArgs {
   roomProbability: number;
   /** Width of corridors */
   corridorWidth: number;
-  /** Probability that a trap spawns in a corridor */
-  corridorTrapProbability: number;
 }
 
 export interface Dungeon {
@@ -209,12 +206,6 @@ function generateCorridor(
     );
   }
 
-  // Generate the corridor's traps (if any)
-  const hasTrap = randomProbability(args.corridorTrapProbability);
-  if (hasTrap) {
-    corridor.traps = corridor.direction === "horizontal" ? Traps[0] : Traps[1];
-  }
-
   return corridor;
 }
 
@@ -333,42 +324,10 @@ function createPropsLayer(
 ): TileMap {
   let props = createTilemap(args.mapWidth, args.mapHeight, 0);
 
-  props = carveCorridorsTraps(tree, props);
   props = carveProps(tree, props);
   props = carveTorches(tiles, props);
 
   return props;
-}
-
-function carveCorridorsTraps(
-  node: TreeNode<Container>,
-  props: TileMap
-): TileMap {
-  let result = duplicateTilemap(props);
-
-  const corridor = node.leaf.corridor;
-  if (!corridor) {
-    return result;
-  }
-
-  // Carve traps
-  if (corridor.traps) {
-    const traps = corridor.traps;
-    const startY = Math.ceil(corridor.center.y - traps.height / 2);
-    const startX = Math.ceil(corridor.center.x - traps.width / 2);
-    for (let y = 0; y < traps.height; y++) {
-      for (let x = 0; x < traps.width; x++) {
-        const posY = startY + y;
-        const posX = startX + x;
-        result[posY][posX] = PropType.Peak;
-      }
-    }
-  }
-
-  result = carveCorridorsTraps(node.left, result);
-  result = carveCorridorsTraps(node.right, result);
-
-  return result;
 }
 
 function carveProps(node: TreeNode<Container>, props: TileMap) {

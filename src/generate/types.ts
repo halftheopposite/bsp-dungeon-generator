@@ -91,7 +91,6 @@ export class Room extends Rectangle {
 }
 
 export class Corridor extends Rectangle {
-  traps?: Pattern;
   direction: Direction;
 
   constructor(x: number, y: number, width: number, height: number) {

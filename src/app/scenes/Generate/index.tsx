@@ -1,7 +1,7 @@
 import * as React from "react";
 import { generate, DungeonArgs } from "../../../generate/dungeon";
-import { SectionTitle, Spacer } from "../../components";
-import { Data } from "../../utils";
+import { SectionTitle, Separator, Spacer } from "../../components";
+import { Data, Download } from "../../utils";
 import { BACKGROUND_LIGHT, BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
 
 import { DungeonDrawer } from "./DungeonDrawer";
@@ -14,6 +14,7 @@ export type GenerateArgs = Omit<DungeonArgs, "rooms"> & {
 export function Generate(props: {}): React.ReactElement {
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<DungeonDrawer>();
+  const [dungeon, setDungeon] = React.useState(null);
 
   const onGenerate = (args: GenerateArgs) => {
     const dungeon = generate({
@@ -21,10 +22,20 @@ export function Generate(props: {}): React.ReactElement {
       rooms: Data.loadRooms(),
     });
 
+    setDungeon(dungeon);
+
     canvasDrawer.current.draw(dungeon, {
       debug: args.debug,
       unitWidthInPixels: args.tileWidth,
     });
+  };
+
+  const onDownload = () => {
+    if (!dungeon) {
+      return;
+    }
+
+    Download.downloadJSON(dungeon, "dungeon.json");
   };
 
   React.useEffect(() => {
@@ -41,7 +52,7 @@ export function Generate(props: {}): React.ReactElement {
         right: 0,
       }}
     >
-      <Sidebar onGenerate={onGenerate} />
+      <Sidebar onGenerate={onGenerate} onDownload={onDownload} />
       <div
         ref={canvasRef}
         style={{
@@ -58,18 +69,16 @@ export function Generate(props: {}): React.ReactElement {
 
 export function Sidebar(props: {
   onGenerate: (args: GenerateArgs) => void;
+  onDownload: () => void;
 }): React.ReactElement {
-  const { onGenerate } = props;
-  const [mapWidth, setMapWidth] = React.useState(48);
+  const { onGenerate, onDownload } = props;
+  const [mapWidth, setMapWidth] = React.useState(64);
   const [mapHeight, setMapHeight] = React.useState(48);
   const [mapGutterWidth, setMapGutterWidth] = React.useState(1);
-  const [iterations, setIterations] = React.useState(4);
+  const [iterations, setIterations] = React.useState(5);
   const [containerSizeRatio, setContainerSizeRatio] = React.useState(0.45);
-  const [roomProbability, setRoomProbability] = React.useState(0.9);
+  const [roomProbability, setRoomProbability] = React.useState(1);
   const [corridorWidth, setCorridorWidth] = React.useState(2);
-  const [corridorTrapProbability, setCorridorTrapProbability] = React.useState(
-    0.9
-  );
   const [tileWidth, setTileWidth] = React.useState(16);
   const [debug, setDebug] = React.useState(false);
 
@@ -82,7 +91,6 @@ export function Sidebar(props: {
       containerSizeRatio,
       roomProbability,
       corridorWidth,
-      corridorTrapProbability,
       tileWidth,
       debug,
     });
@@ -104,6 +112,7 @@ export function Sidebar(props: {
         overflow: "hidden",
       }}
     >
+      {/* Params */}
       <div style={{ padding: 16 }}>
         <SectionTitle>Params</SectionTitle>
         <Spacer size={16} />
@@ -175,7 +184,7 @@ export function Sidebar(props: {
         />
         <Spacer size={16} />
 
-        {/* Room spawn */}
+        {/* Room probability */}
         <p>Room spawn:</p>
         <input
           style={{ width: "100%" }}
@@ -204,22 +213,7 @@ export function Sidebar(props: {
         />
         <Spacer size={16} />
 
-        {/* Corridor trap probability */}
-        <p>Corridor trap probability:</p>
-        <input
-          style={{ width: "100%" }}
-          type="number"
-          min={0}
-          max={1}
-          step={0.1}
-          value={corridorTrapProbability}
-          onChange={(event) =>
-            setCorridorTrapProbability(Number.parseFloat(event.target.value))
-          }
-        />
-        <Spacer size={16} />
-
-        {/* Corridor trap probability */}
+        {/* Tile width */}
         <p>Tile width:</p>
         <input
           style={{ width: "100%" }}
@@ -254,6 +248,18 @@ export function Sidebar(props: {
           Generate
         </button>
       </div>
+      <Separator />
+
+      {/* Result */}
+      <div style={{ padding: 16 }}>
+        <SectionTitle>Result</SectionTitle>
+        <Spacer size={16} />
+
+        <button style={{ width: "100%" }} onClick={onDownload}>
+          Download dungeon JSON
+        </button>
+      </div>
+      <Separator />
     </div>
   );
 }

@@ -40,10 +40,6 @@ export function RoomContent(props: {
 
   /** Initialize the canvas drawer */
   React.useEffect(() => {
-    if (!canvasRef.current) {
-      return;
-    }
-
     if (!canvasDrawer.current) {
       canvasDrawer.current = new EditorDrawer(canvasRef.current);
     }
