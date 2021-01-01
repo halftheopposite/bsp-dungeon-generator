@@ -1,4 +1,4 @@
-# dungeon
+# <p align="center"><img src="images/title.png" /></p>
 
 A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms.
 
