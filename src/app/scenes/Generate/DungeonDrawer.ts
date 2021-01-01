@@ -26,6 +26,7 @@ export class DungeonDrawer {
       width: container.getBoundingClientRect().width,
       height: container.getBoundingClientRect().height,
       backgroundColor: 0x200b13,
+      resizeTo: window,
     });
 
     if (container.hasChildNodes()) {
@@ -44,8 +45,7 @@ export class DungeonDrawer {
   // Layers
   //
   draw = (dungeon: Dungeon, options: DrawOptions) => {
-    this.tilemapContainer.removeChildren();
-    this.shapesContainer.removeChildren();
+    this.clear();
     this.unitInPixels = options.unitWidthInPixels;
 
     this.drawTiles(dungeon.layers.tiles, Textures.tilesSprites, options);
@@ -58,9 +58,9 @@ export class DungeonDrawer {
 
     if (options.debug) {
       this.drawGrid(dungeon);
-      this.drawContainers(dungeon.tree);
-      this.drawRooms(dungeon.tree, options);
       this.drawCorridors(dungeon.tree);
+      this.drawRooms(dungeon.tree, options);
+      this.drawContainers(dungeon.tree);
     }
   };
 
@@ -151,6 +151,11 @@ export class DungeonDrawer {
         }
       }
     }
+  };
+
+  clear = () => {
+    this.tilemapContainer.removeChildren();
+    this.shapesContainer.removeChildren();
   };
 
   //

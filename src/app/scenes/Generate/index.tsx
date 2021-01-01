@@ -15,19 +15,27 @@ export function Generate(props: {}): React.ReactElement {
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<DungeonDrawer>();
   const [dungeon, setDungeon] = React.useState(null);
+  const [error, setError] = React.useState(null);
 
   const onGenerate = (args: GenerateArgs) => {
-    const dungeon = generate({
-      ...args,
-      rooms: Data.loadRooms(),
-    });
+    try {
+      setError(null);
 
-    setDungeon(dungeon);
+      const dungeon = generate({
+        ...args,
+        rooms: Data.loadRooms(),
+      });
 
-    canvasDrawer.current.draw(dungeon, {
-      debug: args.debug,
-      unitWidthInPixels: args.tileWidth,
-    });
+      setDungeon(dungeon);
+      canvasDrawer.current.draw(dungeon, {
+        debug: args.debug,
+        unitWidthInPixels: args.tileWidth,
+      });
+    } catch (error) {
+      setError(error.message);
+      console.error(error.message);
+      canvasDrawer.current.clear();
+    }
   };
 
   const onDownload = () => {
@@ -53,21 +61,40 @@ export function Generate(props: {}): React.ReactElement {
       }}
     >
       <Sidebar onGenerate={onGenerate} onDownload={onDownload} />
+
+      {/* Drawer */}
       <div
-        ref={canvasRef}
         style={{
           position: "absolute",
           left: SIDEBAR_WIDTH,
           bottom: 0,
           top: 0,
           right: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
-      />
+      >
+        <div
+          ref={canvasRef}
+          style={{
+            position: "absolute",
+            left: 0,
+            bottom: 0,
+            top: 0,
+            right: 0,
+          }}
+        />
+
+        {error ? (
+          <p style={{ zIndex: 1000 }}>Error rendering dungeon: {error}.</p>
+        ) : null}
+      </div>
     </div>
   );
 }
 
-export function Sidebar(props: {
+function Sidebar(props: {
   onGenerate: (args: GenerateArgs) => void;
   onDownload: () => void;
 }): React.ReactElement {
@@ -75,12 +102,12 @@ export function Sidebar(props: {
   const [mapWidth, setMapWidth] = React.useState(64);
   const [mapHeight, setMapHeight] = React.useState(48);
   const [mapGutterWidth, setMapGutterWidth] = React.useState(1);
-  const [iterations, setIterations] = React.useState(5);
+  const [iterations, setIterations] = React.useState(4);
   const [containerSizeRatio, setContainerSizeRatio] = React.useState(0.45);
   const [roomProbability, setRoomProbability] = React.useState(1);
   const [corridorWidth, setCorridorWidth] = React.useState(2);
   const [tileWidth, setTileWidth] = React.useState(16);
-  const [debug, setDebug] = React.useState(false);
+  const [debug, setDebug] = React.useState(true);
 
   const onGenerateClick = () => {
     onGenerate({

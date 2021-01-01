@@ -30,6 +30,7 @@ export class EditorDrawer {
       width: container.getBoundingClientRect().width,
       height: container.getBoundingClientRect().height,
       backgroundColor: 0x200b13,
+      resizeTo: window,
     });
 
     if (container.hasChildNodes()) {

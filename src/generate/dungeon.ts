@@ -5,17 +5,12 @@ import {
   PropType,
   Room,
   RoomTemplate,
+  RoomType,
   TileDirection,
   TileMap,
   TreeNode,
 } from "./types";
-import {
-  createTilemap,
-  duplicateTilemap,
-  random,
-  randomChoice,
-  randomProbability,
-} from "./utils";
+import { createTilemap, duplicateTilemap, random, randomChoice } from "./utils";
 
 export interface DungeonArgs {
   /** A list of rooms to be used in the dungeon */
@@ -210,28 +205,63 @@ function generateCorridor(
 }
 
 function generateRooms(tree: TreeNode<Container>, args: DungeonArgs) {
-  let roomId = 0;
+  fillByType(tree, args, "boss", 1);
+  fillByType(tree, args, "entrance", 1);
+  fillByType(tree, args, "heal", 1);
+  fillByType(tree, args, "treasure", 1);
+  fillByType(tree, args, "monsters", -1);
+}
 
-  tree.leaves.forEach((leaf) => {
-    if (!randomProbability(args.roomProbability)) {
-      return;
-    }
+function fillByType(
+  tree: TreeNode<Container>,
+  args: DungeonArgs,
+  type: RoomType,
+  count: number
+) {
+  // Filter available templates by type
+  const templates = getTemplatesByType(args.rooms, type);
+  if (templates.length === 0) {
+    throw new Error(`Couldn't find templates of type "${type}"`);
+  }
 
-    const filteredRooms = args.rooms.filter(
-      (room) => room.width <= leaf.width && room.height <= leaf.height
+  // List containers ids that have no rooms yet
+  const containers = getEmptyContainers(tree.leaves);
+  if (containers.length === 0) {
+    throw new Error(
+      `Couldn't find containers to fit ${count} templates of type "${type}"`
     );
-    if (!filteredRooms.length) {
-      return;
+  }
+
+  // "-1" means "fill rest"
+  if (count === -1) {
+    count = containers.length;
+  }
+
+  // NEW
+  const usedContainersIds = [];
+  const usedTemplatesIds = [];
+  while (count > 0) {
+    const container = getRandomContainer(containers, usedContainersIds);
+    const template = findFittingTemplate(
+      templates,
+      container,
+      usedTemplatesIds
+    );
+
+    if (template) {
+      const x = Math.floor(container.center.x - template.width / 2);
+      const y = Math.floor(container.center.y - template.height / 2);
+      container.room = new Room(x, y, template.id, template);
+      usedTemplatesIds.push(template.id);
+    } else {
+      console.warn(
+        `Couldn't find a template fitting width="${container.width}" height="${container.height}" for type="${type}"`
+      );
     }
 
-    const template = randomChoice(filteredRooms);
-    if (leaf.width > template.width && leaf.height > template.height) {
-      const x = Math.floor(leaf.center.x - template.width / 2);
-      const y = Math.floor(leaf.center.y - template.height / 2);
-      leaf.room = new Room(x, y, String(roomId), template);
-      roomId++;
-    }
-  });
+    usedContainersIds.push(container.id);
+    count--;
+  }
 }
 
 //
@@ -569,4 +599,57 @@ function tileDirectionCollides(
     case "south-east":
       return isRight || isBottom || tilemap[y + 1][x + 1] > 0;
   }
+}
+
+function sortTemplatesBySize(templates: RoomTemplate[]): RoomTemplate[] {
+  return templates.sort((a, b) => a.width - b.width || a.height - b.height);
+}
+
+function findFittingTemplate(
+  templates: RoomTemplate[],
+  container: Container,
+  usedIds: string[]
+): RoomTemplate {
+  const sorted = sortTemplatesBySize(templates).reverse();
+
+  let result = sorted.find(
+    (template) =>
+      !usedIds.includes(template.id) &&
+      template.width <= container.width &&
+      template.height <= container.height
+  );
+
+  if (!result) {
+    result = sorted.find(
+      (template) =>
+        template.width <= container.width && template.height <= container.height
+    );
+  }
+
+  return result;
+}
+
+function getTemplatesByType(
+  templates: RoomTemplate[],
+  type: RoomType
+): RoomTemplate[] {
+  return templates.filter((room) => room.type === type);
+}
+
+function getEmptyContainers(containers: Container[]): Container[] {
+  return containers.filter((leaf) => !leaf.room);
+}
+
+function getRandomContainer(
+  containers: Container[],
+  usedIds: string[]
+): Container {
+  const filtered = containers.filter(
+    (container) => !usedIds.includes(container.id)
+  );
+  if (!filtered.length) {
+    return null;
+  }
+
+  return randomChoice(filtered);
 }

@@ -1,3 +1,5 @@
+import { v4 } from "uuid";
+
 //
 // Tree
 //
@@ -70,11 +72,13 @@ export class Rectangle {
 }
 
 export class Container extends Rectangle {
+  id: string;
   room?: Room;
   corridor?: Corridor;
 
   constructor(x: number, y: number, width: number, height: number) {
     super(x, y, width, height);
+    this.id = v4();
   }
 }
 
