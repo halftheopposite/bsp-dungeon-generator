@@ -95,12 +95,12 @@ export class Room extends Rectangle {
 }
 
 export class Corridor extends Rectangle {
-  direction: Direction;
-
   constructor(x: number, y: number, width: number, height: number) {
     super(x, y, width, height);
+  }
 
-    this.direction = width > height ? "horizontal" : "vertical";
+  get direction(): Direction {
+    return this.width > this.height ? "horizontal" : "vertical";
   }
 }
 
@@ -152,7 +152,7 @@ export enum TileType {
   Hole = -1,
   Wall = 1,
 }
-export const TileTypes = Object.keys(TileType);
+export const TileTypes = ["Hole", "Wall"];
 
 //
 // Props
@@ -184,7 +184,29 @@ export enum PropType {
   // Spawns
   Ladder = 21,
 }
-export const PropTypes = Object.keys(PropType);
+export const PropTypes = [
+  "Peak",
+  "Bone",
+  "CrateSilver",
+  "CrateWood",
+  "Flag",
+  "Handcuff1",
+  "Handcuff2",
+  "Lamp",
+  "Skull",
+  "StonesLarge",
+  "StonesSmall",
+  "Torch",
+  "WebLeft",
+  "WebRight",
+  "HealthLarge",
+  "HealthSmall",
+  "KeyGold",
+  "KeySilver",
+  "ManaLarge",
+  "ManaSmall",
+  "Ladder",
+];
 
 //
 // Monsters
@@ -199,7 +221,16 @@ export enum MonsterType {
   Troll = 7,
   Wolf = 8,
 }
-export const MonsterTypes = Object.keys(MonsterType);
+export const MonsterTypes = [
+  "Bandit",
+  "CentaurFemale",
+  "CentaurMale",
+  "MushroomLarge",
+  "MushroomSmall",
+  "Skeleton",
+  "Troll",
+  "Wolf",
+];
 
 //
 // Tilemap
