@@ -37,13 +37,17 @@ In the **generate** mode, you can render dungeons by tuning some key parameters.
 
 <img src="images/generate.jpg" alt="generate" style="border-radius: 4px;" width="400"/>
 
-## ⚙️ How to use the generator's code in your own project?
+## ⚙️ Package (NPM)
+
+The project also comes with a published package on NPM [@halftheopposite/dungeon](https://www.npmjs.com/package/@halftheopposite/dungeon), which bundles the generator's code only. The interactive editor and generator are excluded for package's weight reasons.
+
+How to use the generator's code in your own project:
 
 ```typescript
 import { generate } from '@halftheopposite/dungeon';
 
 const dungeon = generate({
-  rooms: [...], // A list of templates (e.g. `rooms.json` from the editor)
+  rooms: [...], // A list of templates (e.g. you can download the `rooms.json` from the online editor)
   mapWidth: 96,
   mapHeight: 56,
   mapGutterWidth: 1,
