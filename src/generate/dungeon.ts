@@ -242,6 +242,10 @@ function fillByType(
   const usedTemplatesIds = [];
   while (count > 0) {
     const container = getRandomContainer(containers, usedContainersIds);
+    if (!container) {
+      break;
+    }
+
     const template = findFittingTemplate(
       templates,
       container,
@@ -283,7 +287,7 @@ function createTilesLayer(
 function carveCorridors(node: TreeNode<Container>, tiles: TileMap): TileMap {
   const corridor = node.leaf.corridor;
   if (!corridor) {
-    return;
+    return tiles;
   }
 
   for (let y = 0; y < tiles.length; y++) {
@@ -296,8 +300,13 @@ function carveCorridors(node: TreeNode<Container>, tiles: TileMap): TileMap {
     }
   }
 
-  carveCorridors(node.left, tiles);
-  carveCorridors(node.right, tiles);
+  if (node.left) {
+    carveCorridors(node.left, tiles);
+  }
+
+  if (node.right) {
+    carveCorridors(node.right, tiles);
+  }
 
   return tiles;
 }
@@ -446,7 +455,7 @@ function carveMonsters(node: TreeNode<Container>, monsters: TileMap) {
 //
 // Utils
 //
-const maskToTileIdMap = {
+const maskToTileIdMap: { [key: number]: number } = {
   2: 1,
   8: 2,
   10: 3,
@@ -609,7 +618,7 @@ function findFittingTemplate(
   templates: RoomTemplate[],
   container: Container,
   usedIds: string[]
-): RoomTemplate {
+): RoomTemplate | undefined {
   const sorted = sortTemplatesBySize(templates).reverse();
 
   let result = sorted.find(
@@ -643,7 +652,7 @@ function getEmptyContainers(containers: Container[]): Container[] {
 function getRandomContainer(
   containers: Container[],
   usedIds: string[]
-): Container {
+): Container | null {
   const filtered = containers.filter(
     (container) => !usedIds.includes(container.id)
   );

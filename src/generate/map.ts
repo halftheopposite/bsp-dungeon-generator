@@ -162,4 +162,6 @@ function getTileType(tileId: number, layer: TileLayer): number {
   if (tileId < 0) {
     return TileType.Hole;
   }
+
+  return 0;
 }

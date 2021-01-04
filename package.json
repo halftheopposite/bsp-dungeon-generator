@@ -1,7 +1,10 @@
 {
   "name": "@halftheopposite/dungeon",
+  "description": "A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms.",
   "version": "0.1.0",
   "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/halftheopposite/dungeon"
@@ -14,6 +17,7 @@
   "scripts": {
     "build:dev": "esbuild src/app/index.tsx --define:process.env.NODE_ENV=\\\"development\\\" --bundle --sourcemap=external --outfile=docs/script.js",
     "build:prod": "esbuild src/app/index.tsx --define:process.env.NODE_ENV=\\\"production\\\" --bundle --minify --outfile=docs/script.js",
+    "build:npm": "tsc --p tsconfig.json",
     "start": "nodemon --watch \"src/**\" --ext \"ts,tsx,json\" --exec \"yarn run build:dev && ts-node src/dev/server.ts\""
   },
   "devDependencies": {

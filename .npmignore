@@ -1,0 +1,9 @@
+# Folders
+docs
+images
+src/app
+src/dev
+
+# Files
+*.tsbuildinfo
+*.tgz
