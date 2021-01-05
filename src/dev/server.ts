@@ -7,7 +7,7 @@ const app = express();
 
 // Serve the react app on all routes
 app.use(express.static(path.join(__dirname, "..", "..", "docs")));
-app.get("*", (req, res) => {
+app.get("*", (req: express.Request, res: express.Response) => {
   res.sendFile(path.join(__dirname, "..", "..", "docs", "index.html"));
 });
 

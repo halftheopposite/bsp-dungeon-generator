@@ -11,6 +11,7 @@ import {
   TreeNode,
 } from "./types";
 import { createTilemap, duplicateTilemap, random, randomChoice } from "./utils";
+import seedrandom from "seedrandom";
 
 export interface DungeonArgs {
   /** A list of rooms to be used in the dungeon */
@@ -29,6 +30,8 @@ export interface DungeonArgs {
   roomProbability: number;
   /** Width of corridors */
   corridorWidth: number;
+  /** The seed used to generate the dungeon */
+  seed?: string;
 }
 
 export interface Dungeon {
@@ -43,6 +46,8 @@ export interface Dungeon {
 }
 
 export function generate(args: DungeonArgs): Dungeon {
+  seedrandom(args.seed, { global: true });
+
   const startAt = performance.now();
 
   const tree = createTree(args);

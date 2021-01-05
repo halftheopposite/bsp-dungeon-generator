@@ -28,6 +28,7 @@ export class DungeonDrawer {
       backgroundColor: 0x200b13,
       resizeTo: window,
     });
+    this.app.renderer.autoResize = true;
 
     if (container.hasChildNodes()) {
       container.firstChild.remove();
@@ -45,6 +46,10 @@ export class DungeonDrawer {
   // Layers
   //
   draw = (dungeon: Dungeon, options: DrawOptions) => {
+    this.resize(
+      dungeon.width * options.unitWidthInPixels,
+      dungeon.height * options.unitWidthInPixels
+    );
     this.clear();
     this.unitInPixels = options.unitWidthInPixels;
 
@@ -156,6 +161,13 @@ export class DungeonDrawer {
   clear = () => {
     this.tilemapContainer.removeChildren();
     this.shapesContainer.removeChildren();
+  };
+
+  //
+  // Utils
+  //
+  resize = (newWidth: number, newHeight: number) => {
+    this.app.renderer.resize(newWidth, newHeight);
   };
 
   //

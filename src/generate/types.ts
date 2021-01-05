@@ -1,4 +1,4 @@
-import { v4 } from "uuid";
+import { nanoid } from "nanoid";
 
 //
 // Tree
@@ -78,7 +78,7 @@ export class Container extends Rectangle {
 
   constructor(x: number, y: number, width: number, height: number) {
     super(x, y, width, height);
-    this.id = v4();
+    this.id = nanoid();
   }
 }
 

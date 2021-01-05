@@ -3,6 +3,7 @@ import { generate, DungeonArgs } from "../../../generate/dungeon";
 import { SectionTitle, Separator, Spacer } from "../../components";
 import { Data, Download } from "../../utils";
 import { BACKGROUND_LIGHT, BORDER_COLOR, SIDEBAR_WIDTH } from "../../constants";
+import { nanoid } from "nanoid";
 
 import { DungeonDrawer } from "./DungeonDrawer";
 
@@ -14,6 +15,8 @@ export type GenerateArgs = Omit<DungeonArgs, "rooms"> & {
 export function Generate(props: {}): React.ReactElement {
   const canvasRef = React.useRef<HTMLDivElement>();
   const canvasDrawer = React.useRef<DungeonDrawer>();
+  const [canvasWidth, setCanvasWidth] = React.useState(100);
+  const [canvasHeight, setCanvasHeight] = React.useState(100);
   const [dungeon, setDungeon] = React.useState(null);
   const [error, setError] = React.useState(null);
 
@@ -31,6 +34,9 @@ export function Generate(props: {}): React.ReactElement {
         debug: args.debug,
         unitWidthInPixels: args.tileWidth,
       });
+
+      setCanvasWidth(args.mapWidth * args.tileWidth);
+      setCanvasHeight(args.mapHeight * args.tileWidth);
     } catch (error) {
       setError(error.message);
       console.error(error.message);
@@ -73,8 +79,10 @@ export function Generate(props: {}): React.ReactElement {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          overflow: "scroll",
         }}
       >
+        {/* Canvas */}
         <div
           ref={canvasRef}
           style={{
@@ -84,11 +92,15 @@ export function Generate(props: {}): React.ReactElement {
             top: 0,
             right: 0,
             overflow: "scroll",
+            width: canvasWidth,
+            height: canvasHeight,
           }}
         />
 
         {error ? (
-          <p style={{ zIndex: 1000 }}>Error rendering dungeon: {error}.</p>
+          <p style={{ zIndex: 1000, margin: 16, textAlign: "center" }}>
+            Error rendering dungeon: {error}.
+          </p>
         ) : null}
       </div>
     </div>
@@ -108,9 +120,13 @@ function Sidebar(props: {
   const [roomProbability, setRoomProbability] = React.useState(1);
   const [corridorWidth, setCorridorWidth] = React.useState(2);
   const [tileWidth, setTileWidth] = React.useState(16);
+  const [manualSeed, setManualSeed] = React.useState(false);
+  const [seed, setSeed] = React.useState(nanoid());
   const [debug, setDebug] = React.useState(true);
 
   const onGenerateClick = () => {
+    const newSeed = manualSeed ? seed : nanoid();
+
     onGenerate({
       mapWidth,
       mapHeight,
@@ -120,8 +136,11 @@ function Sidebar(props: {
       roomProbability,
       corridorWidth,
       tileWidth,
+      seed: newSeed,
       debug,
     });
+
+    setSeed(newSeed);
   };
 
   return (
@@ -252,6 +271,27 @@ function Sidebar(props: {
           onChange={(event) =>
             setTileWidth(Number.parseFloat(event.target.value))
           }
+        />
+        <Spacer size={16} />
+
+        {/* Seed */}
+        <Spacer size={8} />
+        <label>
+          <input
+            type="checkbox"
+            style={{ marginRight: 8 }}
+            checked={manualSeed}
+            onChange={(event) => setManualSeed(event.target.checked)}
+          />
+          Input seed?
+        </label>
+        <Spacer size={8} />
+        <input
+          style={{ width: "100%" }}
+          type="text"
+          disabled={!manualSeed}
+          value={seed}
+          onChange={(event) => setSeed(event.target.value)}
         />
         <Spacer size={16} />
 
