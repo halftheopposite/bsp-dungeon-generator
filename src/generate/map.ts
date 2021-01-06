@@ -1,4 +1,4 @@
-import { v4 } from "uuid";
+import { nanoid } from "nanoid";
 import RBush from "rbush";
 import {
   MonsterType,
@@ -135,7 +135,8 @@ function createItem(
   layer: TileLayer,
   type: number
 ): Item {
-  const id = v4();
+  const id = nanoid();
+
   return {
     x: x * tileSize,
     y: y * tileSize,
