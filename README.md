@@ -52,16 +52,19 @@ const dungeon = generate({
   mapHeight: 56,
   mapGutterWidth: 1,
   iterations: 5,
-  containerSizeRatio: 0.45,
-  roomSpawnChance: 0.9,
+  containerSplitRetries: 0.45,
+  containerMinimumRatio: 0.45,
+  containerMinimumSize: 0.45,
+  roomProbability: 0.9,
   corridorWidth: 2,
+  seed: "dungeon",
 });
 ```
 
 This will return:
 
 ```typescript
-{
+const result = {
     width: number;
     height: number;
     tree: TreeNode<Container>;
