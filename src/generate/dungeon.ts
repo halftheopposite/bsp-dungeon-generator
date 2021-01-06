@@ -24,8 +24,12 @@ export interface DungeonArgs {
   mapGutterWidth: number;
   /** Number of recursive divisions */
   iterations: number;
-  /** Minimum size ratio for a container */
-  containerSizeRatio: number;
+  /** Maximum attempts to split a container in half */
+  containerSplitRetries: number;
+  /** Minimum size ratio of a split a container in its parent */
+  containerMinimumRatio: number;
+  /** Minimum size for a container under which he cannot be split */
+  containerMinimumSize: number;
   /** Probability that a room spaws in a container */
   roomProbability: number;
   /** Width of corridors */
@@ -46,7 +50,10 @@ export interface Dungeon {
 }
 
 export function generate(args: DungeonArgs): Dungeon {
-  seedrandom(args.seed, { global: true });
+  // If a seed is provided, use it to generate dungeon.
+  if (args.seed) {
+    seedrandom(args.seed, { global: true });
+  }
 
   const startAt = performance.now();
 
@@ -97,18 +104,28 @@ function generateTree(
 ): TreeNode<Container> {
   const node = new TreeNode<Container>(container);
 
-  if (iterations !== 0) {
+  if (
+    iterations !== 0 &&
+    node.leaf.width > args.containerMinimumSize * 2 &&
+    node.leaf.height > args.containerMinimumSize * 2
+  ) {
     // We still need to divide the container
-    const [left, right] = splitContainer(container, args);
-    node.left = generateTree(left, iterations - 1, args);
-    node.right = generateTree(right, iterations - 1, args);
-
-    // Once divided, we create a corridor between the two containers
-    node.leaf.corridor = generateCorridor(
-      node.left.leaf,
-      node.right.leaf,
-      args
+    const [left, right] = splitContainer(
+      container,
+      args,
+      args.containerSplitRetries
     );
+    if (left && right) {
+      node.left = generateTree(left, iterations - 1, args);
+      node.right = generateTree(right, iterations - 1, args);
+
+      // Once divided, we create a corridor between the two containers
+      node.leaf.corridor = generateCorridor(
+        node.left.leaf,
+        node.right.leaf,
+        args
+      );
+    }
   }
 
   return node;
@@ -116,10 +133,16 @@ function generateTree(
 
 function splitContainer(
   container: Container,
-  args: DungeonArgs
-): [Container, Container] {
+  args: DungeonArgs,
+  iterations: number
+): [Container, Container] | [null, null] {
   let left: Container;
   let right: Container;
+
+  // We tried too many times to split the container without success
+  if (iterations === 0) {
+    return [null, null];
+  }
 
   // Generate a random direction to split the container
   const direction = randomChoice<Direction>(["vertical", "horizontal"]);
@@ -142,10 +165,10 @@ function splitContainer(
     const leftWidthRatio = left.width / left.height;
     const rightWidthRatio = right.width / right.height;
     if (
-      leftWidthRatio < args.containerSizeRatio ||
-      rightWidthRatio < args.containerSizeRatio
+      leftWidthRatio < args.containerMinimumRatio ||
+      rightWidthRatio < args.containerMinimumRatio
     ) {
-      return splitContainer(container, args);
+      return splitContainer(container, args, iterations - 1);
     }
   } else {
     // Horizontal
@@ -166,10 +189,10 @@ function splitContainer(
     const leftHeightRatio = left.height / left.width;
     const rightHeightRatio = right.height / right.width;
     if (
-      leftHeightRatio < args.containerSizeRatio ||
-      rightHeightRatio < args.containerSizeRatio
+      leftHeightRatio < args.containerMinimumRatio ||
+      rightHeightRatio < args.containerMinimumRatio
     ) {
-      return splitContainer(container, args);
+      return splitContainer(container, args, iterations - 1);
     }
   }
 

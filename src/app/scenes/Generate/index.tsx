@@ -116,7 +116,9 @@ function Sidebar(props: {
   const [mapHeight, setMapHeight] = React.useState(48);
   const [mapGutterWidth, setMapGutterWidth] = React.useState(1);
   const [iterations, setIterations] = React.useState(4);
-  const [containerSizeRatio, setContainerSizeRatio] = React.useState(0.45);
+  const [containerMinimumSize, setContainerMinimumSize] = React.useState(4);
+  const [containerMinimumRatio, setContainerSizeRatio] = React.useState(0.45);
+  const [containerSplitRetries, setContainerSplitRetries] = React.useState(30);
   const [roomProbability, setRoomProbability] = React.useState(1);
   const [corridorWidth, setCorridorWidth] = React.useState(2);
   const [tileWidth, setTileWidth] = React.useState(16);
@@ -132,7 +134,9 @@ function Sidebar(props: {
       mapHeight,
       mapGutterWidth,
       iterations,
-      containerSizeRatio,
+      containerMinimumSize,
+      containerMinimumRatio,
+      containerSplitRetries,
       roomProbability,
       corridorWidth,
       tileWidth,
@@ -157,6 +161,7 @@ function Sidebar(props: {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        overflowY: "scroll",
       }}
     >
       {/* Params */}
@@ -216,6 +221,21 @@ function Sidebar(props: {
         />
         <Spacer size={16} />
 
+        {/* Container split retries */}
+        <p>Container split retries:</p>
+        <input
+          style={{ width: "100%" }}
+          type="number"
+          min={1}
+          max={100}
+          step={1}
+          value={containerSplitRetries}
+          onChange={(event) =>
+            setContainerSplitRetries(Number.parseInt(event.target.value))
+          }
+        />
+        <Spacer size={16} />
+
         {/* Container size ratio */}
         <p>Container size ratio:</p>
         <input
@@ -224,15 +244,30 @@ function Sidebar(props: {
           min={0}
           max={1}
           step={0.05}
-          value={containerSizeRatio}
+          value={containerMinimumRatio}
           onChange={(event) =>
             setContainerSizeRatio(Number.parseFloat(event.target.value))
           }
         />
         <Spacer size={16} />
 
+        {/* Container minimum size */}
+        <p>Container minimum size:</p>
+        <input
+          style={{ width: "100%" }}
+          type="number"
+          min={4}
+          max={mapWidth}
+          step={1}
+          value={containerMinimumSize}
+          onChange={(event) =>
+            setContainerMinimumSize(Number.parseInt(event.target.value))
+          }
+        />
+        <Spacer size={16} />
+
         {/* Room probability */}
-        <p>Room spawn:</p>
+        <p>Room probability:</p>
         <input
           style={{ width: "100%" }}
           type="number"
@@ -283,7 +318,7 @@ function Sidebar(props: {
             checked={manualSeed}
             onChange={(event) => setManualSeed(event.target.checked)}
           />
-          Input seed?
+          Manual seed?
         </label>
         <Spacer size={8} />
         <input
