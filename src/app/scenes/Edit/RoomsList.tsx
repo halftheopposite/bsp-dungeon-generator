@@ -12,12 +12,7 @@ export function RoomsList(props: {}): React.ReactElement {
   const { rooms, selectedRoomId, addRoom, selectRoom, removeRoom } = useRooms();
 
   return (
-    <div
-      style={{
-        overflow: "hidden",
-        overflowY: "scroll",
-      }}
-    >
+    <div>
       <RoomsListHeader />
       <Spacer />
       <div

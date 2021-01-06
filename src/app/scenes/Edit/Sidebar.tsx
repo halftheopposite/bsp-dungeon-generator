@@ -20,6 +20,7 @@ export function Sidebar(props: {}): React.ReactElement {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        overflowY: "scroll",
       }}
     >
       <SidebarHeader />

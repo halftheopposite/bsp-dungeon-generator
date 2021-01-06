@@ -87,6 +87,8 @@ export function RoomSidebar(props: {
         backgroundColor: BACKGROUND_LIGHT,
         display: "flex",
         flexDirection: "column",
+        overflow: "hidden",
+        overflowY: "scroll",
       }}
     >
       {/* Params */}

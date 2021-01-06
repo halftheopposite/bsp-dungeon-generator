@@ -60,6 +60,7 @@ export function RoomContent(props: {
         bottom: 0,
         top: 0,
         right: 0,
+        overflow: "scroll",
       }}
     >
       <div
