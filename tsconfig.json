@@ -6,7 +6,7 @@
         "declaration": true,
         "outDir": "dist",
         "strict": true,
-        "esModuleInterop": false
+        "esModuleInterop": true
     },
     "include": [
         "src/generate/index.ts"
