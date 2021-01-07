@@ -127,14 +127,6 @@ export interface RoomTemplate {
   };
 }
 
-export type PatternType = "hole" | "trap" | "entrance";
-export interface Pattern {
-  type: PatternType;
-  width: number;
-  height: number;
-  tiles: TileMap;
-}
-
 //
 // Tiles
 //
@@ -236,6 +228,6 @@ export const MonsterTypes = [
 // Tilemap
 //
 export type TileMap = number[][];
-export type TileMaps = { [layer: string]: TileMap };
+export type TileMaps = { [layer in TileLayer]: TileMap };
 export type TileLayer = "tiles" | "props" | "monsters";
 export const TileLayers: TileLayer[] = ["tiles", "props", "monsters"];
