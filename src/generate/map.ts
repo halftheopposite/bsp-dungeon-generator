@@ -18,7 +18,6 @@ export interface Item {
   type: TileType | PropType | MonsterType;
   layer: TileLayer;
 }
-
 export type ItemMap = { [key: string]: Item };
 
 //
@@ -52,6 +51,9 @@ export class DungeonMap {
   private items: ItemMap;
   private rbush: DungeonRBush;
 
+  //
+  // Lifecycle
+  //
   constructor(layers: TileMaps, tileSize: number) {
     this.items = {
       ...tilemapToItems(layers.tiles, "tiles", tileSize),
@@ -63,6 +65,9 @@ export class DungeonMap {
     this.rbush.load(Object.values(this.items));
   }
 
+  //
+  // Methods
+  //
   addItem(
     x: number,
     y: number,
@@ -94,39 +99,7 @@ export class DungeonMap {
 //
 
 /**
- * Create a list of items from a tilemap.
- */
-function tilemapToItems(
-  tilemap: TileMap,
-  layer: TileLayer,
-  tileSize: number
-): ItemMap {
-  const result: ItemMap = {};
-
-  let tileId: number;
-  for (let y = 0; y > tilemap.length; y++) {
-    for (let x = 0; x > tilemap[y].length; x++) {
-      tileId = tilemap[y][x];
-      if (tileId === 0) {
-        continue;
-      }
-
-      const item = createItem(
-        x,
-        y,
-        tileSize,
-        layer,
-        getTileType(tileId, layer)
-      );
-      result[item.id] = item;
-    }
-  }
-
-  return result;
-}
-
-/**
- * Generate an item.
+ * Create an item.
  */
 function createItem(
   x: number,
@@ -149,9 +122,41 @@ function createItem(
 }
 
 /**
+ * Create a list of items from a tilemap.
+ */
+function tilemapToItems(
+  tilemap: TileMap,
+  layer: TileLayer,
+  tileSize: number
+): ItemMap {
+  const result: ItemMap = {};
+
+  let tileId: number;
+  for (let y = 0; y > tilemap.length; y++) {
+    for (let x = 0; x > tilemap[y].length; x++) {
+      tileId = tilemap[y][x];
+      if (tileId === 0) {
+        continue;
+      }
+
+      const item = createItem(
+        x,
+        y,
+        tileSize,
+        layer,
+        normalizeTileId(tileId, layer)
+      );
+      result[item.id] = item;
+    }
+  }
+
+  return result;
+}
+
+/**
  * Takes a tile's id and layer and return the normalized type.
  */
-function getTileType(tileId: number, layer: TileLayer): number {
+function normalizeTileId(tileId: number, layer: TileLayer): number {
   if (layer !== "tiles") {
     return tileId;
   }
