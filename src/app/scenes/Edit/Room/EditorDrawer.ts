@@ -7,6 +7,11 @@ const TILE_SIZE = 32;
 
 type TileClickCallback = (x: number, y: number) => void;
 
+export interface DrawOptions {
+  selectedLayer: TileLayer;
+  debug: boolean;
+}
+
 export class EditorDrawer {
   private app: PIXI.Application;
 
@@ -93,14 +98,14 @@ export class EditorDrawer {
   //
   // Layers
   //
-  drawLayers = (layers: TileMaps, selectedLayer: TileLayer, debug: boolean) => {
+  drawLayers = (layers: TileMaps, options: DrawOptions) => {
     const { tiles, props, monsters } = layers;
 
-    this.drawTiles(tiles, selectedLayer === "tiles");
-    this.drawProps(props, selectedLayer === "props");
-    this.drawMonsters(monsters, selectedLayer === "monsters");
+    this.drawTiles(tiles, options.selectedLayer === "tiles");
+    this.drawProps(props, options.selectedLayer === "props");
+    this.drawMonsters(monsters, options.selectedLayer === "monsters");
 
-    if (debug) {
+    if (options.debug) {
       this.drawGrid(tiles);
     } else {
       this.clearGrid();
@@ -187,17 +192,6 @@ export class EditorDrawer {
         rectangle.lineStyle(1, 0x00ff00, 0.5);
         rectangle.drawRect(0, 0, TILE_SIZE, TILE_SIZE);
         rectangle.position.set(x * TILE_SIZE, y * TILE_SIZE);
-
-        // Drawing tiles ids is expensive, use when debugging.
-        // const tileId = tiles[y][x];
-        // const text = new PIXI.Text(`${tileId}`, {
-        //   fontSize: 10,
-        //   fill: 0xffffff,
-        // });
-        // text.anchor.set(0.5);
-        // text.position.set(TILE_SIZE / 2, TILE_SIZE / 2);
-        // rectangle.addChild(text);
-
         this.debugContainer.addChild(rectangle);
       }
     }

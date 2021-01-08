@@ -44,6 +44,17 @@ export function Generate(props: {}): React.ReactElement {
     }
   };
 
+  const onDebug = (args: Partial<GenerateArgs>) => {
+    if (!dungeon) {
+      return;
+    }
+
+    canvasDrawer.current.draw(dungeon, {
+      debug: args.debug,
+      unitWidthInPixels: args.tileWidth,
+    });
+  };
+
   const onDownload = () => {
     if (!dungeon) {
       return;
@@ -66,7 +77,11 @@ export function Generate(props: {}): React.ReactElement {
         right: 0,
       }}
     >
-      <Sidebar onGenerate={onGenerate} onDownload={onDownload} />
+      <Sidebar
+        onGenerate={onGenerate}
+        onDebug={onDebug}
+        onDownload={onDownload}
+      />
 
       {/* Drawer */}
       <div
@@ -109,9 +124,10 @@ export function Generate(props: {}): React.ReactElement {
 
 function Sidebar(props: {
   onGenerate: (args: GenerateArgs) => void;
+  onDebug: (args: Partial<GenerateArgs>) => void;
   onDownload: () => void;
 }): React.ReactElement {
-  const { onGenerate, onDownload } = props;
+  const { onGenerate, onDebug, onDownload } = props;
   const [mapWidth, setMapWidth] = React.useState(64);
   const [mapHeight, setMapHeight] = React.useState(48);
   const [mapGutterWidth, setMapGutterWidth] = React.useState(1);
@@ -146,6 +162,10 @@ function Sidebar(props: {
 
     setSeed(newSeed);
   };
+
+  React.useEffect(() => {
+    onDebug({ debug, tileWidth });
+  }, [debug]);
 
   return (
     <div

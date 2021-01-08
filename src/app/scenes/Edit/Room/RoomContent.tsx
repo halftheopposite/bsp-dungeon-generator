@@ -38,7 +38,7 @@ export function RoomContent(props: {
     );
   };
 
-  /** Initialize the canvas drawer */
+  // Initialize the canvas drawer
   React.useEffect(() => {
     if (!canvasDrawer.current) {
       canvasDrawer.current = new EditorDrawer(canvasRef.current);
@@ -47,9 +47,12 @@ export function RoomContent(props: {
     canvasDrawer.current.onTileClick = onTileClick;
   }, [canvasRef, room, selectedLayer, selectedTile]);
 
-  /** Update drawer when room changes */
+  // Update drawer when room changes
   React.useEffect(() => {
-    canvasDrawer.current.drawLayers(room.layers, selectedLayer, debug);
+    canvasDrawer.current.drawLayers(room.layers, {
+      selectedLayer,
+      debug,
+    });
   }, [room, selectedLayer, debug]);
 
   return (
