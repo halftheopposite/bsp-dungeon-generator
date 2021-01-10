@@ -30,8 +30,6 @@ export interface DungeonArgs {
   containerMinimumRatio: number;
   /** Minimum size for a container under which he cannot be split */
   containerMinimumSize: number;
-  /** Probability that a room spaws in a container */
-  roomProbability: number;
   /** Width of corridors */
   corridorWidth: number;
   /** The seed used to generate the dungeon */

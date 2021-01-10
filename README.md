@@ -55,7 +55,6 @@ const dungeon = generate({
   containerSplitRetries: 20,
   containerMinimumRatio: 0.45,
   containerMinimumSize: 4,
-  roomProbability: 0.9,
   corridorWidth: 2,
   seed: "dungeon",
 });

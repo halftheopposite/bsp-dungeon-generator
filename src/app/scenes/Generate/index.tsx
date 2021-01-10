@@ -135,7 +135,6 @@ function Sidebar(props: {
   const [containerMinimumSize, setContainerMinimumSize] = React.useState(4);
   const [containerMinimumRatio, setContainerSizeRatio] = React.useState(0.45);
   const [containerSplitRetries, setContainerSplitRetries] = React.useState(30);
-  const [roomProbability, setRoomProbability] = React.useState(1);
   const [corridorWidth, setCorridorWidth] = React.useState(2);
   const [tileWidth, setTileWidth] = React.useState(16);
   const [manualSeed, setManualSeed] = React.useState(false);
@@ -153,7 +152,6 @@ function Sidebar(props: {
       containerMinimumSize,
       containerMinimumRatio,
       containerSplitRetries,
-      roomProbability,
       corridorWidth,
       tileWidth,
       seed: newSeed,
@@ -282,21 +280,6 @@ function Sidebar(props: {
           value={containerMinimumSize}
           onChange={(event) =>
             setContainerMinimumSize(Number.parseInt(event.target.value))
-          }
-        />
-        <Spacer size={16} />
-
-        {/* Room probability */}
-        <p>Room probability:</p>
-        <input
-          style={{ width: "100%" }}
-          type="number"
-          min={0}
-          max={1}
-          step={0.05}
-          value={roomProbability}
-          onChange={(event) =>
-            setRoomProbability(Number.parseFloat(event.target.value))
           }
         />
         <Spacer size={16} />
