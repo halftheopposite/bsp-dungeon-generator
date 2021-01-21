@@ -39,7 +39,6 @@
   },
   "dependencies": {
     "nanoid": "^3.1.20",
-    "rbush": "^3.0.1",
     "seedrandom": "^3.0.5"
   }
 }

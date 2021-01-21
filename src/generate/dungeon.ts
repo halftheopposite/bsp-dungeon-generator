@@ -53,14 +53,14 @@ export function generate(args: DungeonArgs): Dungeon {
     seedrandom(args.seed, { global: true });
   }
 
-  const startAt = performance.now();
+  const startAt = Date.now();
 
   const tree = createTree(args);
   const tiles = createTilesLayer(tree, args);
   const props = createPropsLayer(tree, tiles, args);
   const monsters = createMonstersLayer(tree, args);
 
-  const endAt = performance.now();
+  const endAt = Date.now();
   console.log(`Dungeon generated in ${endAt - startAt}ms`);
 
   return {
