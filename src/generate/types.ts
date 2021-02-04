@@ -105,7 +105,7 @@ export class Corridor extends Rectangle {
 }
 
 //
-// Patterns
+// Rooms
 //
 export type RoomType = "entrance" | "monsters" | "heal" | "treasure" | "boss";
 export const RoomTypes: RoomType[] = [
@@ -150,54 +150,52 @@ export const TileTypes = ["Hole", "Wall"];
 // Props
 //
 export enum PropType {
-  // Traps
-  Peak = 1,
-  // Decor
   Bone = 2,
+  Coin = 22,
   CrateSilver = 3,
   CrateWood = 4,
   Flag = 5,
   Handcuff1 = 6,
   Handcuff2 = 7,
+  HealthLarge = 15,
+  HealthSmall = 16,
+  KeyGold = 17,
+  KeySilver = 18,
+  Ladder = 21,
   Lamp = 8,
+  ManaLarge = 19,
+  ManaSmall = 20,
+  Peak = 1,
   Skull = 9,
   StonesLarge = 10,
   StonesSmall = 11,
   Torch = 12,
   WebLeft = 13,
   WebRight = 14,
-  // Items
-  HealthLarge = 15,
-  HealthSmall = 16,
-  KeyGold = 17,
-  KeySilver = 18,
-  ManaLarge = 19,
-  ManaSmall = 20,
-  // Spawns
-  Ladder = 21,
 }
 export const PropTypes = [
-  "Peak",
   "Bone",
+  "Coin",
   "CrateSilver",
   "CrateWood",
   "Flag",
   "Handcuff1",
   "Handcuff2",
+  "HealthLarge",
+  "HealthSmall",
+  "KeyGold",
+  "KeySilver",
+  "Ladder",
   "Lamp",
+  "ManaLarge",
+  "ManaSmall",
+  "Peak",
   "Skull",
   "StonesLarge",
   "StonesSmall",
   "Torch",
   "WebLeft",
   "WebRight",
-  "HealthLarge",
-  "HealthSmall",
-  "KeyGold",
-  "KeySilver",
-  "ManaLarge",
-  "ManaSmall",
-  "Ladder",
 ];
 
 //

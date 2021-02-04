@@ -397,11 +397,6 @@
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
   integrity sha512-ewFXqrQHlFsgc09MK5jP5iR7vumV/BYayNC6PgJO2LPe8vrnNFyjQjSppfEngITi0qvfKtzFvgKymGheFM9UOA==
 
-"@types/rbush@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/rbush/-/rbush-3.0.0.tgz#b6887d99b159e87ae23cd14eceff34f139842aa6"
-  integrity sha512-W3ue/GYWXBOpkRm0VSoifrP3HV0Ni47aVJWvXyWMcbtpBy/l/K/smBRiJ+fI8f7shXRjZBiux+iJzYbh7VmcZg==
-
 "@types/react-dom@^17.0.0":
   version "17.0.0"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.0.tgz#b3b691eb956c4b3401777ee67b900cb28415d95a"

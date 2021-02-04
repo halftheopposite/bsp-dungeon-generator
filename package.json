@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.9",
-    "@types/rbush": "^3.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.6",
