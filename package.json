@@ -1,6 +1,16 @@
 {
   "name": "@halftheopposite/dungeon",
   "description": "A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms.",
+  "keywords": [
+    "procedural",
+    "map",
+    "generator",
+    "dungeon",
+    "games",
+    "level",
+    "roguelike",
+    "typescript"
+  ],
   "version": "0.2.2",
   "private": false,
   "main": "dist/index.js",
