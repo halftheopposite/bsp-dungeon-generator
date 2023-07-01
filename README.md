@@ -6,7 +6,7 @@ A configurable and editable dungeon generator using Binary-Space Partitioning an
 
 ## 🕹️ Testing
 
-A demo is available here https://halftheopposite.github.io/dungeon.
+A demo is available here https://halftheopposite.github.io/bsp-dungeon-generator.
 
 ## 💻 Running
 
