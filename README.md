@@ -1,5 +1,13 @@
 # <p align="center"><img alt="dungeon" src="images/title.png" /></p>
 
+---
+
+**Hello fellow game developer 🧙‍♂️!**
+
+**I need less than 5 minutes of your precious time, feedback, and experience, to answer a few questions about multiplayer game development that will help me shape future projects. Survey is available at https://tally.so/r/w81Xr5 and requires no signup and no bs.**
+
+---
+
 A configurable and editable dungeon generator using Binary-Space Partitioning and hand-made rooms running in the browser.
 
 <img src="images/dungeon.jpg" alt="Screenshot of a generated dungeon" style="border-radius: 8px;" />
