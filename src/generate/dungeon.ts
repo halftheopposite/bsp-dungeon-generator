@@ -10,7 +10,7 @@ import {
   TileMap,
   TreeNode,
 } from "./types";
-import { createTilemap, duplicateTilemap, random, randomChoice } from "./utils";
+import { createTilemap, duplicateTilemap, random, randomChoice, randomOptions } from "./utils";
 import seedrandom from "seedrandom";
 
 export interface DungeonArgs {
@@ -49,9 +49,8 @@ export interface Dungeon {
 
 export function generate(args: DungeonArgs): Dungeon {
   // If a seed is provided, use it to generate dungeon.
-  if (args.seed) {
-    seedrandom(args.seed, { global: true });
-  }
+  randomOptions.seed = args.seed || null;
+  randomOptions.random = args.seed ? seedrandom(args.seed) : Math.random;
 
   const startAt = Date.now();
 
